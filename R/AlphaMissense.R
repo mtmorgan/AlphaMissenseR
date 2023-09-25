@@ -1,9 +1,25 @@
-ALPHAMISSENSE_RECORD <- "8360242"
-ALPHAMISSENSE_ZENODO <- "https://zenodo.org/"
-
 #' @rdname AlphaMissense
 #'
 #' @title Retrieve AlphaMissense Resources as DuckDB Databases
+#'
+#' @description `ALPHAMISSENSE_RECORD` is a constant identifier
+#'     corresponding to the default version of the AlphaMissense
+#'     resource to use.
+#'
+#' @details `ALPHAMISSENSE_RECORD` can be set **before the package is
+#'     loaded** with the environment variable of the same name, e.g.,
+#'     `Sys.setenv(ALPHAMISSENSE_RECORD = "8208688")`. The default is
+#'     the most recent version (version 2) on 25 September, 2023.
+#'
+#' @examples
+#' ALPHAMISSENSE_RECORD
+#'
+#' @export
+ALPHAMISSENSE_RECORD <- NULL # set in .onLoad()
+
+ALPHAMISSENSE_ZENODO <- "https://zenodo.org/"
+
+#' @rdname AlphaMissense
 #'
 #' @description `am_browse()` opens a web browser at the Zenodo record
 #'     for the AlphaMissense data.
@@ -21,7 +37,7 @@ ALPHAMISSENSE_ZENODO <- "https://zenodo.org/"
 am_browse <-
     function(record = ALPHAMISSENSE_RECORD)
 {
-    stopifnot(is_scalar_character(ALPHAMISSENSE_RECORD))
+    stopifnot(is_scalar_character(record))
 
     url <- paste0(ALPHAMISSENSE_ZENODO, "/record/", record)
     browseURL(url)
@@ -47,6 +63,8 @@ am_browse <-
 am_available <-
     function(record = ALPHAMISSENSE_RECORD)
 {
+    stopifnot(is_scalar_character(record))
+
     url <- paste0(ALPHAMISSENSE_ZENODO, "/api/records/", record)
     json <- readLines(url, warn = FALSE)
 
@@ -97,7 +115,7 @@ am_available <-
 #'     database are as described on the Zenodo resource page.
 #'
 #' @examples
-#' am_data("AlphaMissense_hg38.tsv.gz")
+#' am_data("hg38")
 #'
 #' @importFrom dplyr tbl filter
 #'
@@ -160,8 +178,8 @@ am_data <-
     db <- dbConnect(duckdb(db_path))
     switch(
         as,
-        tbl = tbl(db, db_tbl_name),
         duckdb  = db,
+        tbl = tbl(db, db_tbl_name),
         tsv = bfcrpath(bfc, key$link)
     )
 }
