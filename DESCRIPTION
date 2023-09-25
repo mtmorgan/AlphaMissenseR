@@ -1,6 +1,6 @@
 Package: AlphaMissense
 Title: Interface to AlphaMissense Data Resources as DuckDB Databases
-Version: 0.0.2
+Version: 0.0.3
 Authors@R: 
     person(
         "Martin", "Morgan", role = c("aut", "cre"),

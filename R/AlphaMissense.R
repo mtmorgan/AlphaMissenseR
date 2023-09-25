@@ -41,7 +41,7 @@ am_browse <-
 #'
 #' @importFrom rjsoncons jmespath
 #'
-#' @importFrom dplyr tibble
+#' @importFrom dplyr tibble mutate .data
 #'
 #' @export
 am_available <-
@@ -59,7 +59,8 @@ am_available <-
     key <- rjmespath(files, "[*].key[]")
     size <- rjmespath(files, "[*].size[]")
     link <- rjmespath(files, "[*].links[].self")
-    tibble(key, size, link, record)
+    tibble(record, key, size, link) |>
+        mutate(key = sub("AlphaMissense_(.*)\\.tsv\\.gz", "\\1", .data$key))
 }
 
 #' @rdname AlphaMissense
@@ -135,13 +136,13 @@ am_data <-
     stopifnot(NROW(key) == 1L)
 
     rname <- paste0("AlphaMissense_", record)
-    db_tbl_name <- sub("AlphaMissense_(.*)\\.tsv\\.gz", "\\1", key$key)
+    db_tbl_name <- key$key
     if (!NROW(bfcquery(bfc, rname)))
         ## create the BiocFileCache record
         bfcnew(bfc, rname)
 
     if (!NROW(bfcquery(bfc, key$link)))
-        spdl::info("retrieving file '{}'", key$key)
+        spdl::info("retrieving key '{}'", key$key)
     file_path <- bfcrpath(bfc, key$link)
 
     db_path <- bfcrpath(bfc, rname)
