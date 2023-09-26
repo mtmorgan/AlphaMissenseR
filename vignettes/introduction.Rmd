@@ -1,8 +1,8 @@
 ---
-title: "Accessing AlphaMissense Resources"
+title: "Accessing AlphaMissense Resources in R"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Accessing AlphaMissense Resources}
+  %\VignetteIndexEntry{Accessing AlphaMissense Resources in R}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -24,7 +24,7 @@ pathogenicity. Supporting data on [Zenodo][] include, for instance
 70+M variants across hg19 and hg38 genome builds. The AlphaMissense
 package allows ready access to the data, downloading individual files
 to DuckDB databases for ready exploration and integration into *R* and
-*Bioconductor* worksflows.
+*Bioconductor* workflows.
 
 [Science]: https://www.science.org/doi/epdf/10.1126/science.adg7492
 [Zenodo]: https://zenodo.org//record/8360242
@@ -98,7 +98,7 @@ tbl <- tbl(db, "hg38")
 tbl
 ```
 
-It is straight-forward and fast to summarize the data, e.g., the
+It is fast and straight-forward to summarize the data, e.g., the
 number of variants assigned to each pathogenicity class.
 
 ```{r db-am_class}
@@ -140,7 +140,7 @@ db_disconnect(db)
 ```
 
 Database connections that are not closed correctly trigger warning
-messages
+messages.
 
 # Working with other Bioconductor resources
 
@@ -163,11 +163,12 @@ Sapiens*.
 ```{r ahub-homo-sap}
 hub <- AnnotationHub::AnnotationHub()
 AnnotationHub::query(hub, c("EnsDb", "Homo sapiens"))
+
 AnnotationHub::AnnotationHub()["AH113665"]
 ```
 
 Load the [ensembldb][] library and retrieve the record. Unfortunately,
-there are many name conflicts between functions in different packages,
+there are many conflicts between function names in different packages,
 so it becomes necessary to fully resolve functions to the package
 where they are defined.
 
@@ -178,7 +179,7 @@ edb
 ```
 
 As an illustration, use [ensembldb][] to identify the exons of the
-cannonical transcript of a particular gene.
+canonical transcript of a particular gene.
 
 ```{r tx}
 bcl2l11 <-
@@ -212,10 +213,10 @@ Use `db_range_join()` to join the AlphaMissense data with the ranges
 defining the exons in our gene of interest. The arguments are the
 database connection, the AlphaMissense table of interest (this table
 must have columns `#CHROM` and `POS`), the table containing ranges of
-interset (with columns `#CHROM`, `start`, `end`), and the temporary
+interest (with columns `#CHROM`, `start`, `end`), and the temporary
 table to contain the results. A range join is like a standard database
-join, expect that the contstraints can be relations, in our case that
-`POS >= start` and `POS <= end` for each range of interset;
+join, expect that the constraints can be relations, in our case that
+`POS >= start` and `POS <= end` for each range of interest;
 implementation details are in this [DuckDB blog][]. The range join
 uses closed intervals (the start and end positions are included in the
 query), following *Bioconductor* convention. Writing to a temporary
@@ -240,8 +241,11 @@ rng |>
     tidyr::pivot_wider(names_from = "am_class", values_from = "n")
 ```
 
-It is perhaps instructive to review the range join template as a
-source of inspiration for other computations that might be of interest.
+It is perhaps instructive to review the range join ([whisker][])
+template as a source of inspiration for other computations that might
+be of interest.
+
+[whisker]: https://cran.r-project.org/package=whisker
 
 ```{r range-join-template}
 AlphaMissense:::sql_template("range_join") |>

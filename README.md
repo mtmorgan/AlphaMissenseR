@@ -1,5 +1,5 @@
 
-# AlphaMissense
+# AlphaMissense for *R* / *Bioconductor*
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -20,7 +20,7 @@ to DuckDB databases for ready exploration and integration into *R* and
 Install the package from GitHub, ensuring correct *Bioconductor*
 dependencies.
 
-```{r install, eval = FALSE}
+``` r
 if (!"BiocManager" %in% rownames(installed.packages))
     install.packages("BiocManager", repos = "https://cran.r-project.org")
 
@@ -32,7 +32,7 @@ remotes::install_github(
 
 Load the library.
 
-```{r setup, message = FALSE}
+``` r
 library(AlphaMissense)
 ```
 
