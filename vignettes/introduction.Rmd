@@ -142,7 +142,7 @@ db_disconnect(db)
 Database connections that are not closed correctly trigger warning
 messages.
 
-# Working with other Bioconductor resources
+# Working with Bioconductor
 
 This section illustrates how AlphaMissense data can be integrated with
 other *Bioconductor* workflows, particularly with the [ensembldb][]
@@ -150,6 +150,8 @@ package and corresponding [AnnotationHub][] resources.
 
 [ensembldb]: https://bioconductor.org/packages/ensembldb
 [AnnotationHub]: https://bioconductor.org/packages/AnnotationHub
+
+## GRCh38 annotation resources
 
 We will work with the hg38 annotations from AlphaMissense.
 
@@ -177,6 +179,8 @@ library(ensembldb)
 edb <- AnnotationHub::AnnotationHub()[["AH113665"]]
 edb
 ```
+
+## From *Bioconductor* to *DuckDB*
 
 As an illustration, use [ensembldb][] to identify the exons of the
 canonical transcript of a particular gene.
@@ -231,6 +235,9 @@ rng <- db_range_join(db, "hg38", "bcl2l11", "bcl2l11_overlaps")
 rng
 ```
 
+This query takes place almost instantly. A larger query of 71M
+variants against 1000 ranges took about 20 seconds.
+
 The usual database and [dplyr][] verbs can be used to summarize the
 results, e.g., the number of variants in each pathogenecity class in
 each exon.
@@ -252,7 +259,48 @@ AlphaMissense:::sql_template("range_join") |>
     cat("\n")
 ```
 
-As always, remember to disconnect and shutdown the DuckDB connection.
+## From *DuckDB* to *Bioconductor*
+
+There are likely more straight-forward ways of performing the query in
+the previous section, e.g., by filtering `hg38` on the relevant
+transcript id(s), retrieving to *R*, and working with `edb` to
+classify variants by exon. The transcript we are interested in is
+`"ENST00000393256"`.
+
+Select the relevant variants and, because there are not too many, load
+into *R*.
+
+```{r filter-variants}
+variants_of_interest <-
+    tbl(db, "hg38") |>
+    dplyr::filter(transcript_id %like% "ENST00000393256%") |>
+    dplyr::collect()
+```
+
+Coerce the AlphaMissense data to a `GRanges::GPos` object.
+
+```{r gpos}
+gpos <- with(
+    variants_of_interest,
+    GPos(
+        sub("chr", "", `#CHROM`), POS, strand = NULL,
+        REF, ALT, uniprot_id, transcript_id, protein_variant,
+        am_pathogenicity, am_class
+    )
+)
+gpos
+```
+
+One can then use [GenomicRanges][] functionality, e.g., to count the
+number of variants in each exon.
+
+```{r countOverlaps}
+countOverlaps(unlist(bcl2l11), gpos)
+```
+
+# Finally
+
+Remember to disconnect and shutdown the DuckDB connection.
 
 ```{r db_disconnect-2}
 db_disconnect(db)
