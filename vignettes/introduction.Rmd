@@ -1,0 +1,151 @@
+---
+title: "Accessing AlphaMissense Resources"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Accessing AlphaMissense Resources}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+AlphaMissense publication. Supporting data on [Zenodo][].
+
+[Zenodo]: https://zenodo.org//record/8360242
+
+Install the package from GitHub
+
+```{r install, eval = FALSE}
+remotes::install_github("mtmorgan/AlphaMissense")
+```
+
+Load the library.
+
+```{r setup, message = FALSE}
+library(AlphaMissense)
+```
+
+Visit the Zenodo record where data will be retrieved from
+
+```{r am_browse, eval = FALSE}
+am_browse()
+```
+
+# Discovery, retrieval and use
+
+```{r am_available}
+am_available()
+```
+
+```{r am_data}
+tbl <- am_data("hg38", as = "tbl")
+tbl
+```
+
+```{r am_data-duckdb}
+db <- am_data("hg38", as = "duckdb")
+db_tables(db)
+tbl <- tbl(db, "hg38")
+tbl
+```
+
+It is straight-forward and fast to summarize the data
+
+```{r db-am_class}
+tbl |>
+    count(am_class)
+```
+
+```{r db-pathogenicity}
+tbl |>
+    group_by(am_class) |>
+    summarize(n = n(), pathogenecity = mean(am_pathogenicity, na.rm = TRUE))
+```
+
+```{r REF-ALT}
+tbl |>
+    count(REF, ALT) |>
+    tidyr::pivot_wider(names_from = "ALT", values_from = "n") |>
+    select(REF, A, C, G, T) |>
+    arrange(REF)
+```
+
+Be sure to clean up the database connection when done.
+
+```{r db_disconnect}
+db_disconnect(db)
+```
+
+Unclosed database connections trigger warning messages, as from the
+connection associated with the first call to `am_data(, as = "tbl")`
+
+```{r gc}
+tmp <- gc(); tmp <- gc()
+```
+
+# Working with other Bioconductor resources
+
+EnsemblDB annotations for GRCh38 (hg38).
+
+```{r AnnotationHub, message = FALSE}
+library(ensembldb)
+AnnotationHub::AnnotationHub()["AH113665"]
+```
+
+```{r edb}
+edb <- AnnotationHub::AnnotationHub()[["AH113665"]]
+edb
+```
+
+```{r tx}
+bcl2l11 <-
+    edb |>
+    ensembldb::filter(
+        ~ symbol == "BCL2L11" &
+            tx_biotype == "protein_coding" &
+            tx_is_canonical == TRUE
+    ) |>
+    exonsBy("tx")
+bcl2l11
+```
+
+```{r am_data-2}
+db <- am_data("hg38")
+```
+
+```{r temp-table}
+bcl2l11_tbl <-
+    bcl2l11 |>
+    dplyr::as_tibble() |>
+    dplyr::mutate(`#CHROM` = paste0("chr", seqnames)) |>
+    dplyr::select(`#CHROM`, everything(), -seqnames)
+
+db_temporary_table(db, bcl2l11_tbl, "bcl2l11")
+```
+
+```{r range-join}
+rng <- db_range_join(db, "hg38", "bcl2l11", "bcl2l11_overlaps")
+```
+
+```{r}
+rng |>
+    dplyr::count(exon_id, am_class) |>
+    tidyr::pivot_wider(names_from = "am_class", values_from = "n")
+```
+
+```{r db_disconnect-2}
+db_disconnect(db)
+```
+
+# Session information {.unnumbered}
+
+```{r}
+sessionInfo()
+```
