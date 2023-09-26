@@ -1,16 +1,22 @@
 Package: AlphaMissense
 Title: Interface to AlphaMissense Resources as DuckDB Databases
-Version: 0.0.4
+Version: 0.0.5
 Authors@R: 
     person(
         "Martin", "Morgan", role = c("aut", "cre"),
         email = "mtmorgan.bioc@gmail.com",
         comment = c(ORCID = "0000-0002-5874-8148")
     )
-Description: Users can discover and retrieve AlphaMissense data
-    resources <https://zenodo.org/record/8360242> to DuckDB
-    databases. The databases are cached locally, so retrieval is only
-    expense on the first evaluation.
+Description:
+    The AlphaMissense publication
+    <https://www.science.org/doi/epdf/10.1126/science.adg7492>
+    outlines how a variant of AlphaFold / DeepMind was used to predict
+    missense variant pathogenicity. Supporting data on Zenodo
+    <https://zenodo.org/record/8360242> include, for instance, 70+M
+    variants across hg19 and hg38 genome builds. The 'AlphaMissense'
+    package allows ready access to the data, downloading individual
+    files to DuckDB databases for ready exploration and integration
+    into *R* and *Bioconductor* worksflows.
 License: Artistic-2.0
 Depends:
     dplyr
