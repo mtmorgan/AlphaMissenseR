@@ -20,7 +20,7 @@ db_disconnect(db)
 
 \item{value}{a \code{data.frame} / \code{tibble} containing data to be placed
 in a temporary table, e.g., from a GenomicRanges object to be
-used in a region join.}
+used in a range join.}
 
 \item{to}{the character(1) name of the table to be created}
 
@@ -39,6 +39,11 @@ dbplyr \code{tibble}.
 
 \code{db_range_join()} returns \code{to} (the temporary table created
 from the join) as a dbplyr tibble.
+
+\code{db_disconnect()} returns \code{FALSE} if the connection has
+already been closed or is not valid (via \code{dbIsValid()}) or
+\code{TRUE} if disconnection is successful. Values are returned
+invisibly.
 }
 \description{
 \code{db_tables()} queries for the names of temporary and
@@ -47,7 +52,7 @@ regular tables defined in the database.
 \code{db_temporary_table()} creates a temporary (for the
 duration of the duckdb connection) table from a tibble.
 
-\code{db_range_join()} performs a region join, finding all
+\code{db_range_join()} performs a range join, finding all
 positions in \code{key} within ranges defined by \code{join}. The result
 is stored in table \code{to}.
 

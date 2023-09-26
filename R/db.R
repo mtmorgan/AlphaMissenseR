@@ -30,7 +30,8 @@ db_tables <-
     function(db)
 {
     stopifnot(
-        inherits(db, "duckdb_connection")
+        inherits(db, "duckdb_connection"),
+        dbIsValid(db)
     )
 
     dbListTables(db)
@@ -59,7 +60,7 @@ db_table_fields <-
 #'
 #' @param value a `data.frame` / `tibble` containing data to be placed
 #'     in a temporary table, e.g., from a GenomicRanges object to be
-#'     used in a region join.
+#'     used in a range join.
 #'
 #' @param to the character(1) name of the table to be created
 #'
@@ -97,7 +98,7 @@ db_temporary_table <-
 
 #' @rdname db
 #'
-#' @description `db_range_join()` performs a region join, finding all
+#' @description `db_range_join()` performs a range join, finding all
 #'     positions in `key` within ranges defined by `join`. The result
 #'     is stored in table `to`.
 #'
@@ -150,7 +151,7 @@ db_range_join <-
     if (to %in% db_tables(db))
         spdl::info("overwriting existing table '{}'", to)
 
-    spdl::info("doing region join of '{}' with '{}'", key, join)
+    spdl::info("doing range join of '{}' with '{}'", key, join)
     template <- sql_template("range_join")
     sql <- whisker.render(template)
     dbExecute(db, sql)
@@ -163,6 +164,11 @@ db_range_join <-
 #' @description `db_disconnect()` disconnects the duckdb database and
 #'     shuts down the DuckDB server associated with the
 #'     connection. Temporary tables are lost.
+#'
+#' @return `db_disconnect()` returns `FALSE` if the connection has
+#'     already been closed or is not valid (via `dbIsValid()`) or
+#'     `TRUE` if disconnection is successful. Values are returned
+#'     invisibly.
 #'
 #' @examples
 #' db_disconnect(db)
@@ -177,6 +183,6 @@ db_disconnect <-
         inherits(db, "duckdb_connection")
     )
 
-    if (dbIsValid(db))
-        dbDisconnect(db, shutdown = TRUE)
+    result <- dbIsValid(db) && dbDisconnect(db, shutdown = TRUE)
+    invisible(result)
 }

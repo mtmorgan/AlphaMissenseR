@@ -14,16 +14,32 @@ knitr::opts_chunk$set(
 )
 ```
 
+Originally written: 26 September, 2023
+
 # Introduction
 
-AlphaMissense publication. Supporting data on [Zenodo][].
+The AlphaMissense [publication][Science] outlines how a variant of
+AlphaFold / DeepMind was used to predict missense variant
+pathogenicity. Supporting data on [Zenodo][] include, for instance
+70+M variants across hg19 and hg38 genome builds. The AlphaMissense
+package allows ready access to the data, downloading individual files
+to DuckDB databases for ready exploration and integration into *R* and
+*Bioconductor* worksflows.
 
+[Science]: https://www.science.org/doi/epdf/10.1126/science.adg7492
 [Zenodo]: https://zenodo.org//record/8360242
 
-Install the package from GitHub
+Install the package from GitHub, ensuring correct *Bioconductor*
+dependencies.
 
 ```{r install, eval = FALSE}
-remotes::install_github("mtmorgan/AlphaMissense")
+if (!"BiocManager" %in% rownames(installed.packages))
+    install.packages("BiocManager", repos = "https://cran.r-project.org")
+
+remotes::install_github(
+    "mtmorgan/AlphaMissense",
+    repos = BiocManager::repositories()
+)
 ```
 
 Load the library.
@@ -32,7 +48,8 @@ Load the library.
 library(AlphaMissense)
 ```
 
-Visit the Zenodo record where data will be retrieved from
+Learn about available data by visiting the Zenodo record where data
+will be retrieved from.
 
 ```{r am_browse, eval = FALSE}
 am_browse()
@@ -40,34 +57,65 @@ am_browse()
 
 # Discovery, retrieval and use
 
+Use `am_available()` to discover data resources available for
+representation in DuckDB databases.
+
 ```{r am_available}
 am_available()
 ```
 
+The available datasets use the most recent record as of 25 September,
+2023; this can be changed by specifying an alternative as the
+`record=` argument or changed globally by setting an environment
+variable `ALPHAMISSENSE_RECORD` *before* loading the package.
+
+Use `am_data()` to download a data resource and store it in a DuckDB
+database. The `key=` argument is from the column returned by
+`am_available()`. Files are cached locally (using [BiocFileCache][])
+so this operation is expensive only the first time. Each `record=` is
+stored in a different database.
+
+[BiocFileCache]: https://bioconductor.org/packages/BiocFileCache
+
 ```{r am_data}
-tbl <- am_data("hg38", as = "tbl")
-tbl
+db <- am_data("hg38")
 ```
 
+The return value `db` is a DuckDB database. The database contains
+tables for each key downloaded. View available tables with
+
 ```{r am_data-duckdb}
-db <- am_data("hg38", as = "duckdb")
 db_tables(db)
+```
+
+Create a [dplyr][] / [dbplyr][] tibble of the table of interest.
+
+[dplyr]: https://cran.r-project.org/package=dplyr
+[dbplyr]: https://cran.r-project.org/package=dbplyr
+
+```{r tbl}
 tbl <- tbl(db, "hg38")
 tbl
 ```
 
-It is straight-forward and fast to summarize the data
+It is straight-forward and fast to summarize the data, e.g., the
+number of variants assigned to each pathogenicity class.
 
 ```{r db-am_class}
 tbl |>
     count(am_class)
 ```
 
+Or the average pathogenicity score in each class...
+
 ```{r db-pathogenicity}
 tbl |>
     group_by(am_class) |>
     summarize(n = n(), pathogenecity = mean(am_pathogenicity, na.rm = TRUE))
 ```
+
+Or the number of transitions between `REF` and `ALT` nucleotides
+across all variants.
 
 ```{r REF-ALT}
 tbl |>
@@ -77,32 +125,60 @@ tbl |>
     arrange(REF)
 ```
 
+It is straight-forward to select variants in individual regions of
+interest, e.g., the first 200000 nucleoties of chromosome 4.
+
+```{r}
+tbl |>
+    filter(`#CHROM` == "chr4", POS > 0, POS <= 200000)
+```
+
 Be sure to clean up the database connection when done.
 
 ```{r db_disconnect}
 db_disconnect(db)
 ```
 
-Unclosed database connections trigger warning messages, as from the
-connection associated with the first call to `am_data(, as = "tbl")`
-
-```{r gc}
-tmp <- gc(); tmp <- gc()
-```
+Database connections that are not closed correctly trigger warning
+messages
 
 # Working with other Bioconductor resources
 
-EnsemblDB annotations for GRCh38 (hg38).
+This section illustrates how AlphaMissense data can be integrated with
+other *Bioconductor* workflows, particularly with the [ensembldb][]
+package and corresponding [AnnotationHub][] resources.
 
-```{r AnnotationHub, message = FALSE}
-library(ensembldb)
+[ensembldb]: https://bioconductor.org/packages/ensembldb
+[AnnotationHub]: https://bioconductor.org/packages/AnnotationHub
+
+We will work with the hg38 annotations from AlphaMissense.
+
+```{r am_data-2}
+db <- am_data("hg38")
+```
+
+Start by identifying the most recent EnsDb resource for *Homo
+Sapiens*.
+
+```{r ahub-homo-sap}
+hub <- AnnotationHub::AnnotationHub()
+AnnotationHub::query(hub, c("EnsDb", "Homo sapiens"))
 AnnotationHub::AnnotationHub()["AH113665"]
 ```
 
-```{r edb}
+Load the [ensembldb][] library and retrieve the record. Unfortunately,
+there are many name conflicts between functions in different packages,
+so it becomes necessary to fully resolve functions to the package
+where they are defined.
+
+```{r AnnotationHub, message = FALSE}
+library(ensembldb)
 edb <- AnnotationHub::AnnotationHub()[["AH113665"]]
 edb
 ```
+
+As an illustration, use [ensembldb][] to identify the exons of the
+cannonical transcript of a particular gene.
 
 ```{r tx}
 bcl2l11 <-
@@ -116,9 +192,11 @@ bcl2l11 <-
 bcl2l11
 ```
 
-```{r am_data-2}
-db <- am_data("hg38")
-```
+Munge the data to a tibble, updating the `seqnames` to a column
+`#CHROM` with identifiers such as `"chr1"` (as in the AlphaMissense
+data). Write the tibble to a temporary table (it will be deleted when
+`db` is disconnected from the database) so that it can be used in
+'lazy' SQL queries with the AlphaMissense data.
 
 ```{r temp-table}
 bcl2l11_tbl <-
@@ -130,15 +208,47 @@ bcl2l11_tbl <-
 db_temporary_table(db, bcl2l11_tbl, "bcl2l11")
 ```
 
+Use `db_range_join()` to join the AlphaMissense data with the ranges
+defining the exons in our gene of interest. The arguments are the
+database connection, the AlphaMissense table of interest (this table
+must have columns `#CHROM` and `POS`), the table containing ranges of
+interset (with columns `#CHROM`, `start`, `end`), and the temporary
+table to contain the results. A range join is like a standard database
+join, expect that the contstraints can be relations, in our case that
+`POS >= start` and `POS <= end` for each range of interset;
+implementation details are in this [DuckDB blog][]. The range join
+uses closed intervals (the start and end positions are included in the
+query), following *Bioconductor* convention. Writing to a temporary
+table avoids bringing potentially large datasets into R memory, and
+makes the table available for subsequent manipulation in the current
+session.
+
+[DuckDB blog]: https://duckdb.org/2022/05/27/iejoin.html
+
 ```{r range-join}
 rng <- db_range_join(db, "hg38", "bcl2l11", "bcl2l11_overlaps")
+rng
 ```
+
+The usual database and [dplyr][] verbs can be used to summarize the
+results, e.g., the number of variants in each pathogenecity class in
+each exon.
 
 ```{r}
 rng |>
     dplyr::count(exon_id, am_class) |>
     tidyr::pivot_wider(names_from = "am_class", values_from = "n")
 ```
+
+It is perhaps instructive to review the range join template as a
+source of inspiration for other computations that might be of interest.
+
+```{r range-join-template}
+AlphaMissense:::sql_template("range_join") |>
+    cat("\n")
+```
+
+As always, remember to disconnect and shutdown the DuckDB connection.
 
 ```{r db_disconnect-2}
 db_disconnect(db)
