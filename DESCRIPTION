@@ -1,5 +1,5 @@
 Package: AlphaMissense
-Title: Interface to AlphaMissense Data Resources as DuckDB Databases
+Title: Interface to AlphaMissense Resources as DuckDB Databases
 Version: 0.0.4
 Authors@R: 
     person(
@@ -16,7 +16,12 @@ Depends:
     dplyr
 Imports:
     rjsoncons, jsonlite, DBI, duckdb, rlang,
-    BiocFileCache, spdl, memoise, utils
+    BiocFileCache, spdl, memoise, utils,
+    whisker
+Suggests:
+    AnnotationHub, ensembldb, tidyr,
+    knitr, rmarkdown
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
+VignetteBuilder: knitr

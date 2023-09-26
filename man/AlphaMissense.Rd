@@ -39,9 +39,9 @@ stored. The default is the 'global' BiocFileCache.}
 \item{as}{chracter(1) type of return value.
 \itemize{
 \item \code{"duckdb"}: a duckdb database connection. Use
-\verb{DBI::dbListTables(<duckdb_connection>)} to see available
-tables. Use \verb{tbl(<duckdb_connection>, "hg28")} and similar to
-create a dbplyr tibble.
+\verb{db_tables(<duckdb_connection>)} to see available tables. Use
+\verb{tbl(<duckdb_connection>, "hg28")} and similar to create a dbplyr
+tibble.
 \item \code{"tbl"}: a dbplyr tbl representation of the database resource.
 \item \code{"tsv"}: path to the tsv.gz file representing the resource and
 downloaded from Zenodo

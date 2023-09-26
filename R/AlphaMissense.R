@@ -98,9 +98,9 @@ am_available <-
 #' @param as chracter(1) type of return value.
 #'
 #' - `"duckdb"`: a duckdb database connection. Use
-#'   `DBI::dbListTables(<duckdb_connection>)` to see available
-#'   tables. Use `tbl(<duckdb_connection>, "hg28")` and similar to
-#'   create a dbplyr tibble.
+#'   `db_tables(<duckdb_connection>)` to see available tables. Use
+#'   `tbl(<duckdb_connection>, "hg28")` and similar to create a dbplyr
+#'   tibble.
 #'
 #' - `"tbl"`: a dbplyr tbl representation of the database resource.
 #'
@@ -125,7 +125,7 @@ am_available <-
 #'
 #' @importFrom duckdb duckdb dbConnect dbDisconnect
 #'
-#' @importFrom DBI dbExecute dbListTables
+#' @importFrom DBI dbExecute
 #'
 #' @export
 am_data <-
@@ -165,7 +165,7 @@ am_data <-
 
     db_path <- bfcrpath(bfc, rname)
     db <- dbConnect(duckdb(db_path))
-    if (!db_tbl_name %in% dbListTables(db)) {
+    if (!db_tbl_name %in% db_tables(db)) {
         spdl::info("creating database table '{}'", db_tbl_name)
         sql <- paste0(
             "CREATE TABLE ", db_tbl_name, " AS ",
