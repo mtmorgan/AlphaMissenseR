@@ -177,7 +177,7 @@ am_data <-
             "SELECT * FROM read_csv_auto('", file_path, "');"
         )
         ## need a read-write (unmanaged) connection
-        db_rw <- db_connect(record, bfc)
+        db_rw <- db_connect(record, bfc, read_only = FALSE)
         dbExecute(db, sql)
         db_disconnect(db_rw)
     }

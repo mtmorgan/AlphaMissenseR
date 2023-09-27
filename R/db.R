@@ -69,9 +69,13 @@ db_connect <-
             record, read_only
         )
         rname <- paste0("AlphaMissense_", record)
-        if (!NROW(bfcquery(bfc, rname)))
+        if (!NROW(bfcquery(bfc, rname))) {
             ## create the BiocFileCache record
-            bfcnew(bfc, rname)
+            db_path <- bfcnew(bfc, rname)
+            ## open read-write to initialize
+            db0 <- dbConnect(duckdb(db_path))
+            dbDisconnect(db0, shutdown = TRUE)
+        }
         db_path <- bfcrpath(bfc, rname)
         db <- dbConnect(duckdb(db_path, read_only))
         if (managed)
