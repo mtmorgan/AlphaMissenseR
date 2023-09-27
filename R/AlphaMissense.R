@@ -178,8 +178,12 @@ am_data <-
         )
         ## need a read-write (unmanaged) connection
         db_rw <- db_connect(record, bfc, read_only = FALSE)
-        dbExecute(db, sql)
+        dbExecute(db_rw, sql)
         db_disconnect(db_rw)
+
+        ## flush managed read-only connection
+        db_disconnect(db)
+        db <- db_connect(record, bfc)
     }
 
     switch(

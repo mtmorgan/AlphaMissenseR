@@ -42,6 +42,8 @@ DB_CONNECTION <- new.env(parent = emptyenv())
 #'
 #' db_rw <- db_connect(read_only = FALSE)
 #'
+#' @importFrom BiocFileCache bfccache
+#'
 #' @export
 db_connect <-
     function(record = ALPHAMISSENSE_RECORD, bfc = BiocFileCache(),
@@ -54,7 +56,10 @@ db_connect <-
         is_scalar_logical(read_only)
     )
 
-    db_connection_name <- paste("AlphaMissense", record, read_only, sep = ":")
+    db_connection_name <- paste(
+        "AlphaMissense", basename(bfccache(bfc)), record, read_only,
+        sep = ":"
+    )
 
     create_entry <-
         ## explicitly requested...
