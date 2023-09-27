@@ -15,33 +15,29 @@ ALPHAMISSENSE_RECORD
 
 am_browse(record = ALPHAMISSENSE_RECORD)
 
-am_available(record = ALPHAMISSENSE_RECORD)
+am_available(record = ALPHAMISSENSE_RECORD, bfc = BiocFileCache())
 
 am_data(
   key,
   record = ALPHAMISSENSE_RECORD,
   bfc = BiocFileCache(),
-  as = c("duckdb", "tbl", "tsv")
+  as = c("tbl", "tsv")
 )
 }
 \arguments{
 \item{record}{character(1) Zenodo record for the AlphaMissense data
 resources.}
 
-\item{key}{a character(1) 'key' from the result of
-\code{am_available()}, or a single row of the tibble returned by
-\code{am_available()}.}
-
 \item{bfc}{an object returned by \code{BiocFileCache()} representing the
 location where downloaded files and the parsed database will be
 stored. The default is the 'global' BiocFileCache.}
 
+\item{key}{a character(1) 'key' from the result of
+\code{am_available()}, or a single row of the tibble returned by
+\code{am_available()}.}
+
 \item{as}{chracter(1) type of return value.
 \itemize{
-\item \code{"duckdb"}: a duckdb database connection. Use
-\verb{db_tables(<duckdb_connection>)} to see available tables. Use
-\verb{tbl(<duckdb_connection>, "hg28")} and similar to create a dbplyr
-tibble.
 \item \code{"tbl"}: a dbplyr tbl representation of the database resource.
 \item \code{"tsv"}: path to the tsv.gz file representing the resource and
 downloaded from Zenodo
@@ -89,6 +85,9 @@ if (interactive())
 am_available()
 
 am_data("hg38")
+
+## close the connection opened when adding the data
+db_disconnect()
 
 }
 \keyword{datasets}

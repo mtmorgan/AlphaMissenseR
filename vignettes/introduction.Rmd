@@ -78,22 +78,30 @@ stored in a different database.
 [BiocFileCache]: https://bioconductor.org/packages/BiocFileCache
 
 ```{r am_data}
-db <- am_data("hg38")
+tbl <- am_data("hg38")
+tbl
 ```
 
-The return value `db` is a DuckDB database. The database contains
-tables for each key downloaded. View available tables with
+The return value `tbl` is a table from a DuckDB database. A
+(read-only) connection to the database itself is available with
 
-```{r am_data-duckdb}
-db_tables(db)
+```{r db_connect}
+db <- db_connect()
 ```
 
-Create a [dplyr][] / [dbplyr][] tibble of the table of interest.
+This connection remains open throughout the session; call
+`db_disconnect(db)` to close it at the end of the session.
+
+The database contains tables for each key downloaded. As an
+alternative to `am_available()`, view available tables and create a
+[dplyr][] / [dbplyr][] tibble of the table of interest.
 
 [dplyr]: https://cran.r-project.org/package=dplyr
 [dbplyr]: https://cran.r-project.org/package=dbplyr
 
-```{r tbl}
+```{r am_data-duckdb}
+db_tables(db)
+
 tbl <- tbl(db, "hg38")
 tbl
 ```
@@ -133,7 +141,8 @@ tbl |>
     filter(`#CHROM` == "chr4", POS > 0, POS <= 200000)
 ```
 
-Be sure to clean up the database connection when done.
+Be sure to clean up the database connection at the end of the session
+when done.
 
 ```{r db_disconnect}
 db_disconnect(db)
@@ -148,16 +157,24 @@ This section illustrates how AlphaMissense data can be integrated with
 other *Bioconductor* workflows, particularly with the [ensembldb][]
 package and corresponding [AnnotationHub][] resources.
 
+In this section we will work more directly with the database,
+including writing temporary tables. For this purpose, we need a
+connection that can read and write.
+
+```{r db_rw}
+db_rw <- db_connect(read_only = FALSE)
+```
+
+The 'hg38' table from the database is
+
+```{r hg38-rw}
+hg38_rw <- tbl(db_rw, "hg38")
+```
+
 [ensembldb]: https://bioconductor.org/packages/ensembldb
 [AnnotationHub]: https://bioconductor.org/packages/AnnotationHub
 
 ## GRCh38 annotation resources
-
-We will work with the hg38 annotations from AlphaMissense.
-
-```{r am_data-2}
-db <- am_data("hg38")
-```
 
 Start by identifying the most recent EnsDb resource for *Homo
 Sapiens*.
@@ -210,7 +227,14 @@ bcl2l11_tbl <-
     dplyr::mutate(`#CHROM` = paste0("chr", seqnames)) |>
     dplyr::select(`#CHROM`, everything(), -seqnames)
 
-db_temporary_table(db, bcl2l11_tbl, "bcl2l11")
+db_temporary_table(db_rw, bcl2l11_tbl, "bcl2l11")
+```
+
+The temporary table is now available on the `db_rw` connection; the
+tables will be removed on disconnect, `db_disconnect(db_rw)`.
+
+```{r db_tables-rw}
+"bcl2l11" %in% db_tables(db_rw)
 ```
 
 Use `db_range_join()` to join the AlphaMissense data with the ranges
@@ -231,7 +255,7 @@ session.
 [DuckDB blog]: https://duckdb.org/2022/05/27/iejoin.html
 
 ```{r range-join}
-rng <- db_range_join(db, "hg38", "bcl2l11", "bcl2l11_overlaps")
+rng <- db_range_join(db_rw, "hg38", "bcl2l11", "bcl2l11_overlaps")
 rng
 ```
 
@@ -259,6 +283,13 @@ AlphaMissense:::sql_template("range_join") |>
     cat("\n")
 ```
 
+As best practice, disconnect from the writable database connection
+when work is complete.
+
+```{r db_disconnect-rw}
+db_disconnect(db_rw)
+```
+
 ## From *DuckDB* to *Bioconductor*
 
 There are likely more straight-forward ways of performing the query in
@@ -272,7 +303,7 @@ into *R*.
 
 ```{r filter-variants}
 variants_of_interest <-
-    tbl(db, "hg38") |>
+    am_data("hg38") |>
     dplyr::filter(transcript_id %like% "ENST00000393256%") |>
     dplyr::collect()
 ```
@@ -300,10 +331,11 @@ countOverlaps(unlist(bcl2l11), gpos)
 
 # Finally
 
-Remember to disconnect and shutdown the DuckDB connection.
+Remember to disconnect and shutdown the session-wide DuckDB
+connection.
 
 ```{r db_disconnect-2}
-db_disconnect(db)
+db_disconnect()
 ```
 
 # Session information {.unnumbered}

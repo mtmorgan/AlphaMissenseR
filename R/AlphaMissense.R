@@ -43,6 +43,14 @@ am_browse <-
     browseURL(url)
 }
 
+## memoized in .onLoad
+am_record_json <-
+    function(record)
+{
+    url <- paste0(ALPHAMISSENSE_ZENODO, "/api/records/", record)
+    readLines(url, warn = FALSE)
+}
+
 #' @rdname AlphaMissense
 #'
 #' @description `am_available()` reports available datasets in the
@@ -57,28 +65,29 @@ am_browse <-
 #'
 #' @importFrom rjsoncons jmespath
 #'
-#' @importFrom dplyr tibble mutate .data
+#' @importFrom dplyr tibble mutate select .data
 #'
 #' @export
 am_available <-
-    function(record = ALPHAMISSENSE_RECORD)
+    function(record = ALPHAMISSENSE_RECORD, bfc = BiocFileCache())
 {
     stopifnot(is_scalar_character(record))
 
-    url <- paste0(ALPHAMISSENSE_ZENODO, "/api/records/", record)
-    json <- readLines(url, warn = FALSE)
-
+    json <- am_record_json(record)
     is_latest <- rjmespath(json, "metadata.relations.version[0].is_last")
     if (!is_latest)
         spdl::info("{} is not the most recent version", record)
 
     ## exclude 'README.md'
     files <- jmespath(json, "files[?type != 'md']")
-    key <- rjmespath(files, "[*].key[]")
+    key <- sub(
+       "AlphaMissense_(.*)\\.tsv\\.gz", "\\1",
+        rjmespath(files, "[*].key[]")
+    )
     size <- rjmespath(files, "[*].size[]")
+    cached <- key %in% db_tables(db_connect(record, bfc))
     link <- rjmespath(files, "[*].links[].self")
-    tibble(record, key, size, link) |>
-        mutate(key = sub("AlphaMissense_(.*)\\.tsv\\.gz", "\\1", .data$key))
+    tibble(record, key, size, cached, link)
 }
 
 #' @rdname AlphaMissense
@@ -97,11 +106,6 @@ am_available <-
 #'
 #' @param as chracter(1) type of return value.
 #'
-#' - `"duckdb"`: a duckdb database connection. Use
-#'   `db_tables(<duckdb_connection>)` to see available tables. Use
-#'   `tbl(<duckdb_connection>, "hg28")` and similar to create a dbplyr
-#'   tibble.
-#'
 #' - `"tbl"`: a dbplyr tbl representation of the database resource.
 #'
 #' - `"tsv"`: path to the tsv.gz file representing the resource and
@@ -117,6 +121,9 @@ am_available <-
 #' @examples
 #' am_data("hg38")
 #'
+#' ## close the connection opened when adding the data
+#' db_disconnect()
+#'
 #' @importFrom dplyr tbl filter
 #'
 #' @importFrom rlang .data .env
@@ -129,9 +136,9 @@ am_available <-
 #'
 #' @export
 am_data <-
-    function(key, record = ALPHAMISSENSE_RECORD,
-             bfc = BiocFileCache(),
-             as = c("duckdb", "tbl", "tsv"))
+    function(key,
+             record = ALPHAMISSENSE_RECORD, bfc = BiocFileCache(),
+             as = c("tbl", "tsv"))
 {
     as <- match.arg(as)
     available <- am_available(record = record)
@@ -153,32 +160,30 @@ am_data <-
     }
     stopifnot(NROW(key) == 1L)
 
+    if (!NROW(bfcquery(bfc, key$link)))
+        spdl::info("retrieving key '{}'", key$key)
+    file_path <- bfcrpath(bfc, key$link)
+
     rname <- paste0("AlphaMissense_", record)
     db_tbl_name <- key$key
     if (!NROW(bfcquery(bfc, rname)))
         ## create the BiocFileCache record
         bfcnew(bfc, rname)
-
-    if (!NROW(bfcquery(bfc, key$link)))
-        spdl::info("retrieving key '{}'", key$key)
-    file_path <- bfcrpath(bfc, key$link)
-
-    db_path <- bfcrpath(bfc, rname)
-    db <- dbConnect(duckdb(db_path))
+    db <- db_connect(record, bfc)
     if (!db_tbl_name %in% db_tables(db)) {
         spdl::info("creating database table '{}'", db_tbl_name)
         sql <- paste0(
             "CREATE TABLE ", db_tbl_name, " AS ",
             "SELECT * FROM read_csv_auto('", file_path, "');"
         )
+        ## need a read-write (unmanaged) connection
+        db_rw <- db_connect(record, bfc)
         dbExecute(db, sql)
+        db_disconnect(db_rw)
     }
-    dbDisconnect(db, shutdown = TRUE) # close to flush, etc?
 
-    db <- dbConnect(duckdb(db_path))
     switch(
         as,
-        duckdb  = db,
         tbl = tbl(db, db_tbl_name),
         tsv = bfcrpath(bfc, key$link)
     )
