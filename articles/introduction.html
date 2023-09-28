@@ -201,9 +201,9 @@ number of variants assigned to each pathogenicity class.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB 0.8.1 [ma38727@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span></span>
 <span><span class="co">#&gt;   am_class                 n</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> likely_pathogenic 22<span style="text-decoration: underline;">770</span>557</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> ambiguous          8<span style="text-decoration: underline;">009</span>648</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> likely_benign     40<span style="text-decoration: underline;">917</span>351</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> likely_benign     40<span style="text-decoration: underline;">917</span>351</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> likely_pathogenic 22<span style="text-decoration: underline;">770</span>557</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> ambiguous          8<span style="text-decoration: underline;">009</span>648</span></span></code></pre></div>
 <p>Or the average pathogenicity score in each class…</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">|&gt;</span></span>
@@ -214,8 +214,8 @@ number of variants assigned to each pathogenicity class.</p>
 <span><span class="co">#&gt;   am_class                 n pathogenecity</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> likely_benign     40<span style="text-decoration: underline;">917</span>351         0.147</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> ambiguous          8<span style="text-decoration: underline;">009</span>648         0.444</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> likely_pathogenic 22<span style="text-decoration: underline;">770</span>557         0.863</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> likely_pathogenic 22<span style="text-decoration: underline;">770</span>557         0.863</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> ambiguous          8<span style="text-decoration: underline;">009</span>648         0.444</span></span></code></pre></div>
 <p>Or the number of transitions between <code>REF</code> and
 <code>ALT</code> nucleotides across all variants.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
@@ -422,7 +422,7 @@ into R memory, and makes the table available for subsequent manipulation
 in the current session.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rng</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/db.html">db_range_join</a></span><span class="op">(</span><span class="va">db_rw</span>, <span class="st">"hg38"</span>, <span class="st">"bcl2l11"</span>, <span class="st">"bcl2l11_overlaps"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; * [21:08:51][info] doing range join of 'hg38' with 'bcl2l11'</span></span>
+<span><span class="co">#&gt; * [21:12:24][info] doing range join of 'hg38' with 'bcl2l11'</span></span>
 <span><span class="va">rng</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   table&lt;bcl2l11_overlaps&gt; [?? x 18]</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB 0.8.1 [ma38727@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span></span>
@@ -464,19 +464,19 @@ interest.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">AlphaMissense</span><span class="fu">:::</span><span class="fu">sql_template</span><span class="op">(</span></span>
 <span>    <span class="st">"range_join"</span>,</span>
-<span>    key <span class="op">=</span> <span class="st">"hg28"</span>, join <span class="op">=</span> <span class="st">"bcl2l11"</span>, to <span class="op">=</span> <span class="st">"bcl2l11_overlaps"</span></span>
+<span>    key <span class="op">=</span> <span class="st">"hg38"</span>, join <span class="op">=</span> <span class="st">"bcl2l11"</span>, to <span class="op">=</span> <span class="st">"bcl2l11_overlaps"</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; -- range join of 'key' with 'join'; overwrite any existing table 'to'</span></span>
 <span><span class="co">#&gt; DROP TABLE IF EXISTS bcl2l11_overlaps;</span></span>
 <span><span class="co">#&gt; CREATE TEMP TABLE bcl2l11_overlaps AS</span></span>
 <span><span class="co">#&gt; SELECT</span></span>
-<span><span class="co">#&gt;     hg28.*,</span></span>
+<span><span class="co">#&gt;     hg38.*,</span></span>
 <span><span class="co">#&gt;     bcl2l11.* EXCLUDE ('#CHROM')</span></span>
-<span><span class="co">#&gt; FROM hg28</span></span>
+<span><span class="co">#&gt; FROM hg38</span></span>
 <span><span class="co">#&gt; JOIN bcl2l11</span></span>
-<span><span class="co">#&gt;     ON bcl2l11."#CHROM" = hg28."#CHROM"</span></span>
-<span><span class="co">#&gt;     AND bcl2l11.start &lt;= hg28.POS</span></span>
-<span><span class="co">#&gt;     AND bcl2l11.end &gt;= hg28.POS;</span></span></code></pre></div>
+<span><span class="co">#&gt;     ON bcl2l11."#CHROM" = hg38."#CHROM"</span></span>
+<span><span class="co">#&gt;     AND bcl2l11.start &lt;= hg38.POS</span></span>
+<span><span class="co">#&gt;     AND bcl2l11.end &gt;= hg38.POS;</span></span></code></pre></div>
 <p>As best practice, disconnect from the writable database connection
 when work is complete.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
