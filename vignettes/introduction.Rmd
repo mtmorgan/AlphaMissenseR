@@ -58,13 +58,15 @@ am_browse()
 # Discovery, retrieval and use
 
 Use `am_available()` to discover data resources available for
-representation in DuckDB databases.
+representation in DuckDB databases. The `cached` column is initially
+`FALSE` for all data sets; `TRUE` indicates that a data set has been
+downloaded by `am_data()`, as described below.
 
 ```{r am_available}
 am_available()
 ```
 
-The available datasets use the most recent record as of 25 September,
+The available data sets use the most recent record as of 25 September,
 2023; this can be changed by specifying an alternative as the
 `record=` argument or changed globally by setting an environment
 variable `ALPHAMISSENSE_RECORD` *before* loading the package.
@@ -93,8 +95,8 @@ This connection remains open throughout the session; call
 `db_disconnect(db)` to close it at the end of the session.
 
 The database contains tables for each key downloaded. As an
-alternative to `am_available()`, view available tables and create a
-[dplyr][] / [dbplyr][] tibble of the table of interest.
+alternative to `am_available()` / `am_data()`, view available tables
+and create a [dplyr][] / [dbplyr][] tibble of the table of interest.
 
 [dplyr]: https://cran.r-project.org/package=dplyr
 [dbplyr]: https://cran.r-project.org/package=dbplyr
@@ -163,12 +165,6 @@ connection that can read and write.
 
 ```{r db_rw}
 db_rw <- db_connect(read_only = FALSE)
-```
-
-The 'hg38' table from the database is
-
-```{r hg38-rw}
-hg38_rw <- tbl(db_rw, "hg38")
 ```
 
 [ensembldb]: https://bioconductor.org/packages/ensembldb
@@ -324,6 +320,8 @@ gpos
 
 One can then use [GenomicRanges][] functionality, e.g., to count the
 number of variants in each exon.
+
+[GenomicRanges]: https://bioconductor.org/packages/GenomicRanges
 
 ```{r countOverlaps}
 countOverlaps(unlist(bcl2l11), gpos)

@@ -51,6 +51,13 @@ am_record_json <-
     readLines(url, warn = FALSE)
 }
 
+am_data_license <-
+    function(record)
+{
+    json <- am_record_json(record)
+    jmespath(json, "metadata.license.id");
+}
+
 #' @rdname AlphaMissense
 #'
 #' @description `am_available()` reports available datasets in the
@@ -160,8 +167,11 @@ am_data <-
     }
     stopifnot(NROW(key) == 1L)
 
-    if (!NROW(bfcquery(bfc, key$link)))
+    if (!NROW(bfcquery(bfc, key$link))) {
+        license <- am_data_license(record)
         spdl::info("retrieving key '{}'", key$key)
+        spdl::info("data licensed under '{}'", license)
+    }
     file_path <- bfcrpath(bfc, key$link)
 
     rname <- paste0("AlphaMissense_", record)
@@ -169,26 +179,23 @@ am_data <-
     if (!NROW(bfcquery(bfc, rname)))
         ## create the BiocFileCache record
         bfcnew(bfc, rname)
-    db <- db_connect(record, bfc)
-    if (!db_tbl_name %in% db_tables(db)) {
+    ## must be 'read_only = FALSE' so new database can be created
+    db_rw <- db_connect(record, bfc, read_only = FALSE)
+    if (!db_tbl_name %in% db_tables(db_rw)) {
         spdl::info("creating database table '{}'", db_tbl_name)
-        sql <- paste0(
-            "CREATE TABLE ", db_tbl_name, " AS ",
-            "SELECT * FROM read_csv_auto('", file_path, "');"
+        sql <- sql_template(
+            "import_csv", db_tbl_name = db_tbl_name, file_path = file_path
         )
-        ## need a read-write (unmanaged) connection
-        db_rw <- db_connect(record, bfc, read_only = FALSE)
         dbExecute(db_rw, sql)
-        db_disconnect(db_rw)
 
         ## flush managed read-only connection
-        db_disconnect(db)
-        db <- db_connect(record, bfc)
+        db_disconnect(db_connect(record, bfc))
     }
+    db_disconnect(db_rw)
 
     switch(
         as,
-        tbl = tbl(db, db_tbl_name),
+        tbl = tbl(db_connect(record, bfc), db_tbl_name),
         tsv = bfcrpath(bfc, key$link)
     )
 }

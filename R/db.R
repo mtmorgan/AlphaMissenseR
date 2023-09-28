@@ -1,12 +1,3 @@
-sql_template <-
-    function(name)
-{
-    file <- paste0(name, ".sql")
-    path <- system.file(package = "AlphaMissense", "sql", file)
-    lines <- readLines(path)
-    paste(lines, collapse = "\n")
-}
-
 DB_CONNECTION <- new.env(parent = emptyenv())
 
 #' @rdname db
@@ -69,7 +60,7 @@ db_connect <-
         ## ...or has been disconnected
         !dbIsValid(DB_CONNECTION[[db_connection_name]])
     if (create_entry) {
-        spdl::info(
+        spdl::debug(
             "creating db connection for record '{}', read only '{}'",
             record, read_only
         )
@@ -215,8 +206,6 @@ db_temporary_table <-
 #'     count(`#CHROM`) |>
 #'     arrange(`#CHROM`)
 #'
-#' @importFrom whisker whisker.render
-#'
 #' @export
 db_range_join <-
     function(db, key, join, to)
@@ -237,8 +226,7 @@ db_range_join <-
         spdl::info("overwriting existing table '{}'", to)
 
     spdl::info("doing range join of '{}' with '{}'", key, join)
-    template <- sql_template("range_join")
-    sql <- whisker.render(template)
+    sql <- sql_template("range_join", key = key, join = join, to = to)
     dbExecute(db, sql)
 
     tbl(db, to)
