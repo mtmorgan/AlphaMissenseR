@@ -275,8 +275,10 @@ be of interest.
 [whisker]: https://cran.r-project.org/package=whisker
 
 ```{r range-join-template}
-AlphaMissense:::sql_template("range_join") |>
-    cat("\n")
+AlphaMissense:::sql_template(
+    "range_join",
+    key = "hg38", join = "bcl2l11", to = "bcl2l11_overlaps"
+) |> cat("\n")
 ```
 
 As best practice, disconnect from the writable database connection
