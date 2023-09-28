@@ -34,7 +34,7 @@ connection. Temporary tables are lost."><!-- mathjax --><script src="https://cdn
     
     <a class="navbar-brand me-2" href="../index.html">AlphaMissense</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.11</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -204,15 +204,13 @@ at the end of a session.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">db_connect</span><span class="op">(</span><span class="op">)</span>          <span class="co"># default 'read-only' connection</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * [17:35:04][info] creating db connection for record '8360242', read only 'TRUE'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> &lt;duckdb_connection f9740 driver=&lt;duckdb_driver 5a5a0 dbdir='/Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac' read_only=TRUE bigint=numeric&gt;&gt;</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> &lt;duckdb_connection fb7a0 driver=&lt;duckdb_driver 00000 dbdir='/Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac' read_only=TRUE bigint=numeric&gt;&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">db_rw</span> <span class="op">&lt;-</span> <span class="fu">db_connect</span><span class="op">(</span>read_only <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * [17:35:04][info] creating db connection for record '8360242', read only 'FALSE'</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="AlphaMissense.html">am_data</a></span><span class="op">(</span><span class="st">"hg38"</span><span class="op">)</span>       <span class="co"># uses the default, 'read-only' connection</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Source:   table&lt;hg38&gt; [?? x 10]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database: DuckDB 0.8.1 [root@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database: DuckDB 0.8.1 [ma38727@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    `#CHROM`   POS REF   ALT   genome uniprot_id transcript_id    protein_variant</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> chr1     <span style="text-decoration: underline;">69</span>094 G     T     hg38   Q8NH21     ENST00000335137… V2L            </span>
@@ -246,7 +244,7 @@ at the end of a session.</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">db_temporary_table</span><span class="op">(</span><span class="va">db_rw</span>, <span class="va">ranges</span>, <span class="st">"ranges"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Source:   table&lt;ranges&gt; [4 x 3]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database: DuckDB 0.8.1 [root@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database: DuckDB 0.8.1 [ma38727@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   `#CHROM` start    end</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> chr1         1 <span style="text-decoration: underline;">200</span>000</span>
@@ -266,22 +264,22 @@ at the end of a session.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [7] "isoforms_hg38"            </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">rng</span> <span class="op">&lt;-</span> <span class="fu">db_range_join</span><span class="op">(</span><span class="va">db_rw</span>, <span class="st">"hg38"</span>, <span class="st">"ranges"</span>, <span class="st">"ranges_overlaps"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * [17:35:05][info] doing range join of 'hg38' with 'ranges'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * [20:57:44][info] doing range join of 'hg38' with 'ranges'</span>
 <span class="r-in"><span><span class="va">rng</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Source:   table&lt;ranges_overlaps&gt; [?? x 12]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database: DuckDB 0.8.1 [root@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database: DuckDB 0.8.1 [ma38727@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    `#CHROM`   POS REF   ALT   genome uniprot_id transcript_id    protein_variant</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> chr2     <span style="text-decoration: underline;">45</span>769 G     T     hg38   Q1W6H9     ENST00000327669… S206Y          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> chr2     <span style="text-decoration: underline;">45</span>770 A     C     hg38   Q1W6H9     ENST00000327669… S206A          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> chr2     <span style="text-decoration: underline;">45</span>770 A     G     hg38   Q1W6H9     ENST00000327669… S206P          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> chr2     <span style="text-decoration: underline;">45</span>770 A     T     hg38   Q1W6H9     ENST00000327669… S206T          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> chr2     <span style="text-decoration: underline;">45</span>771 G     T     hg38   Q1W6H9     ENST00000327669… S205R          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> chr2     <span style="text-decoration: underline;">45</span>771 G     C     hg38   Q1W6H9     ENST00000327669… S205R          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> chr2     <span style="text-decoration: underline;">45</span>772 C     T     hg38   Q1W6H9     ENST00000327669… S205N          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> chr2     <span style="text-decoration: underline;">45</span>772 C     A     hg38   Q1W6H9     ENST00000327669… S205I          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> chr2     <span style="text-decoration: underline;">45</span>772 C     G     hg38   Q1W6H9     ENST00000327669… S205T          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> chr2     <span style="text-decoration: underline;">45</span>773 T     G     hg38   Q1W6H9     ENST00000327669… S205R          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> chr4     <span style="text-decoration: underline;">59</span>430 G     C     hg38   Q8IYB9     ENST00000610261… E2Q            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> chr4     <span style="text-decoration: underline;">59</span>430 G     A     hg38   Q8IYB9     ENST00000610261… E2K            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> chr4     <span style="text-decoration: underline;">59</span>431 A     C     hg38   Q8IYB9     ENST00000610261… E2A            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> chr4     <span style="text-decoration: underline;">59</span>431 A     G     hg38   Q8IYB9     ENST00000610261… E2G            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> chr4     <span style="text-decoration: underline;">59</span>431 A     T     hg38   Q8IYB9     ENST00000610261… E2V            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> chr4     <span style="text-decoration: underline;">59</span>432 A     C     hg38   Q8IYB9     ENST00000610261… E2D            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> chr4     <span style="text-decoration: underline;">59</span>432 A     T     hg38   Q8IYB9     ENST00000610261… E2D            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> chr4     <span style="text-decoration: underline;">59</span>433 C     A     hg38   Q8IYB9     ENST00000610261… L3I            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> chr4     <span style="text-decoration: underline;">59</span>433 C     T     hg38   Q8IYB9     ENST00000610261… L3F            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> chr4     <span style="text-decoration: underline;">59</span>433 C     G     hg38   Q8IYB9     ENST00000610261… L3V            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4 more variables: am_pathogenicity &lt;dbl&gt;, am_class &lt;chr&gt;, start &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   end &lt;dbl&gt;</span></span>
@@ -289,7 +287,7 @@ at the end of a session.</p>
 <span class="r-in"><span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">`#CHROM`</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">`#CHROM`</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Source:     SQL [3 x 2]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database:   DuckDB 0.8.1 [root@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database:   DuckDB 0.8.1 [ma38727@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Ordered by: `#CHROM`</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   `#CHROM`     n</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
