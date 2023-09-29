@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">AlphaMissense</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.13</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -141,7 +141,7 @@ so this operation is expensive only the first time. Each
 <code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AlphaMissense.html">am_data</a></span><span class="op">(</span><span class="st">"hg38"</span><span class="op">)</span></span>
 <span><span class="va">tbl</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   table&lt;hg38&gt; [?? x 10]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB 0.8.1 [ma38727@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB 0.8.1 [root@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span></span>
 <span><span class="co">#&gt;    `#CHROM`   POS REF   ALT   genome uniprot_id transcript_id    protein_variant</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> chr1     <span style="text-decoration: underline;">69</span>094 G     T     hg38   Q8NH21     ENST00000335137… V2L            </span></span>
@@ -161,8 +161,8 @@ A (read-only) connection to the database itself is available with</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/db.html">db_connect</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>This connection remains open throughout the session; call
-<code>db_disconnect(db)</code> to close it at the end of the
-session.</p>
+<code>db_disconnect(db)</code> or <code><a href="../reference/db.html">db_disconnect_all()</a></code> to
+close it at the end of the session.</p>
 <p>The database contains tables for each key downloaded. As an
 alternative to <code><a href="../reference/AlphaMissense.html">am_available()</a></code> / <code><a href="../reference/AlphaMissense.html">am_data()</a></code>,
 view available tables and create a <a href="https://cran.r-project.org/package=dplyr" class="external-link">dplyr</a> / <a href="https://cran.r-project.org/package=dbplyr" class="external-link">dbplyr</a> tibble of
@@ -174,10 +174,10 @@ the table of interest.</p>
 <span><span class="co">#&gt; [5] "hg38"                      "isoforms_aa_substitutions"</span></span>
 <span><span class="co">#&gt; [7] "isoforms_hg38"</span></span>
 <span></span>
-<span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">db</span>, <span class="st">"hg38"</span><span class="op">)</span></span>
+<span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu">tbl</span><span class="op">(</span><span class="va">db</span>, <span class="st">"hg38"</span><span class="op">)</span></span>
 <span><span class="va">tbl</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   table&lt;hg38&gt; [?? x 10]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB 0.8.1 [ma38727@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB 0.8.1 [root@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span></span>
 <span><span class="co">#&gt;    `#CHROM`   POS REF   ALT   genome uniprot_id transcript_id    protein_variant</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> chr1     <span style="text-decoration: underline;">69</span>094 G     T     hg38   Q8NH21     ENST00000335137… V2L            </span></span>
@@ -196,9 +196,9 @@ the table of interest.</p>
 number of variants assigned to each pathogenicity class.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">am_class</span><span class="op">)</span></span>
+<span>    <span class="fu">count</span><span class="op">(</span><span class="va">am_class</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [3 x 2]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB 0.8.1 [ma38727@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB 0.8.1 [root@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span></span>
 <span><span class="co">#&gt;   am_class                 n</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> likely_pathogenic 22<span style="text-decoration: underline;">770</span>557</span></span>
@@ -207,25 +207,25 @@ number of variants assigned to each pathogenicity class.</p>
 <p>Or the average pathogenicity score in each class…</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">am_class</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>, pathogenecity <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">am_pathogenicity</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu">group_by</span><span class="op">(</span><span class="va">am_class</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">summarize</span><span class="op">(</span>n <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>, pathogenecity <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">am_pathogenicity</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [3 x 3]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB 0.8.1 [ma38727@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB 0.8.1 [root@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span></span>
 <span><span class="co">#&gt;   am_class                 n pathogenecity</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> likely_benign     40<span style="text-decoration: underline;">917</span>351         0.147</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> ambiguous          8<span style="text-decoration: underline;">009</span>648         0.444</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> likely_pathogenic 22<span style="text-decoration: underline;">770</span>557         0.863</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> likely_pathogenic 22<span style="text-decoration: underline;">770</span>557         0.863</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> ambiguous          8<span style="text-decoration: underline;">009</span>648         0.444</span></span></code></pre></div>
 <p>Or the number of transitions between <code>REF</code> and
 <code>ALT</code> nucleotides across all variants.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">REF</span>, <span class="va">ALT</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">count</span><span class="op">(</span><span class="va">REF</span>, <span class="va">ALT</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="st">"ALT"</span>, values_from <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">REF</span>, <span class="va">A</span>, <span class="va">C</span>, <span class="va">G</span>, <span class="cn">T</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">REF</span><span class="op">)</span></span>
+<span>    <span class="fu">select</span><span class="op">(</span><span class="va">REF</span>, <span class="va">A</span>, <span class="va">C</span>, <span class="va">G</span>, <span class="cn">T</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">arrange</span><span class="op">(</span><span class="va">REF</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:     SQL [4 x 5]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database:   DuckDB 0.8.1 [ma38727@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database:   DuckDB 0.8.1 [root@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Ordered by: REF</span></span></span>
 <span><span class="co">#&gt;   REF         A       C       G       T</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
@@ -237,9 +237,9 @@ number of variants assigned to each pathogenicity class.</p>
 interest, e.g., the first 200000 nucleoties of chromosome 4.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">`#CHROM`</span> <span class="op">==</span> <span class="st">"chr4"</span>, <span class="va">POS</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="va">POS</span> <span class="op">&lt;=</span> <span class="fl">200000</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">`#CHROM`</span> <span class="op">==</span> <span class="st">"chr4"</span>, <span class="va">POS</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="va">POS</span> <span class="op">&lt;=</span> <span class="fl">200000</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [?? x 10]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB 0.8.1 [ma38727@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB 0.8.1 [root@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span></span>
 <span><span class="co">#&gt;    `#CHROM`   POS REF   ALT   genome uniprot_id transcript_id    protein_variant</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> chr4     <span style="text-decoration: underline;">59</span>430 G     C     hg38   Q8IYB9     ENST00000610261… E2Q            </span></span>
@@ -254,12 +254,6 @@ interest, e.g., the first 200000 nucleoties of chromosome 4.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> chr4     <span style="text-decoration: underline;">59</span>433 C     G     hg38   Q8IYB9     ENST00000610261… L3V            </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: am_pathogenicity &lt;dbl&gt;, am_class &lt;chr&gt;</span></span></span></code></pre></div>
-<p>Be sure to clean up the database connection at the end of the session
-when done.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/db.html">db_disconnect</a></span><span class="op">(</span><span class="va">db</span><span class="op">)</span></span></code></pre></div>
-<p>Database connections that are not closed correctly trigger warning
-messages.</p>
 </div>
 <div class="section level2">
 <h2 id="working-with-bioconductor">Working with Bioconductor<a class="anchor" aria-label="anchor" href="#working-with-bioconductor"></a>
@@ -269,20 +263,21 @@ with other <em>Bioconductor</em> workflows, particularly with the <a href="https
 and corresponding <a href="https://bioconductor.org/packages/AnnotationHub" class="external-link">AnnotationHub</a>
 resources.</p>
 <p>In this section we will work more directly with the database,
-including writing temporary tables. For this purpose, we need a
-connection that can read and write.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+including writing temporary tables. For illustration purposes, we use a
+connection that can read and write; in practice, read-only permissions
+are sufficient for creating temporary tables.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">db_rw</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/db.html">db_connect</a></span><span class="op">(</span>read_only <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="grch38-annotation-resources">GRCh38 annotation resources<a class="anchor" aria-label="anchor" href="#grch38-annotation-resources"></a>
 </h3>
 <p>Start by identifying the most recent EnsDb resource for <em>Homo
 Sapiens</em>.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hub</span> <span class="op">&lt;-</span> <span class="fu">AnnotationHub</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationHub/man/AnnotationHub-class.html" class="external-link">AnnotationHub</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu">AnnotationHub</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationHub/man/AnnotationHub-class.html" class="external-link">query</a></span><span class="op">(</span><span class="va">hub</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"EnsDb"</span>, <span class="st">"Homo sapiens"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; AnnotationHub with 25 records</span></span>
-<span><span class="co">#&gt; # snapshotDate(): 2023-09-27</span></span>
+<span><span class="co">#&gt; # snapshotDate(): 2023-09-29</span></span>
 <span><span class="co">#&gt; # $dataprovider: Ensembl</span></span>
 <span><span class="co">#&gt; # $species: Homo sapiens</span></span>
 <span><span class="co">#&gt; # $rdataclass: EnsDb</span></span>
@@ -306,7 +301,7 @@ Sapiens</em>.</p>
 <span></span>
 <span><span class="fu">AnnotationHub</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationHub/man/AnnotationHub-class.html" class="external-link">AnnotationHub</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="st">"AH113665"</span><span class="op">]</span></span>
 <span><span class="co">#&gt; AnnotationHub with 1 record</span></span>
-<span><span class="co">#&gt; # snapshotDate(): 2023-09-27</span></span>
+<span><span class="co">#&gt; # snapshotDate(): 2023-09-29</span></span>
 <span><span class="co">#&gt; # names(): AH113665</span></span>
 <span><span class="co">#&gt; # $dataprovider: Ensembl</span></span>
 <span><span class="co">#&gt; # $species: Homo sapiens</span></span>
@@ -327,7 +322,7 @@ Sapiens</em>.</p>
 and retrieve the record. Unfortunately, there are many conflicts between
 function names in different packages, so it becomes necessary to fully
 resolve functions to the package where they are defined.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jorainer/ensembldb" class="external-link">ensembldb</a></span><span class="op">)</span></span>
 <span><span class="va">edb</span> <span class="op">&lt;-</span> <span class="fu">AnnotationHub</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationHub/man/AnnotationHub-class.html" class="external-link">AnnotationHub</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="st">"AH113665"</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="va">edb</span></span>
@@ -356,7 +351,7 @@ resolve functions to the package where they are defined.</p>
 </h3>
 <p>As an illustration, use <a href="https://bioconductor.org/packages/ensembldb" class="external-link">ensembldb</a> to
 identify the exons of the canonical transcript of a particular gene.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bcl2l11</span> <span class="op">&lt;-</span></span>
 <span>    <span class="va">edb</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">ensembldb</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ensembldb/man/global-filters.html" class="external-link">filter</a></span><span class="op">(</span></span>
@@ -383,16 +378,16 @@ column <code>#CHROM</code> with identifiers such as <code>"chr1"</code>
 (it will be deleted when <code>db</code> is disconnected from the
 database) so that it can be used in ‘lazy’ SQL queries with the
 AlphaMissense data.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bcl2l11_tbl</span> <span class="op">&lt;-</span></span>
 <span>    <span class="va">bcl2l11</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>`#CHROM` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"chr"</span>, <span class="va">seqnames</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">`#CHROM`</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>, <span class="op">-</span><span class="va">seqnames</span><span class="op">)</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">`#CHROM`</span>, <span class="fu">everything</span><span class="op">(</span><span class="op">)</span>, <span class="op">-</span><span class="va">seqnames</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/db.html">db_temporary_table</a></span><span class="op">(</span><span class="va">db_rw</span>, <span class="va">bcl2l11_tbl</span>, <span class="st">"bcl2l11"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   table&lt;bcl2l11&gt; [4 x 9]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB 0.8.1 [ma38727@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB 0.8.1 [root@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span></span>
 <span><span class="co">#&gt;   `#CHROM` group group_name          start    end width strand exon_id exon_rank</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> chr2         1 ENST00000393256 111<span style="text-decoration: underline;">120</span>914 1.11<span style="color: #949494;">e</span>8   275 +      ENSE00…         1</span></span>
@@ -402,7 +397,7 @@ AlphaMissense data.</p>
 <p>The temporary table is now available on the <code>db_rw</code>
 connection; the tables will be removed on disconnect,
 <code>db_disconnect(db_rw)</code>.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="st">"bcl2l11"</span> <span class="op"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="../reference/db.html">db_tables</a></span><span class="op">(</span><span class="va">db_rw</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
 <p>Use <code><a href="../reference/db.html">db_range_join()</a></code> to join the AlphaMissense data with
@@ -420,11 +415,11 @@ included in the query), following <em>Bioconductor</em> convention.
 Writing to a temporary table avoids bringing potentially large datasets
 into R memory, and makes the table available for subsequent manipulation
 in the current session.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rng</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/db.html">db_range_join</a></span><span class="op">(</span><span class="va">db_rw</span>, <span class="st">"hg38"</span>, <span class="st">"bcl2l11"</span>, <span class="st">"bcl2l11_overlaps"</span><span class="op">)</span></span>
 <span><span class="va">rng</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   table&lt;bcl2l11_overlaps&gt; [?? x 18]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB 0.8.1 [ma38727@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB 0.8.1 [root@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span></span>
 <span><span class="co">#&gt;    `#CHROM`      POS REF   ALT   genome uniprot_id transcript_id protein_variant</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> chr2       1.11<span style="color: #949494;">e</span>8 G     A     hg38   O43521     ENST00000393… V167I          </span></span>
@@ -446,12 +441,12 @@ variants against 1000 ranges took about 20 seconds.</p>
 <p>The usual database and <a href="https://cran.r-project.org/package=dplyr" class="external-link">dplyr</a> verbs can be
 used to summarize the results, e.g., the number of variants in each
 pathogenecity class in each exon.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rng</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">exon_id</span>, <span class="va">am_class</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="st">"am_class"</span>, values_from <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [3 x 4]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB 0.8.1 [ma38727@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB 0.8.1 [root@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span></span>
 <span><span class="co">#&gt;   exon_id         likely_benign likely_pathogenic ambiguous</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> ENSE00001924953           172                16        19</span></span>
@@ -460,7 +455,7 @@ pathogenecity class in each exon.</p>
 <p>It is perhaps instructive to review the range join (<a href="https://cran.r-project.org/package=whisker" class="external-link">whisker</a>) template
 as a source of inspiration for other computations that might be of
 interest.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">AlphaMissense</span><span class="fu">:::</span><span class="fu">sql_template</span><span class="op">(</span></span>
 <span>    <span class="st">"range_join"</span>,</span>
 <span>    key <span class="op">=</span> <span class="st">"hg38"</span>, join <span class="op">=</span> <span class="st">"bcl2l11"</span>, to <span class="op">=</span> <span class="st">"bcl2l11_overlaps"</span></span>
@@ -478,7 +473,7 @@ interest.</p>
 <span><span class="co">#&gt;     AND bcl2l11.end &gt;= hg38.POS;</span></span></code></pre></div>
 <p>As best practice, disconnect from the writable database connection
 when work is complete.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/db.html">db_disconnect</a></span><span class="op">(</span><span class="va">db_rw</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -491,14 +486,14 @@ relevant transcript id(s), retrieving to <em>R</em>, and working with
 interested in is <code>"ENST00000393256"</code>.</p>
 <p>Select the relevant variants and, because there are not too many,
 load into <em>R</em>.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">variants_of_interest</span> <span class="op">&lt;-</span></span>
 <span>    <span class="fu"><a href="../reference/AlphaMissense.html">am_data</a></span><span class="op">(</span><span class="st">"hg38"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">transcript_id</span> <span class="op">%like%</span> <span class="st">"ENST00000393256%"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Coerce the AlphaMissense data to a <code>GRanges::GPos</code>
 object.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gpos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span></span>
 <span>    <span class="va">variants_of_interest</span>,</span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GPos-class.html" class="external-link">GPos</a></span><span class="op">(</span></span>
@@ -539,7 +534,7 @@ object.</p>
 <span><span class="co">#&gt;   seqinfo: 1 sequence from an unspecified genome; no seqlengths</span></span></code></pre></div>
 <p>One can then use <a href="https://bioconductor.org/packages/GenomicRanges" class="external-link">GenomicRanges</a>
 functionality, e.g., to count the number of variants in each exon.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html" class="external-link">countOverlaps</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">bcl2l11</span><span class="op">)</span>, <span class="va">gpos</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ENST00000393256 ENST00000393256 ENST00000393256 ENST00000393256 </span></span>
 <span><span class="co">#&gt;               0             859             232             207</span></span></code></pre></div>
@@ -548,15 +543,17 @@ functionality, e.g., to count the number of variants in each exon.</p>
 <div class="section level2">
 <h2 id="finally">Finally<a class="anchor" aria-label="anchor" href="#finally"></a>
 </h2>
-<p>Remember to disconnect and shutdown the session-wide DuckDB
-connection.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/db.html">db_disconnect</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>Remember to disconnect and shutdown all managed DuckDB
+connections.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/db.html">db_disconnect_all</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>Database connections that are not closed correctly trigger warning
+messages.</p>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="session-information">Session information<a class="anchor" aria-label="anchor" href="#session-information"></a>
 </h2>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; R version 4.3.1 Patched (2023-08-16 r84986)</span></span>
 <span><span class="co">#&gt; Platform: aarch64-apple-darwin21.6.0 (64-bit)</span></span>
@@ -569,7 +566,7 @@ connection.</p>
 <span><span class="co">#&gt; locale:</span></span>
 <span><span class="co">#&gt; [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; time zone: America/New_York</span></span>
+<span><span class="co">#&gt; time zone: America/Chicago</span></span>
 <span><span class="co">#&gt; tzcode source: internal</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; attached base packages:</span></span>
