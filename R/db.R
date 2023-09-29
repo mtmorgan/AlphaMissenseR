@@ -1,5 +1,14 @@
 DB_CONNECTION <- new.env(parent = emptyenv())
 
+db_connection_name <-
+    function(record, bfc, read_only)
+{
+    paste(
+        "AlphaMissense", basename(bfccache(bfc)), record, read_only,
+        sep = ":"
+    )
+}
+
 #' @rdname db
 #'
 #' @title Manipulate the Database of Missense Mutations
@@ -37,7 +46,7 @@ DB_CONNECTION <- new.env(parent = emptyenv())
 #' @export
 db_connect <-
     function(record = ALPHAMISSENSE_RECORD, bfc = BiocFileCache(),
-             read_only = TRUE, managed = TRUE)
+             read_only = TRUE, managed = read_only)
 {
     stopifnot(
         is_scalar_character(record),
@@ -45,10 +54,7 @@ db_connect <-
         is_scalar_logical(read_only)
     )
 
-    db_connection_name <- paste(
-        "AlphaMissense", basename(bfccache(bfc)), record, read_only,
-        sep = ":"
-    )
+    db_connection_name <- db_connection_name(record, bfc, read_only)
 
     create_entry <-
         ## explicitly requested...
@@ -80,6 +86,28 @@ db_connect <-
     }
 
     db
+}
+
+db_connect_or_renew <-
+    function(record = ALPHAMISSENSE_RECORD, bfc = BiocFileCache(),
+             read_only = TRUE, managed = read_only)
+{
+    if (!managed) {
+        return(db_connect(record, bfc, read_only, managed))
+    }
+
+    db_connection_name <- db_connection_name(record, bfc, read_only)
+    if (db_connection_name %in% names(DB_CONNECTION)) {
+        ## renew
+        spdl::info(paste0(
+            "renewing managed connection to record '{}', ",
+            "BiocFileCache '{}', read_only '{}'; ",
+            "previously assigned connections are invalid"
+        ), record, basename(bfccache(bfc)), read_only)
+        db_disconnect(db_connect(record, bfc, read_only, managed))
+    }
+
+    db_connect(record, bfc, read_only, managed)
 }
 
 #' @rdname db
@@ -259,6 +287,32 @@ db_disconnect <-
         inherits(db, "duckdb_connection")
     )
 
+    ## shut down this connection
     result <- dbIsValid(db) && dbDisconnect(db, shutdown = TRUE)
+    ## remove from DB_CONNECTION environment
+    is_valid <- unlist(eapply(DB_CONNECTION, dbIsValid))
+    if (length(is_valid) && any(!is_valid))
+        rm(list = names(is_valid)[!is_valid], envir = DB_CONNECTION)
+
     invisible(result)
+}
+
+#' @rdname db
+#'
+#' @description `db_disconnect_all()` disconnects all managed duckdb
+#'     database connection.
+#'
+#' @return `db_disconnect_all()` returns the `db_disconnect()` value
+#'     for each connection, invisibly.
+#'
+#' @examples
+#' \dontrun{
+#' db_disconnect_all()
+#' }
+#'
+#' @export
+db_disconnect_all <-
+    function()
+{
+    invisible(unlist(eapply(DB_CONNECTION, db_disconnect)))
 }

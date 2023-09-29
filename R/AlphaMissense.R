@@ -92,9 +92,34 @@ am_available <-
         rjmespath(files, "[*].key[]")
     )
     size <- rjmespath(files, "[*].size[]")
-    cached <- key %in% db_tables(db_connect(record, bfc))
+    db <- db_connect(record, bfc, managed = FALSE)
+    cached <- key %in% db_tables(db)
+    db_disconnect(db)
     link <- rjmespath(files, "[*].links[].self")
     tibble(record, key, size, cached, link)
+}
+
+am_data_import_csv <-
+    function(record, bfc, db_tbl_name, file_path)
+{
+    ## must be 'read_only = FALSE' so new database can be created. use
+    ## 'managed = FALSE' so connection is independent of other
+    ## read-write connections
+    db_rw <- db_connect(record, bfc, read_only = FALSE)
+    if (!db_tbl_name %in% db_tables(db_rw)) {
+        spdl::info("creating database table '{}'", db_tbl_name)
+        sql <- sql_template(
+            "import_csv", db_tbl_name = db_tbl_name, file_path = file_path
+        )
+        dbExecute(db_rw, sql)
+
+        ## flush managed read-only connection
+        ## FIXME: but this invalidates existing read-only connections
+        db_connect_or_renew(record, bfc)
+    }
+    db_disconnect(db_rw)
+
+    tbl(db_connect(record, bfc), db_tbl_name)
 }
 
 #' @rdname AlphaMissense
@@ -179,26 +204,11 @@ am_data <-
     if (!NROW(bfcquery(bfc, rname)))
         ## create the BiocFileCache record
         bfcnew(bfc, rname)
-    ## must be 'read_only = FALSE' so new database can be created. use
-    ## 'managed = FALSE' so connection is independent of other
-    ## read-write connections
-    db_rw <- db_connect(record, bfc, read_only = FALSE, managed = FALSE)
-    if (!db_tbl_name %in% db_tables(db_rw)) {
-        spdl::info("creating database table '{}'", db_tbl_name)
-        sql <- sql_template(
-            "import_csv", db_tbl_name = db_tbl_name, file_path = file_path
-        )
-        dbExecute(db_rw, sql)
-
-        ## flush managed read-only connection
-        ## FIXME: but this invalidates existing read-only connections
-        db_disconnect(db_connect(record, bfc))
-    }
-    db_disconnect(db_rw)
+    tbl <- am_data_import_csv(record, bfc, db_tbl_name, file_path)
 
     switch(
         as,
-        tbl = tbl(db_connect(record, bfc), db_tbl_name),
+        tbl = tbl,
         tsv = bfcrpath(bfc, key$link)
     )
 }

@@ -15,7 +15,6 @@ test_that("'am_available()' works", {
     ## new cache
     fl <- tempfile(); dir.create(fl)
     bfc <- BiocFileCache::BiocFileCache(fl)
-    db <- db_connect(ALPHAMISSENSE_RECORD, bfc)
 
     result <- am_available(ALPHAMISSENSE_RECORD, bfc)
     expect_true(inherits(result, "tbl_df"))
@@ -27,8 +26,30 @@ test_that("'am_available()' works", {
         "hg38", "isoforms_aa_substitutions", "isoforms_hg38"
     )
     expect_true(setequal(keys, result$key))
+})
 
-    db_disconnect(db)
+test_that("'am_data_import_csv()' works", {
+    record <- ALPHAMISSENSE_RECORD
+    fl <- tempfile(); dir.create(fl)
+    bfc <- BiocFileCache::BiocFileCache(fl)
+
+    tsv_file <- tempfile()
+    writeLines(c(
+        "# Comment",
+        "#",
+        "# Comment",
+        "#CHROM\tPOS",
+        "chr1\t1",
+        "chr1\t2"
+    ), tsv_file)
+
+    spdl::set_level("warn")
+    tbl <- am_data_import_csv(record, bfc, "tsv_file", tsv_file)
+    spdl::set_level("info")
+    expect_true(NROW(tbl |> collect()) == 2L)
+    expect_identical(colnames(tbl), c("#CHROM", "POS"))
+
+    db_disconnect(db_connect(record, bfc))
 })
 
 test_that("'am_data()' works", {

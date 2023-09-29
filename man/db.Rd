@@ -6,13 +6,14 @@
 \alias{db_temporary_table}
 \alias{db_range_join}
 \alias{db_disconnect}
+\alias{db_disconnect_all}
 \title{Manipulate the Database of Missense Mutations}
 \usage{
 db_connect(
   record = ALPHAMISSENSE_RECORD,
   bfc = BiocFileCache(),
   read_only = TRUE,
-  managed = TRUE
+  managed = read_only
 )
 
 db_tables(db = db_connect())
@@ -22,6 +23,8 @@ db_temporary_table(db, value, to)
 db_range_join(db, key, join, to)
 
 db_disconnect(db = db_connect())
+
+db_disconnect_all()
 }
 \arguments{
 \item{record}{character(1) Zenodo record for the AlphaMissense data
@@ -69,6 +72,9 @@ from the join) as a dbplyr tibble.
 already been closed or is not valid (via \code{dbIsValid()}) or
 \code{TRUE} if disconnection is successful. Values are returned
 invisibly.
+
+\code{db_disconnect_all()} returns the \code{db_disconnect()} value
+for each connection, invisibly.
 }
 \description{
 \code{db_connect()} manages connections to AlphaMissense
@@ -88,6 +94,9 @@ is stored in table \code{to}.
 \code{db_disconnect()} disconnects the duckdb database and
 shuts down the DuckDB server associated with the
 connection. Temporary tables are lost.
+
+\code{db_disconnect_all()} disconnects all managed duckdb
+database connection.
 }
 \details{
 For \code{db_connect()}, set \code{managed = FALSE} when, for
@@ -140,5 +149,9 @@ rng |>
 
 db_disconnect(db_rw)  # explicit read-write connection
 db_disconnect()       # implicit read-only connection
+
+\dontrun{
+db_disconnect_all()
+}
 
 }

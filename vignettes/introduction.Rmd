@@ -92,7 +92,8 @@ db <- db_connect()
 ```
 
 This connection remains open throughout the session; call
-`db_disconnect(db)` to close it at the end of the session.
+`db_disconnect(db)` or `db_disconnect_all()` to close it at the end of
+the session.
 
 The database contains tables for each key downloaded. As an
 alternative to `am_available()` / `am_data()`, view available tables
@@ -143,16 +144,6 @@ tbl |>
     filter(`#CHROM` == "chr4", POS > 0, POS <= 200000)
 ```
 
-Be sure to clean up the database connection at the end of the session
-when done.
-
-```{r db_disconnect}
-db_disconnect(db)
-```
-
-Database connections that are not closed correctly trigger warning
-messages.
-
 # Working with Bioconductor
 
 This section illustrates how AlphaMissense data can be integrated with
@@ -160,8 +151,9 @@ other *Bioconductor* workflows, particularly with the [ensembldb][]
 package and corresponding [AnnotationHub][] resources.
 
 In this section we will work more directly with the database,
-including writing temporary tables. For this purpose, we need a
-connection that can read and write.
+including writing temporary tables. For illustration purposes, we use
+a connection that can read and write; in practice, read-only
+permissions are sufficient for creating temporary tables.
 
 ```{r db_rw}
 db_rw <- db_connect(read_only = FALSE)
@@ -331,12 +323,14 @@ countOverlaps(unlist(bcl2l11), gpos)
 
 # Finally
 
-Remember to disconnect and shutdown the session-wide DuckDB
-connection.
+Remember to disconnect and shutdown all managed DuckDB connections.
 
-```{r db_disconnect-2}
-db_disconnect()
+```{r db_disconnect_all}
+db_disconnect_all()
 ```
+
+Database connections that are not closed correctly trigger warning
+messages.
 
 # Session information {.unnumbered}
 
