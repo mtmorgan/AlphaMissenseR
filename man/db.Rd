@@ -12,7 +12,7 @@ db_connect(
   record = ALPHAMISSENSE_RECORD,
   bfc = BiocFileCache(),
   read_only = TRUE,
-  managed = read_only
+  managed = TRUE
 )
 
 db_tables(db = db_connect())
@@ -93,8 +93,8 @@ connection. Temporary tables are lost.
 For \code{db_connect()}, set \code{managed = FALSE} when, for
 instance, accessing a database in a separate process. Remember
 to capture the database connection \code{db_unmanaged <- db_connect(managed = FALSE)} and disconnect when done
-\verb{db_disconnect(db_unmanaged). Connections opened with }read_only = FALSE` are \emph{not} managed, and must also be
-disconnected manually.
+`db_disconnect(db_unmanaged). Connections are managed by
+default.
 
 \code{db_temporary_table()} \strong{overwrites} an existing table
 with name \code{to}.
@@ -138,7 +138,7 @@ rng |>
     count(`#CHROM`) |>
     arrange(`#CHROM`)
 
-db_disconnect(db_rw)  # required for each non-'managed' connection
-db_disconnect()       # required once per session
+db_disconnect(db_rw)  # explicit read-write connection
+db_disconnect()       # implicit read-only connection
 
 }

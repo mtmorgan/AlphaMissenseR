@@ -21,9 +21,8 @@ DB_CONNECTION <- new.env(parent = emptyenv())
 #'     instance, accessing a database in a separate process. Remember
 #'     to capture the database connection `db_unmanaged <-
 #'     db_connect(managed = FALSE)` and disconnect when done
-#'     `db_disconnect(db_unmanaged). Connections opened with
-#'     `read_only = FALSE` are *not* managed, and must also be
-#'     disconnected manually.
+#'     `db_disconnect(db_unmanaged). Connections are managed by
+#'     default.
 #'
 #' @return `db_connect()` returns an open `duckdb_connection` to the
 #'     AlphaMissense record-specific database.
@@ -38,8 +37,7 @@ DB_CONNECTION <- new.env(parent = emptyenv())
 #' @export
 db_connect <-
     function(record = ALPHAMISSENSE_RECORD, bfc = BiocFileCache(),
-             read_only = TRUE,
-             managed = read_only)
+             read_only = TRUE, managed = TRUE)
 {
     stopifnot(
         is_scalar_character(record),
@@ -225,7 +223,7 @@ db_range_join <-
     if (to %in% db_tables(db))
         spdl::info("overwriting existing table '{}'", to)
 
-    spdl::info("doing range join of '{}' with '{}'", key, join)
+    spdl::debug("doing range join of '{}' with '{}'", key, join)
     sql <- sql_template("range_join", key = key, join = join, to = to)
     dbExecute(db, sql)
 
@@ -248,8 +246,8 @@ db_range_join <-
 #'     invisibly.
 #'
 #' @examples
-#' db_disconnect(db_rw)  # required for each non-'managed' connection
-#' db_disconnect()       # required once per session
+#' db_disconnect(db_rw)  # explicit read-write connection
+#' db_disconnect()       # implicit read-only connection
 #'
 #' @importFrom DBI dbIsValid dbDisconnect
 #'

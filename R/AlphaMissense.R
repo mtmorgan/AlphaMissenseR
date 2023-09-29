@@ -179,8 +179,10 @@ am_data <-
     if (!NROW(bfcquery(bfc, rname)))
         ## create the BiocFileCache record
         bfcnew(bfc, rname)
-    ## must be 'read_only = FALSE' so new database can be created
-    db_rw <- db_connect(record, bfc, read_only = FALSE)
+    ## must be 'read_only = FALSE' so new database can be created. use
+    ## 'managed = FALSE' so connection is independent of other
+    ## read-write connections
+    db_rw <- db_connect(record, bfc, read_only = FALSE, managed = FALSE)
     if (!db_tbl_name %in% db_tables(db_rw)) {
         spdl::info("creating database table '{}'", db_tbl_name)
         sql <- sql_template(
@@ -189,6 +191,7 @@ am_data <-
         dbExecute(db_rw, sql)
 
         ## flush managed read-only connection
+        ## FIXME: but this invalidates existing read-only connections
         db_disconnect(db_connect(record, bfc))
     }
     db_disconnect(db_rw)
