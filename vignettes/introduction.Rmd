@@ -147,8 +147,9 @@ tbl |>
 # Working with Bioconductor
 
 This section illustrates how AlphaMissense data can be integrated with
-other *Bioconductor* workflows, particularly with the [ensembldb][]
-package and corresponding [AnnotationHub][] resources.
+other *Bioconductor* workflows, including the [GenomicRanges][]
+infrastructure and the [ensembldb][] package / [AnnotationHub][]
+resources.
 
 In this section we will work more directly with the database,
 including writing temporary tables. For illustration purposes, we use
@@ -159,8 +160,49 @@ permissions are sufficient for creating temporary tables.
 db_rw <- db_connect(read_only = FALSE)
 ```
 
+[GenomicRanges]: https://bioconductor.org/packages/GenomicRanges
 [ensembldb]: https://bioconductor.org/packages/ensembldb
 [AnnotationHub]: https://bioconductor.org/packages/AnnotationHub
+
+## Genomic ranges
+
+The [GenomicRanges][] infrastructure provides standard data structures
+that allow range-based operations across Bioconductor packages. The
+`GPos` data structure provides a convenient and memory-efficient
+representation of single-nucleotide variants like those in the `hg19`
+and `hg38` AlphaMissense resources. Start by installing (if necessary)
+the [GenomicRanges][] package.
+
+```{r}
+if (!requireNamespace("GenomicRanges", quietly = TRUE))
+    BiocManager::install("GeomicRanges")
+```
+
+Select the `hg38` data resource, and filter to a subset of variants;
+`GPos` is an in-memory data structure and can easily manage 10's of
+millions of variants.
+
+```{r}
+tbl <-
+    am_data("hg38") |>
+    filter(`#CHROM` == "chr2", POS < 10000000, REF == "G")
+```
+
+Use `to_GPos()` to coerce to a `GPos` object.
+
+```{r}
+gpos <-
+    tbl |>
+    to_GPos()
+gpos
+```
+
+Vignettes in the [GenomicRanges][] package illustrate use of these
+objects.
+
+```{r, eval = FALSE}
+utils::browseVignettes("GenomicRanges")
+```
 
 ## GRCh38 annotation resources
 
