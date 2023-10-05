@@ -21,7 +21,7 @@ Install the package from GitHub, ensuring correct *Bioconductor*
 dependencies.
 
 ``` r
-if (!"BiocManager" %in% rownames(installed.packages))
+if (!"BiocManager" %in% rownames(installed.packages()))
     install.packages("BiocManager", repos = "https://cran.r-project.org")
 
 remotes::install_github(

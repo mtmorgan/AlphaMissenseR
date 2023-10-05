@@ -1,6 +1,6 @@
 Package: AlphaMissense
 Title: Accessing AlphaMissense Resources in R
-Version: 0.0.14
+Version: 0.0.15
 Authors@R: 
     person(
         "Martin", "Morgan", role = c("aut", "cre"),
