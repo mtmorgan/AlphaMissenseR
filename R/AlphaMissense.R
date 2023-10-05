@@ -54,8 +54,59 @@ am_record_json <-
 am_data_license <-
     function(record)
 {
+    if (internet_available()) {
+        json <- am_record_json(record)
+        license <- jmespath(json, "metadata.license.id")
+    } else {
+        license <- "unknown (internet not available)"
+    }
+    spdl::info("data licensed under '{}'", license)
+    license
+}
+
+am_available_from_internet <-
+    function(record, bfc)
+{
+    spdl::debug("am_available_from_internet()")
     json <- am_record_json(record)
-    jmespath(json, "metadata.license.id");
+    is_latest <- rjmespath(json, "metadata.relations.version[0].is_last")
+    if (!is_latest)
+        spdl::info("{} is not the most recent version", record)
+
+    ## exclude 'README.md'
+    files <- jmespath(json, "files[?type != 'md']")
+    key <- sub(
+       "AlphaMissense_(.*)\\.tsv\\.gz", "\\1",
+        rjmespath(files, "[*].key[]")
+    )
+    size <- rjmespath(files, "[*].size[]")
+    db <- db_connect(record, bfc, managed = FALSE)
+    cached <- key %in% db_tables(db)
+    db_disconnect(db)
+    link <- rjmespath(files, "[*].links[].self")
+    tibble(record, key, size, cached, link)
+}
+
+#' @importFrom BiocFileCache bfcinfo
+am_available_from_cache <-
+    function(record, bfc)
+{
+    spdl::debug("am_available_from_cache()")
+    query <- paste0("AlphaMissense_", record)
+    tbl <- bfcquery(query = query)
+    if (!NROW(tbl))
+        stop("no off-line resources available")
+    db <- db_connect(record, bfc, managed = FALSE)
+    key <- db_tables(db)
+    db_disconnect(db)
+    n_rows <- length(key)
+    tibble(
+        record = rep(record, n_rows),
+        key,
+        size = rep(NA_integer_, n_rows),
+        cached = rep(TRUE, n_rows),
+        link = rep(NA_character_, n_rows)
+    )
 }
 
 #' @rdname AlphaMissense
@@ -80,33 +131,23 @@ am_available <-
 {
     stopifnot(is_scalar_character(record))
 
-    json <- am_record_json(record)
-    is_latest <- rjmespath(json, "metadata.relations.version[0].is_last")
-    if (!is_latest)
-        spdl::info("{} is not the most recent version", record)
-
-    ## exclude 'README.md'
-    files <- jmespath(json, "files[?type != 'md']")
-    key <- sub(
-       "AlphaMissense_(.*)\\.tsv\\.gz", "\\1",
-        rjmespath(files, "[*].key[]")
-    )
-    size <- rjmespath(files, "[*].size[]")
-    db <- db_connect(record, bfc, managed = FALSE)
-    cached <- key %in% db_tables(db)
-    db_disconnect(db)
-    link <- rjmespath(files, "[*].links[].self")
-    tibble(record, key, size, cached, link)
+    if (internet_available()) {
+        am_available_from_internet(record, bfc)
+    } else {
+        am_available_from_cache(record, bfc)
+    }
 }
 
 am_data_import_csv <-
-    function(record, bfc, db_tbl_name, file_path)
+    function(record, bfc, db_tbl_name, link)
 {
     ## must be 'read_only = FALSE' so new database can be created. use
     ## 'managed = FALSE' so connection is independent of other
     ## read-write connections
     db_rw <- db_connect(record, bfc, read_only = FALSE)
     if (!db_tbl_name %in% db_tables(db_rw)) {
+        spdl::info("downloading or finding local file")
+        file_path <- bfcrpath(bfc, link)
         spdl::info("creating database table '{}'", db_tbl_name)
         sql <- sql_template(
             "import_csv", db_tbl_name = db_tbl_name, file_path = file_path
@@ -192,19 +233,17 @@ am_data <-
     }
     stopifnot(NROW(key) == 1L)
 
-    if (!NROW(bfcquery(bfc, key$link))) {
-        license <- am_data_license(record)
+    if ("link" %in% colnames(key) && !NROW(bfcquery(bfc, key$link))) {
         spdl::info("retrieving key '{}'", key$key)
-        spdl::info("data licensed under '{}'", license)
+        am_data_license(record)
     }
-    file_path <- bfcrpath(bfc, key$link)
 
     rname <- paste0("AlphaMissense_", record)
     db_tbl_name <- key$key
     if (!NROW(bfcquery(bfc, rname)))
         ## create the BiocFileCache record
         bfcnew(bfc, rname)
-    tbl <- am_data_import_csv(record, bfc, db_tbl_name, file_path)
+    tbl <- am_data_import_csv(record, bfc, db_tbl_name, key$link)
 
     switch(
         as,

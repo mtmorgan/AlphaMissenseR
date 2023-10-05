@@ -8,7 +8,11 @@ test_that("'am_record_json()' returns", {
 })
 
 test_that("'am_data_license()' reports appropriate license", {
-    expect_identical(am_data_license(ALPHAMISSENSE_RECORD), "CC-BY-NC-SA-4.0")
+    output <- capture.output({
+        result <- am_data_license(ALPHAMISSENSE_RECORD)
+    })
+    expect_identical(result, "CC-BY-NC-SA-4.0")
+    expect_true(nzchar(output))
 })
 
 test_that("'am_available()' works", {
@@ -44,8 +48,11 @@ test_that("'am_data_import_csv()' works", {
     ), tsv_file)
 
     spdl::set_level("warn")
-    tbl <- am_data_import_csv(record, bfc, "tsv_file", tsv_file)
+    output <- capture.output({
+        tbl <- am_data_import_csv(record, bfc, "tsv_file", tsv_file)
+    }, type = "message")
     spdl::set_level("info")
+    expect_true(nzchar(output))
     expect_true(NROW(tbl |> collect()) == 2L)
     expect_identical(colnames(tbl), c("#CHROM", "POS"))
 
