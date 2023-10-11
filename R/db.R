@@ -17,6 +17,14 @@ db_connection_name <-
 #'     record-specific databases. By default, connections are created
 #'     once and reused.
 #'
+#' @usage
+#' db_connect(
+#'     record = ALPHAMISSENSE_RECORD,
+#'     bfc = BiocFileCache(),
+#'     read_only = TRUE,
+#'     managed = read_only
+#' )
+#'
 #' @inheritParams am_data
 #'
 #' @param read_only logical(1) open the connection 'read only'.
@@ -26,12 +34,13 @@ db_connection_name <-
 #' @param managed logical(1) when `TRUE`, re-use an existing managed
 #'     connection to the same database.
 #'
-#' @details For `db_connect()`, set `managed = FALSE` when, for
-#'     instance, accessing a database in a separate process. Remember
-#'     to capture the database connection `db_unmanaged <-
-#'     db_connect(managed = FALSE)` and disconnect when done
-#'     `db_disconnect(db_unmanaged). Connections are managed by
-#'     default.
+#' @details
+#'
+#' For `db_connect()`, set `managed = FALSE` when, for instance,
+#' accessing a database in a separate process. Remember to capture the
+#' database connection `db_unmanaged <- db_connect(managed = FALSE)`
+#' and disconnect when done `db_disconnect(db_unmanaged). Connections
+#' are managed by default.
 #'
 #' @return `db_connect()` returns an open `duckdb_connection` to the
 #'     AlphaMissense record-specific database.
@@ -45,8 +54,9 @@ db_connection_name <-
 #'
 #' @export
 db_connect <-
-    function(record = ALPHAMISSENSE_RECORD, bfc = BiocFileCache(),
-             read_only = TRUE, managed = read_only)
+    function(
+        record = ALPHAMISSENSE_RECORD, bfc = BiocFileCache(),
+        read_only = TRUE, managed = read_only)
 {
     stopifnot(
         is_scalar_character(record),
@@ -89,8 +99,9 @@ db_connect <-
 }
 
 db_connect_or_renew <-
-    function(record = ALPHAMISSENSE_RECORD, bfc = BiocFileCache(),
-             read_only = TRUE, managed = read_only)
+    function(
+        record = ALPHAMISSENSE_RECORD, bfc = BiocFileCache(),
+        read_only = TRUE, managed = read_only)
 {
     if (!managed) {
         return(db_connect(record, bfc, read_only, managed))
@@ -115,7 +126,7 @@ db_connect_or_renew <-
 #' @description `db_tables()` queries for the names of temporary and
 #'     regular tables defined in the database.
 #'
-#' @param db a `duckdb_connection` object, as returned by `db_connect()`.
+#' @param db `duckdb_connection` object, returned by `db_connect()`.
 #'
 #' @return `db_tables()` returns a character vector of database table
 #'     names.
@@ -207,14 +218,14 @@ db_temporary_table <-
 #'
 #' @details
 #'
-#' `db_range_join()` **overwrites** and existing table with name `to`.
+#' `db_range_join()` **overwrites** an existing table `to`.
 #' The table `key` is usually `"hg19"` or `"hg38"` and must have
 #' `#CHROM` and `POS` columns. The table `join` must have columns
-#' `#CHROM`, `start` and `end`. Following *Bioconductor* convention
-#' and as reported in at `am_browse()`, coordinates are 1-based and
-#' ranges defined by `start` and `end` are closed. All columns from
-#' both `key` and `join` are included, so column names (other than
-#' `#CHROM`) cannot be duplicated.
+#' `#CHROM`, `start` and `end`. Following *Bioconductor*
+#' convention and as reported in `am_browse()`, coordinates are
+#' 1-based and ranges defined by `start` and `end` are closed. All
+#' columns from both `key` and `join` are included, so column names
+#' (other than `#CHROM`) cannot be duplicated.
 #'
 #' @param key a character(1) table name in `db` containing missense
 #'     mutation coordinates.

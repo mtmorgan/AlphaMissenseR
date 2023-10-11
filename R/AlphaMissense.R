@@ -76,7 +76,7 @@ am_available_from_internet <-
     ## exclude 'README.md'
     files <- jmespath(json, "files[?type != 'md']")
     key <- sub(
-       "AlphaMissense_(.*)\\.tsv\\.gz", "\\1",
+        "AlphaMissense_(.*)\\.tsv\\.gz", "\\1",
         rjmespath(files, "[*].key[]")
     )
     size <- rjmespath(files, "[*].size[]")
@@ -169,6 +169,14 @@ am_data_import_csv <-
 #'     AlpahMissense Zenodo site and parses the file into a DuckDB
 #'     database.
 #'
+#' @usage
+#' am_data(
+#'     key,
+#'     record = ALPHAMISSENSE_RECORD,
+#'     bfc = BiocFileCache(),
+#'     as = c("tbl", "tsv")
+#' )
+#'
 #' @param key a character(1) 'key' from the result of
 #'     `am_available()`, or a single row of the tibble returned by
 #'     `am_available()`.
@@ -209,9 +217,10 @@ am_data_import_csv <-
 #'
 #' @export
 am_data <-
-    function(key,
-             record = ALPHAMISSENSE_RECORD, bfc = BiocFileCache(),
-             as = c("tbl", "tsv"))
+    function(
+        key,
+        record = ALPHAMISSENSE_RECORD, bfc = BiocFileCache(),
+        as = c("tbl", "tsv"))
 {
     as <- match.arg(as)
     available <- am_available(record = record)

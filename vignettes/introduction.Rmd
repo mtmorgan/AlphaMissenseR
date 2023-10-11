@@ -9,8 +9,8 @@ vignette: >
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
+    collapse = TRUE,
+    comment = "#>"
 )
 ```
 
@@ -132,7 +132,7 @@ across all variants.
 tbl |>
     count(REF, ALT) |>
     tidyr::pivot_wider(names_from = "ALT", values_from = "n") |>
-    select(REF, A, C, G, T) |>
+    select("REF", "A", "C", "G", "T") |>
     arrange(REF)
 ```
 
@@ -173,7 +173,7 @@ representation of single-nucleotide variants like those in the `hg19`
 and `hg38` AlphaMissense resources. Start by installing (if necessary)
 the [GenomicRanges][] package.
 
-```{r}
+```{r, eval = FALSE}
 if (!requireNamespace("GenomicRanges", quietly = TRUE))
     BiocManager::install("GeomicRanges")
 ```

@@ -10,10 +10,10 @@
 \title{Manipulate the Database of Missense Mutations}
 \usage{
 db_connect(
-  record = ALPHAMISSENSE_RECORD,
-  bfc = BiocFileCache(),
-  read_only = TRUE,
-  managed = read_only
+    record = ALPHAMISSENSE_RECORD,
+    bfc = BiocFileCache(),
+    read_only = TRUE,
+    managed = read_only
 )
 
 db_tables(db = db_connect())
@@ -41,7 +41,7 @@ default.}
 \item{managed}{logical(1) when \code{TRUE}, re-use an existing managed
 connection to the same database.}
 
-\item{db}{a \code{duckdb_connection} object, as returned by \code{db_connect()}.}
+\item{db}{\code{duckdb_connection} object, returned by \code{db_connect()}.}
 
 \item{value}{a \code{data.frame} / \code{tibble} containing data to be placed
 in a temporary table, e.g., from a GenomicRanges object to be
@@ -99,23 +99,23 @@ connection. Temporary tables are lost.
 database connection.
 }
 \details{
-For \code{db_connect()}, set \code{managed = FALSE} when, for
-instance, accessing a database in a separate process. Remember
-to capture the database connection \code{db_unmanaged <- db_connect(managed = FALSE)} and disconnect when done
-`db_disconnect(db_unmanaged). Connections are managed by
-default.
+For \code{db_connect()}, set \code{managed = FALSE} when, for instance,
+accessing a database in a separate process. Remember to capture the
+database connection \code{db_unmanaged <- db_connect(managed = FALSE)}
+and disconnect when done `db_disconnect(db_unmanaged). Connections
+are managed by default.
 
 \code{db_temporary_table()} \strong{overwrites} an existing table
 with name \code{to}.
 
-\code{db_range_join()} \strong{overwrites} and existing table with name \code{to}.
+\code{db_range_join()} \strong{overwrites} an existing table \code{to}.
 The table \code{key} is usually \code{"hg19"} or \code{"hg38"} and must have
 \verb{#CHROM} and \code{POS} columns. The table \code{join} must have columns
-\verb{#CHROM}, \code{start} and \code{end}. Following \emph{Bioconductor} convention
-and as reported in at \code{am_browse()}, coordinates are 1-based and
-ranges defined by \code{start} and \code{end} are closed. All columns from
-both \code{key} and \code{join} are included, so column names (other than
-\verb{#CHROM}) cannot be duplicated.
+\verb{#CHROM}, \code{start} and \code{end}. Following \emph{Bioconductor}
+convention and as reported in \code{am_browse()}, coordinates are
+1-based and ranges defined by \code{start} and \code{end} are closed. All
+columns from both \code{key} and \code{join} are included, so column names
+(other than \verb{#CHROM}) cannot be duplicated.
 
 \code{db_disconnect()} should be called on each unmanaged
 connection, and once (to free the default managed connection)

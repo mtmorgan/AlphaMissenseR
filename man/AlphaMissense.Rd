@@ -18,10 +18,10 @@ am_browse(record = ALPHAMISSENSE_RECORD)
 am_available(record = ALPHAMISSENSE_RECORD, bfc = BiocFileCache())
 
 am_data(
-  key,
-  record = ALPHAMISSENSE_RECORD,
-  bfc = BiocFileCache(),
-  as = c("tbl", "tsv")
+    key,
+    record = ALPHAMISSENSE_RECORD,
+    bfc = BiocFileCache(),
+    as = c("tbl", "tsv")
 )
 }
 \arguments{
