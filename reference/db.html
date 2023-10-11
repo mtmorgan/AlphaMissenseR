@@ -38,7 +38,7 @@ database connection."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/
     
     <a class="navbar-brand me-2" href="../index.html">AlphaMissense</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.16</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.17</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,6 +54,9 @@ database connection."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/introduction.html">Accessing AlphaMissense Resources in R</a>
   </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -97,10 +100,10 @@ database connection.</p>
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">db_connect</span><span class="op">(</span></span>
-<span>  record <span class="op">=</span> <span class="va">ALPHAMISSENSE_RECORD</span>,</span>
-<span>  bfc <span class="op">=</span> <span class="fu">BiocFileCache</span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  read_only <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  managed <span class="op">=</span> <span class="va">read_only</span></span>
+<span>    record <span class="op">=</span> <span class="va">ALPHAMISSENSE_RECORD</span>,</span>
+<span>    bfc <span class="op">=</span> <span class="fu">BiocFileCache</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    read_only <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    managed <span class="op">=</span> <span class="va">read_only</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">db_tables</span><span class="op">(</span>db <span class="op">=</span> <span class="fu">db_connect</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
@@ -139,7 +142,7 @@ connection to the same database.</p></dd>
 
 
 <dt>db</dt>
-<dd><p>a <code>duckdb_connection</code> object, as returned by <code>db_connect()</code>.</p></dd>
+<dd><p><code>duckdb_connection</code> object, returned by <code>db_connect()</code>.</p></dd>
 
 
 <dt>value</dt>
@@ -193,21 +196,21 @@ for each connection, invisibly.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>For <code>db_connect()</code>, set <code>managed = FALSE</code> when, for
-instance, accessing a database in a separate process. Remember
-to capture the database connection <code>db_unmanaged &lt;- db_connect(managed = FALSE)</code> and disconnect when done
-`db_disconnect(db_unmanaged). Connections are managed by
-default.</p>
+    <p>For <code>db_connect()</code>, set <code>managed = FALSE</code> when, for instance,
+accessing a database in a separate process. Remember to capture the
+database connection <code>db_unmanaged &lt;- db_connect(managed = FALSE)</code>
+and disconnect when done `db_disconnect(db_unmanaged). Connections
+are managed by default.</p>
 <p><code>db_temporary_table()</code> <strong>overwrites</strong> an existing table
 with name <code>to</code>.</p>
-<p><code>db_range_join()</code> <strong>overwrites</strong> and existing table with name <code>to</code>.
+<p><code>db_range_join()</code> <strong>overwrites</strong> an existing table <code>to</code>.
 The table <code>key</code> is usually <code>"hg19"</code> or <code>"hg38"</code> and must have
 <code>#CHROM</code> and <code>POS</code> columns. The table <code>join</code> must have columns
-<code>#CHROM</code>, <code>start</code> and <code>end</code>. Following <em>Bioconductor</em> convention
-and as reported in at <code><a href="AlphaMissense.html">am_browse()</a></code>, coordinates are 1-based and
-ranges defined by <code>start</code> and <code>end</code> are closed. All columns from
-both <code>key</code> and <code>join</code> are included, so column names (other than
-<code>#CHROM</code>) cannot be duplicated.</p>
+<code>#CHROM</code>, <code>start</code> and <code>end</code>. Following <em>Bioconductor</em>
+convention and as reported in <code><a href="AlphaMissense.html">am_browse()</a></code>, coordinates are
+1-based and ranges defined by <code>start</code> and <code>end</code> are closed. All
+columns from both <code>key</code> and <code>join</code> are included, so column names
+(other than <code>#CHROM</code>) cannot be duplicated.</p>
 <p><code>db_disconnect()</code> should be called on each unmanaged
 connection, and once (to free the default managed connection)
 at the end of a session.</p>
@@ -216,7 +219,7 @@ at the end of a session.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">db_connect</span><span class="op">(</span><span class="op">)</span>          <span class="co"># default 'read-only' connection</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> &lt;duckdb_connection 02ee0 driver=&lt;duckdb_driver b0000 dbdir='/Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac' read_only=TRUE bigint=numeric&gt;&gt;</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> &lt;duckdb_connection e11c0 driver=&lt;duckdb_driver 78000 dbdir='/Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac' read_only=TRUE bigint=numeric&gt;&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">db_rw</span> <span class="op">&lt;-</span> <span class="fu">db_connect</span><span class="op">(</span>read_only <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -281,16 +284,16 @@ at the end of a session.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database: DuckDB 0.8.1 [ma38727@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    `#CHROM`   POS REF   ALT   genome uniprot_id transcript_id    protein_variant</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> chr1     <span style="text-decoration: underline;">69</span>094 G     T     hg38   Q8NH21     ENST00000335137… V2L            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> chr1     <span style="text-decoration: underline;">69</span>094 G     C     hg38   Q8NH21     ENST00000335137… V2L            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> chr1     <span style="text-decoration: underline;">69</span>094 G     A     hg38   Q8NH21     ENST00000335137… V2M            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> chr1     <span style="text-decoration: underline;">69</span>095 T     C     hg38   Q8NH21     ENST00000335137… V2A            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> chr1     <span style="text-decoration: underline;">69</span>095 T     A     hg38   Q8NH21     ENST00000335137… V2E            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> chr1     <span style="text-decoration: underline;">69</span>095 T     G     hg38   Q8NH21     ENST00000335137… V2G            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> chr1     <span style="text-decoration: underline;">69</span>097 A     G     hg38   Q8NH21     ENST00000335137… T3A            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> chr1     <span style="text-decoration: underline;">69</span>097 A     C     hg38   Q8NH21     ENST00000335137… T3P            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> chr1     <span style="text-decoration: underline;">69</span>097 A     T     hg38   Q8NH21     ENST00000335137… T3S            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> chr1     <span style="text-decoration: underline;">69</span>098 C     A     hg38   Q8NH21     ENST00000335137… T3N            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> chr2     <span style="text-decoration: underline;">45</span>769 G     T     hg38   Q1W6H9     ENST00000327669… S206Y          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> chr2     <span style="text-decoration: underline;">45</span>770 A     C     hg38   Q1W6H9     ENST00000327669… S206A          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> chr2     <span style="text-decoration: underline;">45</span>770 A     G     hg38   Q1W6H9     ENST00000327669… S206P          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> chr2     <span style="text-decoration: underline;">45</span>770 A     T     hg38   Q1W6H9     ENST00000327669… S206T          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> chr2     <span style="text-decoration: underline;">45</span>771 G     T     hg38   Q1W6H9     ENST00000327669… S205R          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> chr2     <span style="text-decoration: underline;">45</span>771 G     C     hg38   Q1W6H9     ENST00000327669… S205R          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> chr2     <span style="text-decoration: underline;">45</span>772 C     T     hg38   Q1W6H9     ENST00000327669… S205N          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> chr2     <span style="text-decoration: underline;">45</span>772 C     A     hg38   Q1W6H9     ENST00000327669… S205I          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> chr2     <span style="text-decoration: underline;">45</span>772 C     G     hg38   Q1W6H9     ENST00000327669… S205T          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> chr2     <span style="text-decoration: underline;">45</span>773 T     G     hg38   Q1W6H9     ENST00000327669… S205R          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4 more variables: am_pathogenicity &lt;dbl&gt;, am_class &lt;chr&gt;, start &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   end &lt;dbl&gt;</span></span>
@@ -320,7 +323,7 @@ at the end of a session.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Martin Morgan.</p>
+  <p></p><p>Developed by Martin Morgan, Chan Zuckerberg Initiative DAF CZF2019-002443, NIH NCI ITCR U24CA180996.</p>
 </div>
 
 <div class="pkgdown-footer-right">

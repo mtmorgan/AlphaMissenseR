@@ -28,7 +28,7 @@ database."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/m
     
     <a class="navbar-brand me-2" href="../index.html">AlphaMissense</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.16</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.17</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,6 +44,9 @@ database."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/m
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/introduction.html">Accessing AlphaMissense Resources in R</a>
   </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -88,10 +91,10 @@ database.</p>
 <span><span class="fu">am_available</span><span class="op">(</span>record <span class="op">=</span> <span class="va">ALPHAMISSENSE_RECORD</span>, bfc <span class="op">=</span> <span class="fu">BiocFileCache</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">am_data</span><span class="op">(</span></span>
-<span>  <span class="va">key</span>,</span>
-<span>  record <span class="op">=</span> <span class="va">ALPHAMISSENSE_RECORD</span>,</span>
-<span>  bfc <span class="op">=</span> <span class="fu">BiocFileCache</span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  as <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tbl"</span>, <span class="st">"tsv"</span><span class="op">)</span></span>
+<span>    <span class="va">key</span>,</span>
+<span>    record <span class="op">=</span> <span class="va">ALPHAMISSENSE_RECORD</span>,</span>
+<span>    bfc <span class="op">=</span> <span class="fu">BiocFileCache</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    as <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tbl"</span>, <span class="st">"tsv"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -196,7 +199,7 @@ file and the corresponding DuckDB database.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Martin Morgan.</p>
+  <p></p><p>Developed by Martin Morgan, Chan Zuckerberg Initiative DAF CZF2019-002443, NIH NCI ITCR U24CA180996.</p>
 </div>
 
 <div class="pkgdown-footer-right">
