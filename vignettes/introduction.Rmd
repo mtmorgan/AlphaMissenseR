@@ -254,8 +254,8 @@ data). Write the tibble to a temporary table (it will be deleted when
 bcl2l11_tbl <-
     bcl2l11 |>
     dplyr::as_tibble() |>
-    dplyr::mutate(`CHROM` = paste0("chr", seqnames)) |>
-    dplyr::select(`CHROM`, everything(), -seqnames)
+    dplyr::mutate(CHROM = paste0("chr", seqnames)) |>
+    dplyr::select(CHROM, everything(), -seqnames)
 
 db_temporary_table(db_rw, bcl2l11_tbl, "bcl2l11")
 ```

@@ -108,14 +108,14 @@ are managed by default.
 \code{db_temporary_table()} \strong{overwrites} an existing table
 with name \code{to}.
 
-\code{db_range_join()} \strong{overwrites} an existing table \code{to}.  The table
-\code{key} is usually \code{"hg19"} or \code{"hg38"} and must have \code{CHROM} and
-\code{POS} columns. The table \code{join} must have columns \code{CHROM}, \code{start}
-and \code{end}. Following \emph{Bioconductor} convention and as reported in
-\code{am_browse()}, coordinates are 1-based and ranges defined by
-\code{start} and \code{end} are closed. All columns from both \code{key} and
-\code{join} are included, so column names (other than \code{CHROM}) cannot
-be duplicated.
+\code{db_range_join()} \strong{overwrites} an existing table \code{to}.
+The table \code{key} is usually \code{"hg19"} or \code{"hg38"} and must have
+\code{CHROM} and \code{POS} columns. The table \code{join} must have columns
+\code{CHROM}, \code{start} and \code{end}. Following \emph{Bioconductor}
+convention and as reported in \code{am_browse()}, coordinates are
+1-based and ranges defined by \code{start} and \code{end} are closed. All
+columns from both \code{key} and \code{join} are included, so column names
+(other than \code{CHROM}) cannot be duplicated.
 
 \code{db_disconnect()} should be called on each unmanaged
 connection, and once (to free the default managed connection)
@@ -150,8 +150,6 @@ rng |>
 db_disconnect(db_rw)  # explicit read-write connection
 db_disconnect()       # implicit read-only connection
 
-\dontrun{
 db_disconnect_all()
-}
 
 }

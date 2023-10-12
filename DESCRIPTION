@@ -1,6 +1,6 @@
 Package: AlphaMissense
 Title: Accessing AlphaMissense Resources in R
-Version: 0.0.18
+Version: 0.99.0
 Authors@R: 
     c(person(
         "Martin", "Morgan", role = c("aut", "cre"),
@@ -22,7 +22,7 @@ Description:
     variants across hg19 and hg38 genome builds. The 'AlphaMissense'
     package allows ready access to the data, downloading individual
     files to DuckDB databases for exploration and integration into *R*
-    and *Bioconductor* worksflows.
+    and *Bioconductor* workflows.
 License: Artistic-2.0
 URL: https://mtmorgan.github.io/AlphaMissense/
 BugReports: https://github.com/mtmorgan/AlphaMissense/issues

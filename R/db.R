@@ -217,14 +217,14 @@ db_temporary_table <-
 #'
 #' @details
 #'
-#' `db_range_join()` **overwrites** an existing table `to`.  The table
-#' `key` is usually `"hg19"` or `"hg38"` and must have `CHROM` and
-#' `POS` columns. The table `join` must have columns `CHROM`, `start`
-#' and `end`. Following *Bioconductor* convention and as reported in
-#' `am_browse()`, coordinates are 1-based and ranges defined by
-#' `start` and `end` are closed. All columns from both `key` and
-#' `join` are included, so column names (other than `CHROM`) cannot
-#' be duplicated.
+#' `db_range_join()` **overwrites** an existing table `to`.
+#' The table `key` is usually `"hg19"` or `"hg38"` and must have
+#' `CHROM` and `POS` columns. The table `join` must have columns
+#' `CHROM`, `start` and `end`. Following *Bioconductor*
+#' convention and as reported in `am_browse()`, coordinates are
+#' 1-based and ranges defined by `start` and `end` are closed. All
+#' columns from both `key` and `join` are included, so column names
+#' (other than `CHROM`) cannot be duplicated.
 #'
 #' @param key a character(1) table name in `db` containing missense
 #'     mutation coordinates.
@@ -316,9 +316,7 @@ db_disconnect <-
 #'     for each connection, invisibly.
 #'
 #' @examples
-#' \dontrun{
 #' db_disconnect_all()
-#' }
 #'
 #' @export
 db_disconnect_all <-
