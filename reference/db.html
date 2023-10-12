@@ -38,7 +38,7 @@ database connection."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/
     
     <a class="navbar-brand me-2" href="../index.html">AlphaMissense</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.18</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -203,14 +203,14 @@ and disconnect when done `db_disconnect(db_unmanaged). Connections
 are managed by default.</p>
 <p><code>db_temporary_table()</code> <strong>overwrites</strong> an existing table
 with name <code>to</code>.</p>
-<p><code>db_range_join()</code> <strong>overwrites</strong> an existing table <code>to</code>.  The table
-<code>key</code> is usually <code>"hg19"</code> or <code>"hg38"</code> and must have <code>CHROM</code> and
-<code>POS</code> columns. The table <code>join</code> must have columns <code>CHROM</code>, <code>start</code>
-and <code>end</code>. Following <em>Bioconductor</em> convention and as reported in
-<code><a href="AlphaMissense.html">am_browse()</a></code>, coordinates are 1-based and ranges defined by
-<code>start</code> and <code>end</code> are closed. All columns from both <code>key</code> and
-<code>join</code> are included, so column names (other than <code>CHROM</code>) cannot
-be duplicated.</p>
+<p><code>db_range_join()</code> <strong>overwrites</strong> an existing table <code>to</code>.
+The table <code>key</code> is usually <code>"hg19"</code> or <code>"hg38"</code> and must have
+<code>CHROM</code> and <code>POS</code> columns. The table <code>join</code> must have columns
+<code>CHROM</code>, <code>start</code> and <code>end</code>. Following <em>Bioconductor</em>
+convention and as reported in <code><a href="AlphaMissense.html">am_browse()</a></code>, coordinates are
+1-based and ranges defined by <code>start</code> and <code>end</code> are closed. All
+columns from both <code>key</code> and <code>join</code> are included, so column names
+(other than <code>CHROM</code>) cannot be duplicated.</p>
 <p><code>db_disconnect()</code> should be called on each unmanaged
 connection, and once (to free the default managed connection)
 at the end of a session.</p>
@@ -219,7 +219,7 @@ at the end of a session.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">db_connect</span><span class="op">(</span><span class="op">)</span>          <span class="co"># default 'read-only' connection</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> &lt;duckdb_connection 22ba0 driver=&lt;duckdb_driver f0000 dbdir='/Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac' read_only=TRUE bigint=numeric&gt;&gt;</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> &lt;duckdb_connection f6b00 driver=&lt;duckdb_driver 30000 dbdir='/Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac' read_only=TRUE bigint=numeric&gt;&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">db_rw</span> <span class="op">&lt;-</span> <span class="fu">db_connect</span><span class="op">(</span>read_only <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -312,9 +312,7 @@ at the end of a session.</p>
 <span class="r-in"><span><span class="fu">db_disconnect</span><span class="op">(</span><span class="va">db_rw</span><span class="op">)</span>  <span class="co"># explicit read-write connection</span></span></span>
 <span class="r-in"><span><span class="fu">db_disconnect</span><span class="op">(</span><span class="op">)</span>       <span class="co"># implicit read-only connection</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="fu">db_disconnect_all</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
