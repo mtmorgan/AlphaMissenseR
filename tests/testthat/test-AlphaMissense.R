@@ -54,7 +54,7 @@ test_that("'am_data_import_csv()' works", {
     spdl::set_level("info")
     expect_true(nzchar(output))
     expect_true(NROW(tbl |> collect()) == 2L)
-    expect_identical(colnames(tbl), c("#CHROM", "POS"))
+    expect_identical(colnames(tbl), c("CHROM", "POS"))
 
     db_disconnect(db_connect(record, bfc))
 })

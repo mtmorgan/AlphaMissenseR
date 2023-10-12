@@ -8,8 +8,8 @@ to_GPos(tbl)
 }
 \arguments{
 \item{tbl}{a tibble derived from \code{am_data("hg19")} or
-\code{am_data("hg38")}. The tibble must have columns \verb{#CHROM},
-\code{POS}, and \code{genome}.}
+\code{am_data("hg38")}. The tibble must have columns \code{CHROM}, \code{POS},
+and \code{genome}.}
 }
 \value{
 \code{to_GPos()} returns a \code{GPos} object, which can be used in
@@ -23,7 +23,7 @@ GenomicRanges \code{GPos} objects.
 }
 \examples{
 am_data("hg38") |>
-    filter(`#CHROM` == "chr2", POS < 10000000, REF == "G") |>
+    filter(CHROM == "chr2", POS < 10000000, REF == "G") |>
     select(-REF) |>
     to_GPos()
 

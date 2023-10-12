@@ -7,8 +7,8 @@
 #'     GenomicRanges `GPos` objects.
 #'
 #' @param tbl a tibble derived from `am_data("hg19")` or
-#'     `am_data("hg38")`. The tibble must have columns `#CHROM`,
-#'     `POS`, and `genome`.
+#'     `am_data("hg38")`. The tibble must have columns `CHROM`, `POS`,
+#'     and `genome`.
 #'
 #' @return `to_GPos()` returns a `GPos` object, which can be used in
 #'     the same was a `GRanges` object for range-based filtering and
@@ -16,7 +16,7 @@
 #'
 #' @examples
 #' am_data("hg38") |>
-#'     filter(`#CHROM` == "chr2", POS < 10000000, REF == "G") |>
+#'     filter(CHROM == "chr2", POS < 10000000, REF == "G") |>
 #'     select(-REF) |>
 #'     to_GPos()
 #'
@@ -28,7 +28,7 @@ to_GPos <-
 {
     stopifnot(
         inherits(tbl, "tbl") || inherits(tbl, "data.frame"),
-        all(c("#CHROM", "POS", "genome") %in% colnames(tbl))
+        all(c("CHROM", "POS", "genome") %in% colnames(tbl))
     )
 
     if (!requireNamespace("GenomicRanges", quietly = TRUE))
@@ -52,11 +52,11 @@ to_GPos <-
 
     gpos_args <- c(
         list(
-            seqnames = pull(tbl, "#CHROM"),
+            seqnames = pull(tbl, "CHROM"),
             pos = pull(tbl, "POS"),
             seqinfo = seqinfo
         ), 
-        tbl |> select(-c("#CHROM", "POS", "genome")) |> as.list()
+        tbl |> select(-c("CHROM", "POS", "genome")) |> as.list()
     )
     do.call(GenomicRanges::GPos, gpos_args)
 }

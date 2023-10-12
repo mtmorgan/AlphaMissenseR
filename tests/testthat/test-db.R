@@ -90,7 +90,7 @@ test_that("'db_range_join()' works", {
     db <- db_connect(ALPHAMISSENSE_RECORD, bfc)
 
     key <- tibble(
-        `#CHROM` = paste0("chr", rep(1:2, c(3,5))),
+        CHROM = paste0("chr", rep(1:2, c(3,5))),
         POS = 10 * c(1:3, 1:5),
         key_etc = letters[1:8]
     )
@@ -98,7 +98,7 @@ test_that("'db_range_join()' works", {
 
     ## empty join
     join <- tibble(
-        `#CHROM` = character(),
+        CHROM = character(),
         start = integer(),
         end = integer(),
         join_etc = character()
@@ -113,7 +113,7 @@ test_that("'db_range_join()' works", {
 
     ## single join range
     join <- tibble(
-        `#CHROM` = "chr2",
+        CHROM = "chr2",
         start = 40,
         end = 49,
         join_etc = LETTERS[1]
@@ -126,7 +126,7 @@ test_that("'db_range_join()' works", {
 
     ## duplicate join range -- each range matches, so two rows
     join <- tibble(
-        `#CHROM` = rep("chr2", 2),
+        CHROM = rep("chr2", 2),
         start = rep(40, 2),
         end = rep(49, 2),
         join_etc = LETTERS[1:2]

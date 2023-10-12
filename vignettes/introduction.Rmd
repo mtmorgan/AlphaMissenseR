@@ -141,7 +141,7 @@ interest, e.g., the first 200000 nucleoties of chromosome 4.
 
 ```{r}
 tbl |>
-    filter(`#CHROM` == "chr4", POS > 0, POS <= 200000)
+    filter(CHROM == "chr4", POS > 0, POS <= 200000)
 ```
 
 # Working with Bioconductor
@@ -150,15 +150,6 @@ This section illustrates how AlphaMissense data can be integrated with
 other *Bioconductor* workflows, including the [GenomicRanges][]
 infrastructure and the [ensembldb][] package / [AnnotationHub][]
 resources.
-
-In this section we will work more directly with the database,
-including writing temporary tables. For illustration purposes, we use
-a connection that can read and write; in practice, read-only
-permissions are sufficient for creating temporary tables.
-
-```{r db_rw}
-db_rw <- db_connect(read_only = FALSE)
-```
 
 [GenomicRanges]: https://bioconductor.org/packages/GenomicRanges
 [ensembldb]: https://bioconductor.org/packages/ensembldb
@@ -185,7 +176,7 @@ millions of variants.
 ```{r}
 tbl <-
     am_data("hg38") |>
-    filter(`#CHROM` == "chr2", POS < 10000000, REF == "G")
+    filter(CHROM == "chr2", POS < 10000000, REF == "G")
 ```
 
 Use `to_GPos()` to coerce to a `GPos` object.
@@ -229,6 +220,15 @@ edb
 
 ## From *Bioconductor* to *DuckDB*
 
+In this section we will work more directly with the database,
+including writing temporary tables. For illustration purposes, we use
+a connection that can read and write; in practice, read-only
+permissions are sufficient for creating temporary tables.
+
+```{r db_rw}
+db_rw <- db_connect(read_only = FALSE)
+```
+
 As an illustration, use [ensembldb][] to identify the exons of the
 canonical transcript of a particular gene.
 
@@ -245,7 +245,7 @@ bcl2l11
 ```
 
 Munge the data to a tibble, updating the `seqnames` to a column
-`#CHROM` with identifiers such as `"chr1"` (as in the AlphaMissense
+`CHROM` with identifiers such as `"chr1"` (as in the AlphaMissense
 data). Write the tibble to a temporary table (it will be deleted when
 `db` is disconnected from the database) so that it can be used in
 'lazy' SQL queries with the AlphaMissense data.
@@ -254,8 +254,8 @@ data). Write the tibble to a temporary table (it will be deleted when
 bcl2l11_tbl <-
     bcl2l11 |>
     dplyr::as_tibble() |>
-    dplyr::mutate(`#CHROM` = paste0("chr", seqnames)) |>
-    dplyr::select(`#CHROM`, everything(), -seqnames)
+    dplyr::mutate(`CHROM` = paste0("chr", seqnames)) |>
+    dplyr::select(`CHROM`, everything(), -seqnames)
 
 db_temporary_table(db_rw, bcl2l11_tbl, "bcl2l11")
 ```
@@ -270,8 +270,8 @@ tables will be removed on disconnect, `db_disconnect(db_rw)`.
 Use `db_range_join()` to join the AlphaMissense data with the ranges
 defining the exons in our gene of interest. The arguments are the
 database connection, the AlphaMissense table of interest (this table
-must have columns `#CHROM` and `POS`), the table containing ranges of
-interest (with columns `#CHROM`, `start`, `end`), and the temporary
+must have columns `CHROM` and `POS`), the table containing ranges of
+interest (with columns `CHROM`, `start`, `end`), and the temporary
 table to contain the results. A range join is like a standard database
 join, expect that the constraints can be relations, in our case that
 `POS >= start` and `POS <= end` for each range of interest;
@@ -336,21 +336,18 @@ into *R*.
 ```{r filter-variants}
 variants_of_interest <-
     am_data("hg38") |>
-    dplyr::filter(transcript_id %like% "ENST00000393256%") |>
-    dplyr::collect()
+    dplyr::filter(transcript_id %like% "ENST00000393256%")
 ```
 
 Coerce the AlphaMissense data to a `GRanges::GPos` object.
 
 ```{r gpos}
-gpos <- with(
-    variants_of_interest,
-    GPos(
-        sub("chr", "", `#CHROM`), POS, strand = NULL,
-        REF, ALT, uniprot_id, transcript_id, protein_variant,
-        am_pathogenicity, am_class
-    )
-)
+gpos <-
+    variants_of_interest |>
+    to_GPos()
+## make gpos 'genome' and 'seqlevels' like bcl2l11
+GenomeInfoDb::genome(gpos) <- "GRCh38"
+GenomeInfoDb::seqlevelsStyle(gpos) <- "Ensembl"
 gpos
 ```
 

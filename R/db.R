@@ -111,10 +111,9 @@ db_connect_or_renew <-
     if (db_connection_name %in% names(DB_CONNECTION)) {
         ## renew
         spdl::info(paste0(
-            "renewing managed connection to record '{}', ",
-            "BiocFileCache '{}', read_only '{}'; ",
-            "previously assigned connections are invalid"
-        ), record, basename(bfccache(bfc)), read_only)
+            "renewing managed connection to record '{}',\n",
+            "  read_only '{}'; previous connections are invalid"
+        ), record, read_only)
         db_disconnect(db_connect(record, bfc, read_only, managed))
     }
 
@@ -183,7 +182,7 @@ db_table_fields <-
 #' @examples
 #' ## ranges of interest -- the first 200000 bases on chromsomes 1-4.
 #' ranges <- tibble(
-#'     `#CHROM` = paste0("chr", 1:4),
+#'     CHROM = paste0("chr", 1:4),
 #'     start = rep(1, 4),
 #'     end = rep(200000, 4)
 #' )
@@ -218,14 +217,14 @@ db_temporary_table <-
 #'
 #' @details
 #'
-#' `db_range_join()` **overwrites** an existing table `to`.
-#' The table `key` is usually `"hg19"` or `"hg38"` and must have
-#' `#CHROM` and `POS` columns. The table `join` must have columns
-#' `#CHROM`, `start` and `end`. Following *Bioconductor*
-#' convention and as reported in `am_browse()`, coordinates are
-#' 1-based and ranges defined by `start` and `end` are closed. All
-#' columns from both `key` and `join` are included, so column names
-#' (other than `#CHROM`) cannot be duplicated.
+#' `db_range_join()` **overwrites** an existing table `to`.  The table
+#' `key` is usually `"hg19"` or `"hg38"` and must have `CHROM` and
+#' `POS` columns. The table `join` must have columns `CHROM`, `start`
+#' and `end`. Following *Bioconductor* convention and as reported in
+#' `am_browse()`, coordinates are 1-based and ranges defined by
+#' `start` and `end` are closed. All columns from both `key` and
+#' `join` are included, so column names (other than `CHROM`) cannot
+#' be duplicated.
 #'
 #' @param key a character(1) table name in `db` containing missense
 #'     mutation coordinates.
@@ -240,8 +239,8 @@ db_temporary_table <-
 #' rng <- db_range_join(db_rw, "hg38", "ranges", "ranges_overlaps")
 #' rng
 #' rng |>
-#'     count(`#CHROM`) |>
-#'     arrange(`#CHROM`)
+#'     count(CHROM) |>
+#'     arrange(CHROM)
 #'
 #' @export
 db_range_join <-
@@ -251,10 +250,10 @@ db_range_join <-
         inherits(db, "duckdb_connection"),
 
         is_scalar_character(key) && key %in% db_tables(db),
-        all(c("#CHROM", "POS") %in% db_table_fields(db, key)),
+        all(c("CHROM", "POS") %in% db_table_fields(db, key)),
 
         is_scalar_character(join) && join %in% db_tables(db),
-        all(c("#CHROM", "start", "end") %in% db_table_fields(db, join)),
+        all(c("CHROM", "start", "end") %in% db_table_fields(db, join)),
 
         is_scalar_character(to)
     )
