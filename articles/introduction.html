@@ -146,8 +146,8 @@ so this operation is expensive only the first time. Each
 <code>record=</code> is stored in a different database.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AlphaMissense.html">am_data</a></span><span class="op">(</span><span class="st">"hg38"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; * [13:34:13][info] retrieving key 'hg38'</span></span>
-<span><span class="co">#&gt; * [13:34:13][info] data licensed under 'cc-by-nc-sa-4.0'</span></span>
+<span><span class="co">#&gt; * [15:03:05][info] retrieving key 'hg38'</span></span>
+<span><span class="co">#&gt; * [15:03:05][info] data licensed under 'cc-by-nc-sa-4.0'</span></span>
 <span><span class="va">tbl</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   table&lt;hg38&gt; [?? x 10]</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB 0.8.1 [root@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span></span>
@@ -223,8 +223,8 @@ number of variants assigned to each pathogenicity class.</p>
 <span><span class="co">#&gt;   am_class                 n pathogenecity</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> likely_benign     40<span style="text-decoration: underline;">917</span>351         0.147</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> likely_pathogenic 22<span style="text-decoration: underline;">770</span>557         0.863</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> ambiguous          8<span style="text-decoration: underline;">009</span>648         0.444</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> ambiguous          8<span style="text-decoration: underline;">009</span>648         0.444</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> likely_pathogenic 22<span style="text-decoration: underline;">770</span>557         0.863</span></span></code></pre></div>
 <p>Or the number of transitions between <code>REF</code> and
 <code>ALT</code> nucleotides across all variants.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
@@ -293,8 +293,8 @@ easily manage 10’s of millions of variants.</p>
 <code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">&lt;-</span></span>
 <span>    <span class="fu"><a href="../reference/AlphaMissense.html">am_data</a></span><span class="op">(</span><span class="st">"hg38"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">CHROM</span> <span class="op">==</span> <span class="st">"chr2"</span>, <span class="va">POS</span> <span class="op">&lt;</span> <span class="fl">10000000</span>, <span class="va">REF</span> <span class="op">==</span> <span class="st">"G"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; * [13:34:17][info] retrieving key 'hg38'</span></span>
-<span><span class="co">#&gt; * [13:34:17][info] data licensed under 'cc-by-nc-sa-4.0'</span></span></code></pre></div>
+<span><span class="co">#&gt; * [15:03:08][info] retrieving key 'hg38'</span></span>
+<span><span class="co">#&gt; * [15:03:08][info] data licensed under 'cc-by-nc-sa-4.0'</span></span></code></pre></div>
 <p>Use <code><a href="../reference/GenomicRanges.html">to_GPos()</a></code> to coerce to a <code>GPos</code>
 object.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
@@ -564,8 +564,8 @@ load into <em>R</em>.</p>
 <code class="sourceCode R"><span><span class="va">variants_of_interest</span> <span class="op">&lt;-</span></span>
 <span>    <span class="fu"><a href="../reference/AlphaMissense.html">am_data</a></span><span class="op">(</span><span class="st">"hg38"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">transcript_id</span> <span class="op">%like%</span> <span class="st">"ENST00000393256%"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; * [13:34:45][info] retrieving key 'hg38'</span></span>
-<span><span class="co">#&gt; * [13:34:45][info] data licensed under 'cc-by-nc-sa-4.0'</span></span></code></pre></div>
+<span><span class="co">#&gt; * [15:03:36][info] retrieving key 'hg38'</span></span>
+<span><span class="co">#&gt; * [15:03:36][info] data licensed under 'cc-by-nc-sa-4.0'</span></span></code></pre></div>
 <p>Coerce the AlphaMissense data to a <code>GRanges::GPos</code>
 object.</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
