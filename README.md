@@ -20,14 +20,15 @@ to DuckDB databases for ready exploration and integration into *R* and
 Install the package from Bioconductor or GitHub, ensuring correct
 *Bioconductor* dependencies.
 
-``` r
-if (!"BiocManager" %in% rownames(installed.packages()))
-    install.packages("BiocManager", repos = "https://cran.r-project.org")
+When the package is available on *Bioconductor*, use
 
-## when available in Bioconductor
+```{r install-Bioconductor, eval = FALSE}
 BiocManager::install("AlphaMissenseData")
+```
 
-## pre-release and devel version
+Use the pre-release or devel version with
+
+```{r install-devel, eval = FALSE}
 remotes::install_github(
     "mtmorgan/AlphaMissenseData",
     repos = BiocManager::repositories()

@@ -35,11 +35,17 @@ Install the package from *Bioconductor* or GitHub, ensuring correct
 ```{r install, eval = FALSE}
 if (!"BiocManager" %in% rownames(installed.packages()))
     install.packages("BiocManager", repos = "https://cran.r-project.org")
+```
 
-## when available in Bioconductor
+When the package is available on *Bioconductor*, use
+
+```{r install-Bioconductor, eval = FALSE}
 BiocManager::install("AlphaMissenseData")
+```
 
-## pre-release and devel version
+Use the pre-release or devel version with
+
+```{r install-devel, eval = FALSE}
 remotes::install_github(
     "mtmorgan/AlphaMissenseData",
     repos = BiocManager::repositories()
