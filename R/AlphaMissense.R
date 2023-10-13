@@ -17,7 +17,7 @@
 #' @export
 ALPHAMISSENSE_RECORD <- NULL # set in .onLoad()
 
-ALPHAMISSENSE_ZENODO <- "https://zenodo.org/"
+ALPHAMISSENSE_ZENODO <- "https://zenodo.org"
 
 #' @rdname AlphaMissense
 #'
@@ -56,7 +56,7 @@ am_data_license <-
 {
     if (internet_available()) {
         json <- am_record_json(record)
-        license <- jmespath(json, "metadata.license.id")
+        license <- jmespath(json, "metadata.license")
     } else {
         license <- "unknown (internet not available)"
     }
@@ -64,22 +64,31 @@ am_data_license <-
     license
 }
 
+am_record_is_latest <-
+    function(record)
+{
+    json <- am_record_json(record)
+    latest_version_url <- jmespath(json, "links.latest")
+    latest_version <- readLines(latest_version_url, warn = FALSE)
+    latest_version_id <- jmespath(json, "id")
+    identical(record, latest_version_id)
+}
+
 am_available_from_internet <-
     function(record, bfc)
 {
     spdl::debug("am_available_from_internet()")
     json <- am_record_json(record)
-    is_latest <- rjmespath(json, "metadata.relations.version[0].is_last")
-    if (!is_latest)
+    if (!am_record_is_latest(record))
         spdl::info("{} is not the most recent version", record)
 
     ## exclude 'README.md'
-    files <- jmespath(json, "files[?type != 'md']")
+    files <- jmespath(json, "files[?!ends_with(filename, '.md')]")
     key <- sub(
         "AlphaMissense_(.*)\\.tsv\\.gz", "\\1",
-        rjmespath(files, "[*].key[]")
+        rjmespath(files, "[*].filename")
     )
-    size <- rjmespath(files, "[*].size[]")
+    size <- rjmespath(files, "[*].filesize")
     db <- db_connect(record, bfc, managed = FALSE)
     cached <- key %in% db_tables(db)
     db_disconnect(db)

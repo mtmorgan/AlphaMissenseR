@@ -1,5 +1,5 @@
 
-# AlphaMissense for *R* / *Bioconductor*
+# AlphaMissense Data for *R* / *Bioconductor*
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -17,15 +17,19 @@ to DuckDB databases for ready exploration and integration into *R* and
 
 ## Installation
 
-Install the package from GitHub, ensuring correct *Bioconductor*
-dependencies.
+Install the package from Bioconductor or GitHub, ensuring correct
+*Bioconductor* dependencies.
 
 ``` r
 if (!"BiocManager" %in% rownames(installed.packages()))
     install.packages("BiocManager", repos = "https://cran.r-project.org")
 
+## when available in Bioconductor
+BiocManager::install("AlphaMissenseData")
+
+## pre-release and devel version
 remotes::install_github(
-    "mtmorgan/AlphaMissense",
+    "mtmorgan/AlphaMissenseData",
     repos = BiocManager::repositories()
 )
 ```
@@ -33,7 +37,7 @@ remotes::install_github(
 Load the library.
 
 ``` r
-library(AlphaMissense)
+library(AlphaMissenseData)
 ```
 
 ## Next steps
@@ -41,4 +45,4 @@ library(AlphaMissense)
 Visit the [introductory article][intro] to learn more about using this
 package.
 
-[intro]: https://mtmorgan.github.io/AlphaMissense/articles/introduction.html
+[intro]: https://mtmorgan.github.io/AlphaMissenseData/articles/introduction.html

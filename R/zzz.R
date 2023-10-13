@@ -10,4 +10,5 @@
     ALPHAMISSENSE_RECORD <<- Sys.getenv("ALPHAMISSENSE_RECORD", "8360242")
 
     am_record_json <<- memoise(am_record_json)
+    am_record_is_latest <<- memoise(am_record_is_latest)
 }

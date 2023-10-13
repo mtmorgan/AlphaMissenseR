@@ -29,15 +29,19 @@ to DuckDB databases for ready exploration and integration into *R* and
 [Science]: https://www.science.org/doi/epdf/10.1126/science.adg7492
 [Zenodo]: https://zenodo.org//record/8360242
 
-Install the package from GitHub, ensuring correct *Bioconductor*
-dependencies.
+Install the package from *Bioconductor* or GitHub, ensuring correct
+*Bioconductor* dependencies.
 
 ```{r install, eval = FALSE}
 if (!"BiocManager" %in% rownames(installed.packages()))
     install.packages("BiocManager", repos = "https://cran.r-project.org")
 
+## when available in Bioconductor
+BiocManager::install("AlphaMissenseData")
+
+## pre-release and devel version
 remotes::install_github(
-    "mtmorgan/AlphaMissense",
+    "mtmorgan/AlphaMissenseData",
     repos = BiocManager::repositories()
 )
 ```
@@ -45,7 +49,7 @@ remotes::install_github(
 Load the library.
 
 ```{r setup, message = FALSE}
-library(AlphaMissense)
+library(AlphaMissenseData)
 ```
 
 Learn about available data by visiting the Zenodo record where data
@@ -309,7 +313,7 @@ be of interest.
 [whisker]: https://cran.r-project.org/package=whisker
 
 ```{r range-join-template}
-AlphaMissense:::sql_template(
+AlphaMissenseData:::sql_template(
     "range_join",
     key = "hg38", join = "bcl2l11", to = "bcl2l11_overlaps"
 ) |> cat("\n")

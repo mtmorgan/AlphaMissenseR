@@ -11,7 +11,7 @@ test_that("'am_data_license()' reports appropriate license", {
     output <- capture.output({
         result <- am_data_license(ALPHAMISSENSE_RECORD)
     })
-    expect_identical(result, "CC-BY-NC-SA-4.0")
+    expect_identical(toupper(result), "CC-BY-NC-SA-4.0")
     expect_true(nzchar(output))
 })
 
