@@ -1,6 +1,6 @@
 Package: AlphaMissenseData
 Title: Accessing AlphaMissense Data Resources in R
-Version: 0.99.2
+Version: 0.99.3
 Authors@R: 
     c(person(
         "Martin", "Morgan", role = c("aut", "cre"),
@@ -24,8 +24,8 @@ Description:
     files to DuckDB databases for exploration and integration into *R*
     and *Bioconductor* workflows.
 License: Artistic-2.0
-URL: https://mtmorgan.github.io/AlphaMissense/
-BugReports: https://github.com/mtmorgan/AlphaMissense/issues
+URL: https://mtmorgan.github.io/AlphaMissenseData/
+BugReports: https://github.com/mtmorgan/AlphaMissenseData/issues
 Depends:
     dplyr
 Imports:

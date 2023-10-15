@@ -22,13 +22,13 @@ Install the package from Bioconductor or GitHub, ensuring correct
 
 When the package is available on *Bioconductor*, use
 
-```{r install-Bioconductor, eval = FALSE}
+``` r
 BiocManager::install("AlphaMissenseData")
 ```
 
 Use the pre-release or devel version with
 
-```{r install-devel, eval = FALSE}
+``` r
 remotes::install_github(
     "mtmorgan/AlphaMissenseData",
     repos = BiocManager::repositories()
