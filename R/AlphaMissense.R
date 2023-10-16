@@ -60,7 +60,7 @@ am_data_license <-
     } else {
         license <- "unknown (internet not available)"
     }
-    spdl::info("data licensed under '{}'", license)
+    spdl::info("data licensed under '{}'", toupper(license))
     license
 }
 
@@ -84,6 +84,7 @@ am_available_from_internet <-
 
     ## exclude 'README.md'
     files <- jmespath(json, "files[?!ends_with(filename, '.md')]")
+    filename <- rjmespath(files, "[*].filename")
     key <- sub(
         "AlphaMissense_(.*)\\.tsv\\.gz", "\\1",
         rjmespath(files, "[*].filename")
@@ -93,7 +94,9 @@ am_available_from_internet <-
     cached <- key %in% db_tables(db)
     db_disconnect(db)
     link <- rjmespath(files, "[*].links[].self")
-    tibble(record, key, size, cached, link)
+    link <- sub("(.*/files/).*", "\\1", link)
+    link <- paste0(link, filename, "/content")
+    tibble(record, key, size, cached, filename, link)
 }
 
 #' @importFrom BiocFileCache bfcinfo
@@ -114,6 +117,7 @@ am_available_from_cache <-
         key,
         size = rep(NA_integer_, n_rows),
         cached = rep(TRUE, n_rows),
+        filename = paste0("AlphaMissense_", key, ".tsv.gz"),
         link = rep(NA_character_, n_rows)
     )
 }
@@ -148,7 +152,7 @@ am_available <-
 }
 
 am_data_import_csv <-
-    function(record, bfc, db_tbl_name, link)
+    function(record, bfc, db_tbl_name, rname, fpath)
 {
     ## must be 'read_only = FALSE' so new database can be created. use
     ## 'managed = FALSE' so connection is independent of other
@@ -157,7 +161,7 @@ am_data_import_csv <-
     renew <- FALSE
     if (!db_tbl_name %in% db_tables(db_rw)) {
         spdl::info("downloading or finding local file")
-        file_path <- bfcrpath(bfc, link)
+        file_path <- bfcrpath(bfc, rnames  = rname, fpath = fpath)
         spdl::info("creating database table '{}'", db_tbl_name)
         sql <- sql_template(
             "import_csv", db_tbl_name = db_tbl_name, file_path = file_path
@@ -252,7 +256,7 @@ am_data <-
     if (inherits(key, "data.frame")) {
         stopifnot(
             NROW(key) == 1L,
-            all(c("key", "link") %in% colnames(key)),
+            all(c("key", "filename", "link") %in% colnames(key)),
             all(key$key %in% available$key)
         )
     } else {
@@ -267,17 +271,17 @@ am_data <-
     }
     stopifnot(NROW(key) == 1L)
 
-    if ("link" %in% colnames(key) && !NROW(bfcquery(bfc, key$link))) {
-        spdl::info("retrieving key '{}'", key$key)
+    if (!NROW(bfcquery(bfc, key$filename))) {
+        spdl::info("retrieving file name '{}'", key$filename)
         am_data_license(record)
     }
 
-    rname <- paste0("AlphaMissense_", record)
+    db_rname <- paste0("AlphaMissense_", record)
     db_tbl_name <- key$key
-    if (!NROW(bfcquery(bfc, rname)))
+    if (!NROW(bfcquery(bfc, db_rname)))
         ## create the BiocFileCache record
-        bfcnew(bfc, rname)
-    tbl <- am_data_import_csv(record, bfc, db_tbl_name, key$link)
+        bfcnew(bfc, db_rname)
+    tbl <- am_data_import_csv(record, bfc, db_tbl_name, key$filename, key$link)
 
     switch(
         as,

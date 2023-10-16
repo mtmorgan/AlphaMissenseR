@@ -1,0 +1,98 @@
+---
+title: "Issues & Solutions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Issues & Solutions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+    collapse = TRUE,
+    comment = "#>"
+)
+```
+
+Original version: 16 October, 2023
+
+```{r setup, message = FALSE}
+library(AlphaMissenseR)
+```
+
+# Updating [duckdb][] to 0.9.1
+
+The R duckdb client version 0.9.1 cannot read databases created with
+previous versions of the package. The duckdb error message indicates
+
+> > am_available()
+> Error in h(simpleError(msg, call)) :
+>   error in evaluating the argument 'drv' in selecting a method for
+> function 'dbConnect': rapi_startup: Failed to open database: IO
+> Error: Trying to read a database file with version number 51, but we
+> can only read version 64.
+>
+> The database file was created with DuckDB version v0.8.0 or v0.8.1.
+>
+> The storage of DuckDB is not yet stable; newer versions of DuckDB
+> cannot read old database files and vice versa.  The storage will be
+> stabilized when version 1.0 releases.
+>
+> For now, we recommend that you load the database file in a supported
+> version of DuckDB, and use the EXPORT DATABASE command followed by
+> IMPORT DATABASE on the current version of DuckDB.
+
+> See the storage page for more information:
+> https://duckdb.org/internals/storage
+
+but in practice the most straight-forward solution is to remove
+existing AlphaMissenseR data resources and 'start again'.
+
+The following attempts to identify AlphaMissenseR data resources
+cached locally
+
+```{r, eval = FALSE}
+am_rids <-
+    bfcinfo() |>
+    dplyr::filter(
+        grepl("zenodo", rname) |
+        startsWith(rname, "AlphaMissense_")
+    ) |>
+    pull(rid)
+```
+
+After verifying that these resources have not been created outside
+AlphaMissenseR, remove them.
+
+```{r, eval = FALSE}
+BiocFileCache::bfcremove(rids = am_rids)
+```
+
+Commands such as `am_available()` should report no files cached. The command
+
+```{r}
+am_data("gene_hg38")
+```
+
+will re-download the file and insert it into a database that functions
+with duckdb 0.9.1.
+
+[duckdb]: https://CRAN.R-project.org/package=duckdb
+
+
+# Finally
+
+Remember to disconnect and shutdown all managed DuckDB connections.
+
+```{r db_disconnect_all}
+db_disconnect_all()
+```
+
+Database connections that are not closed correctly trigger warning
+messages.
+
+# Session information {.unnumbered}
+
+```{r}
+sessionInfo()
+```

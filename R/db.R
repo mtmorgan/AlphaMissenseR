@@ -87,7 +87,15 @@ db_connect <-
             dbDisconnect(db0, shutdown = TRUE)
         }
         db_path <- bfcrpath(bfc, rname)
-        db <- dbConnect(duckdb(db_path, read_only))
+        db <- tryCatch({
+            dbConnect(duckdb(db_path, read_only))
+        }, error = function(e) {
+            spdl::warn("{}", conditionMessage(e))
+            stop(
+                "failed to connect to DuckDB database, ",
+                "see 'Issues & Solutions' vignette"
+            )
+        })
         if (managed)
             DB_CONNECTION[[db_connection_name]] <- db
     } else {

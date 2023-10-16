@@ -38,6 +38,7 @@ test_that("'am_data_import_csv()' works", {
     bfc <- BiocFileCache::BiocFileCache(fl)
 
     tsv_file <- tempfile()
+    filename <- basename(tsv_file)
     writeLines(c(
         "# Comment",
         "#",
@@ -45,11 +46,11 @@ test_that("'am_data_import_csv()' works", {
         "#CHROM\tPOS",
         "chr1\t1",
         "chr1\t2"
-    ), tsv_file)
+    ), gzfile(tsv_file))
 
     spdl::set_level("warn")
     output <- capture.output({
-        tbl <- am_data_import_csv(record, bfc, "tsv_file", tsv_file)
+        tbl <- am_data_import_csv(record, bfc, "tsv_file", filename, tsv_file)
     }, type = "message")
     spdl::set_level("info")
     expect_true(nzchar(output))

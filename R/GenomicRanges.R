@@ -43,9 +43,16 @@ to_GPos <-
         pull()
     if (length(genome) > 1L)
         stop("'to_GPos()' 'genome' field must have exactly one distinct value")
-    seqinfo <-
+    seqinfo <- tryCatch({
         GenomeInfoDb::Seqinfo(genome = genome) |>
-        GenomeInfoDb::keepStandardChromosomes()
+            GenomeInfoDb::keepStandardChromosomes()
+    }, error = function(e) {
+        spdl::warn(
+            "'to_GPos()' failed to discover 'seqinfo': {}",
+            conditionMessage(e)
+        )
+        NULL
+    })
 
     tbl <- collect(tbl)
     column_names <- colnames(tbl)

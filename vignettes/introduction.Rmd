@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-Originally written: 26 September, 2023
+Original version: 26 September, 2023
 
 # Introduction
 
