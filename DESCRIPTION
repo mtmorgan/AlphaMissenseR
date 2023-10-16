@@ -1,6 +1,6 @@
-Package: AlphaMissenseData
+Package: AlphaMissenseR
 Title: Accessing AlphaMissense Data Resources in R
-Version: 0.99.3
+Version: 0.99.4
 Authors@R: 
     c(person(
         "Martin", "Morgan", role = c("aut", "cre"),
@@ -24,8 +24,8 @@ Description:
     files to DuckDB databases for exploration and integration into *R*
     and *Bioconductor* workflows.
 License: Artistic-2.0
-URL: https://mtmorgan.github.io/AlphaMissenseData/
-BugReports: https://github.com/mtmorgan/AlphaMissenseData/issues
+URL: https://mtmorgan.github.io/AlphaMissenseR/
+BugReports: https://github.com/mtmorgan/AlphaMissenseR/issues
 Depends:
     dplyr
 Imports:
@@ -44,7 +44,8 @@ Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
-biocViews: FunctionalAnnotation, GenomicSequence, Homo_sapiens, Mus_musculus
+biocViews: SNP, Annotation, FunctionalGenomics, StructuralPrediction,
+    Transcriptomics, VariantAnnotation
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3

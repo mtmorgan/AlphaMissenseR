@@ -14,7 +14,7 @@ sql_template <-
     function(name, ...)
 {
     file <- paste0(name, ".sql")
-    path <- system.file(package = "AlphaMissenseData", "sql", file)
+    path <- system.file(package = "AlphaMissenseR", "sql", file)
     lines <- readLines(path)
     template <- paste(lines, collapse = "\n")
     whisker.render(template, list(...))

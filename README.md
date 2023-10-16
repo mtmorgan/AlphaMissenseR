@@ -23,14 +23,14 @@ Install the package from Bioconductor or GitHub, ensuring correct
 When the package is available on *Bioconductor*, use
 
 ``` r
-BiocManager::install("AlphaMissenseData")
+BiocManager::install("AlphaMissenseR")
 ```
 
 Use the pre-release or devel version with
 
 ``` r
 remotes::install_github(
-    "mtmorgan/AlphaMissenseData",
+    "mtmorgan/AlphaMissenseR",
     repos = BiocManager::repositories()
 )
 ```
@@ -38,7 +38,7 @@ remotes::install_github(
 Load the library.
 
 ``` r
-library(AlphaMissenseData)
+library(AlphaMissenseR)
 ```
 
 ## Next steps
@@ -46,4 +46,4 @@ library(AlphaMissenseData)
 Visit the [introductory article][intro] to learn more about using this
 package.
 
-[intro]: https://mtmorgan.github.io/AlphaMissenseData/articles/introduction.html
+[intro]: https://mtmorgan.github.io/AlphaMissenseR/articles/introduction.html

@@ -40,14 +40,14 @@ if (!"BiocManager" %in% rownames(installed.packages()))
 When the package is available on *Bioconductor*, use
 
 ```{r install-Bioconductor, eval = FALSE}
-BiocManager::install("AlphaMissenseData")
+BiocManager::install("AlphaMissenseR")
 ```
 
 Use the pre-release or devel version with
 
 ```{r install-devel, eval = FALSE}
 remotes::install_github(
-    "mtmorgan/AlphaMissenseData",
+    "mtmorgan/AlphaMissenseR",
     repos = BiocManager::repositories()
 )
 ```
@@ -55,7 +55,7 @@ remotes::install_github(
 Load the library.
 
 ```{r setup, message = FALSE}
-library(AlphaMissenseData)
+library(AlphaMissenseR)
 ```
 
 Learn about available data by visiting the Zenodo record where data
@@ -319,7 +319,7 @@ be of interest.
 [whisker]: https://cran.r-project.org/package=whisker
 
 ```{r range-join-template}
-AlphaMissenseData:::sql_template(
+AlphaMissenseR:::sql_template(
     "range_join",
     key = "hg38", join = "bcl2l11", to = "bcl2l11_overlaps"
 ) |> cat("\n")

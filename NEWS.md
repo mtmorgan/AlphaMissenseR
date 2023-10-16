@@ -1,7 +1,9 @@
-# AlphaMissenseData 1.0.0
+# AlphaMissenseR 1.0.0
 
-* (v. 0.99.1) Change to Bioconductor 'Annotation' package
-* (v. 0.99.1) Update to change in Zenodo API
+* (v. 0.99.4) Change back to Bioconductor 'Software' package, to allow
+  for regular testing of data access code.
+* (v. 0.99.1) Change to Bioconductor 'Annotation' package.
+* (v. 0.99.1) Update to change in Zenodo API.
 
 # AlphaMissense 0.99.0
 

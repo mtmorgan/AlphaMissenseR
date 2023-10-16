@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(AlphaMissenseData)
+library(AlphaMissenseR)
 
-test_check("AlphaMissenseData")
+test_check("AlphaMissenseR")
