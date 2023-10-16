@@ -15,7 +15,7 @@
     package allows ready access to the data, downloading individual
     files to DuckDB databases for exploration and integration into *R*
     and *Bioconductor* workflows.">
-<title>Accessing AlphaMissense Data Resources in R • AlphaMissenseData</title>
+<title>Accessing AlphaMissense Data Resources in R • AlphaMissenseR</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
@@ -42,9 +42,9 @@
 
     <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
     
-    <a class="navbar-brand me-2" href="index.html">AlphaMissenseData</a>
+    <a class="navbar-brand me-2" href="index.html">AlphaMissenseR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,6 +60,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="articles/introduction.html">Accessing AlphaMissense Resources in R</a>
+    <a class="dropdown-item" href="articles/issues.html">Issues &amp; Solutions</a>
   </div>
 </li>
 <li class="nav-item">
@@ -72,7 +73,7 @@
 
       <ul class="navbar-nav">
 <li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/mtmorgan/AlphaMissense/" aria-label="github">
+  <a class="external-link nav-link" href="https://github.com/mtmorgan/AlphaMissenseR/" aria-label="github">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -97,28 +98,28 @@
 <p>Install the package from Bioconductor or GitHub, ensuring correct <em>Bioconductor</em> dependencies.</p>
 <p>When the package is available on <em>Bioconductor</em>, use</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"AlphaMissenseData"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"AlphaMissenseR"</span><span class="op">)</span></span></code></pre></div>
 <p>Use the pre-release or devel version with</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span></span>
-<span>    <span class="st">"mtmorgan/AlphaMissenseData"</span>,</span>
+<span>    <span class="st">"mtmorgan/AlphaMissenseR"</span>,</span>
 <span>    repos <span class="op">=</span> <span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/repositories.html" class="external-link">repositories</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Load the library.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mtmorgan.github.io/AlphaMissense/">AlphaMissenseData</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mtmorgan.github.io/AlphaMissenseR/">AlphaMissenseR</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="next-steps">Next steps<a class="anchor" aria-label="anchor" href="#next-steps"></a>
 </h2>
-<p>Visit the <a href="https://mtmorgan.github.io/AlphaMissenseData/articles/introduction.html">introductory article</a> to learn more about using this package.</p>
+<p>Visit the <a href="https://mtmorgan.github.io/AlphaMissenseR/articles/introduction.html">introductory article</a> to learn more about using this package.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/mtmorgan/AlphaMissense/" class="external-link">Browse source code</a></li>
-<li><a href="https://github.com/mtmorgan/AlphaMissense/issues" class="external-link">Report a bug</a></li>
+<li><a href="https://github.com/mtmorgan/AlphaMissenseR/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/mtmorgan/AlphaMissenseR/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
@@ -133,7 +134,7 @@
 <div class="citation">
 <h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li><a href="authors.html#citation">Citing AlphaMissenseData</a></li>
+<li><a href="authors.html#citation">Citing AlphaMissenseR</a></li>
 </ul>
 </div>
 

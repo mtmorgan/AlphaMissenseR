@@ -13,7 +13,7 @@ db_disconnect() disconnects the duckdb database and
 shuts down the DuckDB server associated with the
 connection. Temporary tables are lost.
 db_disconnect_all() disconnects all managed duckdb
-database connection."><title>Manipulate the Database of Missense Mutations — db_connect • AlphaMissenseData</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Manipulate the Database of Missense Mutations — db_connect"><meta property="og:description" content="db_connect() manages connections to AlphaMissense
+database connection."><title>Manipulate the Database of Missense Mutations — db_connect • AlphaMissenseR</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Manipulate the Database of Missense Mutations — db_connect"><meta property="og:description" content="db_connect() manages connections to AlphaMissense
 record-specific databases. By default, connections are created
 once and reused.
 db_tables() queries for the names of temporary and
@@ -36,9 +36,9 @@ database connection."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/
 
     <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
     
-    <a class="navbar-brand me-2" href="../index.html">AlphaMissenseData</a>
+    <a class="navbar-brand me-2" href="../index.html">AlphaMissenseR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,7 @@ database connection."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/introduction.html">Accessing AlphaMissense Resources in R</a>
+    <a class="dropdown-item" href="../articles/issues.html">Issues &amp; Solutions</a>
   </div>
 </li>
 <li class="nav-item">
@@ -62,7 +63,7 @@ database connection."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
       <ul class="navbar-nav"><li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/mtmorgan/AlphaMissense/" aria-label="github">
+  <a class="external-link nav-link" href="https://github.com/mtmorgan/AlphaMissenseR/" aria-label="github">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -75,7 +76,7 @@ database connection."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Manipulate the Database of Missense Mutations</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mtmorgan/AlphaMissense/blob/HEAD/R/db.R" class="external-link"><code>R/db.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mtmorgan/AlphaMissenseR/blob/HEAD/R/db.R" class="external-link"><code>R/db.R</code></a></small>
       <div class="d-none name"><code>db.Rd</code></div>
     </div>
 
@@ -219,15 +220,13 @@ at the end of a session.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">db_connect</span><span class="op">(</span><span class="op">)</span>          <span class="co"># default 'read-only' connection</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> &lt;duckdb_connection 3a6c0 driver=&lt;duckdb_driver 20770 dbdir='/Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac' read_only=TRUE bigint=numeric&gt;&gt;</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> &lt;duckdb_connection 66600 driver=&lt;duckdb_driver 28000 dbdir='/Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2' read_only=TRUE bigint=numeric&gt;&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">db_rw</span> <span class="op">&lt;-</span> <span class="fu">db_connect</span><span class="op">(</span>read_only <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="AlphaMissense.html">am_data</a></span><span class="op">(</span><span class="st">"hg38"</span><span class="op">)</span>       <span class="co"># uses the default, 'read-only' connection</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * [15:02:58][info] retrieving key 'hg38'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * [15:02:58][info] data licensed under 'cc-by-nc-sa-4.0'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Source:   table&lt;hg38&gt; [?? x 10]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database: DuckDB 0.8.1 [root@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database: DuckDB v0.9.1 [ma38727@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    CHROM   POS REF   ALT   genome uniprot_id transcript_id     protein_variant</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> chr1  <span style="text-decoration: underline;">69</span>094 G     T     hg38   Q8NH21     ENST00000335137.4 V2L            </span>
@@ -243,15 +242,9 @@ at the end of a session.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2 more variables: am_pathogenicity &lt;dbl&gt;, am_class &lt;chr&gt;</span></span>
 <span class="r-in"><span><span class="fu">db_tables</span><span class="op">(</span><span class="op">)</span>           <span class="co"># connections initially share the same tables</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "aa_substitutions"          "gene_hg19"                </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3] "gene_hg38"                 "hg19"                     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "hg38"                      "isoforms_aa_substitutions"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [7] "isoforms_hg38"            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "gene_hg38" "hg38"     </span>
 <span class="r-in"><span><span class="fu">db_tables</span><span class="op">(</span><span class="va">db_rw</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "aa_substitutions"          "gene_hg19"                </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3] "gene_hg38"                 "hg19"                     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "hg38"                      "isoforms_aa_substitutions"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [7] "isoforms_hg38"            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "gene_hg38" "hg38"     </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## ranges of interest -- the first 200000 bases on chromsomes 1-4.</span></span></span>
 <span class="r-in"><span><span class="va">ranges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span></span>
@@ -261,7 +254,7 @@ at the end of a session.</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">db_temporary_table</span><span class="op">(</span><span class="va">db_rw</span>, <span class="va">ranges</span>, <span class="st">"ranges"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Source:   table&lt;ranges&gt; [4 x 3]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database: DuckDB 0.8.1 [root@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database: DuckDB v0.9.1 [ma38727@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   CHROM start    end</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> chr1      1 <span style="text-decoration: underline;">200</span>000</span>
@@ -270,32 +263,26 @@ at the end of a session.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> chr4      1 <span style="text-decoration: underline;">200</span>000</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">db_tables</span><span class="op">(</span><span class="va">db_rw</span><span class="op">)</span>      <span class="co"># temporary table available to the db_rw connection...</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "aa_substitutions"          "gene_hg19"                </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3] "gene_hg38"                 "hg19"                     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "hg38"                      "isoforms_aa_substitutions"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [7] "isoforms_hg38"             "ranges"                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "gene_hg38" "hg38"      "ranges"   </span>
 <span class="r-in"><span><span class="fu">db_tables</span><span class="op">(</span><span class="op">)</span>           <span class="co"># ...but not to the read-only connection</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "aa_substitutions"          "gene_hg19"                </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3] "gene_hg38"                 "hg19"                     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "hg38"                      "isoforms_aa_substitutions"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [7] "isoforms_hg38"            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "gene_hg38" "hg38"     </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">rng</span> <span class="op">&lt;-</span> <span class="fu">db_range_join</span><span class="op">(</span><span class="va">db_rw</span>, <span class="st">"hg38"</span>, <span class="st">"ranges"</span>, <span class="st">"ranges_overlaps"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">rng</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Source:   table&lt;ranges_overlaps&gt; [?? x 12]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database: DuckDB 0.8.1 [root@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database: DuckDB v0.9.1 [ma38727@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    CHROM   POS REF   ALT   genome uniprot_id transcript_id     protein_variant</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> chr4  <span style="text-decoration: underline;">59</span>430 G     C     hg38   Q8IYB9     ENST00000610261.6 E2Q            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> chr4  <span style="text-decoration: underline;">59</span>430 G     A     hg38   Q8IYB9     ENST00000610261.6 E2K            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> chr4  <span style="text-decoration: underline;">59</span>431 A     C     hg38   Q8IYB9     ENST00000610261.6 E2A            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> chr4  <span style="text-decoration: underline;">59</span>431 A     G     hg38   Q8IYB9     ENST00000610261.6 E2G            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> chr4  <span style="text-decoration: underline;">59</span>431 A     T     hg38   Q8IYB9     ENST00000610261.6 E2V            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> chr4  <span style="text-decoration: underline;">59</span>432 A     C     hg38   Q8IYB9     ENST00000610261.6 E2D            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> chr4  <span style="text-decoration: underline;">59</span>432 A     T     hg38   Q8IYB9     ENST00000610261.6 E2D            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> chr4  <span style="text-decoration: underline;">59</span>433 C     A     hg38   Q8IYB9     ENST00000610261.6 L3I            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> chr4  <span style="text-decoration: underline;">59</span>433 C     T     hg38   Q8IYB9     ENST00000610261.6 L3F            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> chr4  <span style="text-decoration: underline;">59</span>433 C     G     hg38   Q8IYB9     ENST00000610261.6 L3V            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> chr2  <span style="text-decoration: underline;">45</span>769 G     T     hg38   Q1W6H9     ENST00000327669.5 S206Y          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> chr2  <span style="text-decoration: underline;">45</span>770 A     C     hg38   Q1W6H9     ENST00000327669.5 S206A          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> chr2  <span style="text-decoration: underline;">45</span>770 A     G     hg38   Q1W6H9     ENST00000327669.5 S206P          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> chr2  <span style="text-decoration: underline;">45</span>770 A     T     hg38   Q1W6H9     ENST00000327669.5 S206T          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> chr2  <span style="text-decoration: underline;">45</span>771 G     T     hg38   Q1W6H9     ENST00000327669.5 S205R          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> chr2  <span style="text-decoration: underline;">45</span>771 G     C     hg38   Q1W6H9     ENST00000327669.5 S205R          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> chr2  <span style="text-decoration: underline;">45</span>772 C     T     hg38   Q1W6H9     ENST00000327669.5 S205N          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> chr2  <span style="text-decoration: underline;">45</span>772 C     A     hg38   Q1W6H9     ENST00000327669.5 S205I          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> chr2  <span style="text-decoration: underline;">45</span>772 C     G     hg38   Q1W6H9     ENST00000327669.5 S205T          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> chr2  <span style="text-decoration: underline;">45</span>773 T     G     hg38   Q1W6H9     ENST00000327669.5 S205R          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4 more variables: am_pathogenicity &lt;dbl&gt;, am_class &lt;chr&gt;, start &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   end &lt;dbl&gt;</span></span>
@@ -303,7 +290,7 @@ at the end of a session.</p>
 <span class="r-in"><span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">CHROM</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">CHROM</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Source:     SQL [3 x 2]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database:   DuckDB 0.8.1 [root@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/dbb12417e9ac_dbb12417e9ac]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database:   DuckDB v0.9.1 [ma38727@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Ordered by: CHROM</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   CHROM     n</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>

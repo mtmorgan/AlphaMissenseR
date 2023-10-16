@@ -1,33 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://mtmorgan.github.io/AlphaMissense/404.html</loc>
+    <loc>https://mtmorgan.github.io/AlphaMissenseR/404.html</loc>
   </url>
   <url>
-    <loc>https://mtmorgan.github.io/AlphaMissense/articles/index.html</loc>
+    <loc>https://mtmorgan.github.io/AlphaMissenseR/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://mtmorgan.github.io/AlphaMissense/articles/introduction.html</loc>
+    <loc>https://mtmorgan.github.io/AlphaMissenseR/articles/introduction.html</loc>
   </url>
   <url>
-    <loc>https://mtmorgan.github.io/AlphaMissense/authors.html</loc>
+    <loc>https://mtmorgan.github.io/AlphaMissenseR/articles/issues.html</loc>
   </url>
   <url>
-    <loc>https://mtmorgan.github.io/AlphaMissense/index.html</loc>
+    <loc>https://mtmorgan.github.io/AlphaMissenseR/authors.html</loc>
   </url>
   <url>
-    <loc>https://mtmorgan.github.io/AlphaMissense/news/index.html</loc>
+    <loc>https://mtmorgan.github.io/AlphaMissenseR/index.html</loc>
   </url>
   <url>
-    <loc>https://mtmorgan.github.io/AlphaMissense/reference/AlphaMissense.html</loc>
+    <loc>https://mtmorgan.github.io/AlphaMissenseR/news/index.html</loc>
   </url>
   <url>
-    <loc>https://mtmorgan.github.io/AlphaMissense/reference/GenomicRanges.html</loc>
+    <loc>https://mtmorgan.github.io/AlphaMissenseR/reference/AlphaMissense.html</loc>
   </url>
   <url>
-    <loc>https://mtmorgan.github.io/AlphaMissense/reference/db.html</loc>
+    <loc>https://mtmorgan.github.io/AlphaMissenseR/reference/GenomicRanges.html</loc>
   </url>
   <url>
-    <loc>https://mtmorgan.github.io/AlphaMissense/reference/index.html</loc>
+    <loc>https://mtmorgan.github.io/AlphaMissenseR/reference/db.html</loc>
+  </url>
+  <url>
+    <loc>https://mtmorgan.github.io/AlphaMissenseR/reference/index.html</loc>
   </url>
 </urlset>
