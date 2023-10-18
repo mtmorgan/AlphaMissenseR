@@ -1,12 +1,43 @@
 DB_CONNECTION <- new.env(parent = emptyenv())
 
-db_connection_name <-
+db_connection_id <-
     function(record, bfc, read_only)
 {
     paste(
         "AlphaMissense", basename(bfccache(bfc)), record, read_only,
         sep = ":"
     )
+}
+
+db_connect_create <-
+    function(record, bfc, read_only)
+{
+    spdl::debug(
+        "creating db connection for record '{}', read only '{}'",
+        record, read_only
+    )
+    rname <- paste0("AlphaMissense_", record)
+    if (!NROW(bfcquery(bfc, rname))) {
+        spdl::debug("creating new DuckDB database '{}'", rname)
+        ## create the BiocFileCache record
+        db_path <- bfcnew(bfc, rname)
+        ## open read-write to initialize
+        db0 <- dbConnect(duckdb(db_path))
+        dbDisconnect(db0, shutdown = TRUE)
+    }
+    db_path <- bfcrpath(bfc, rname)
+    db <- tryCatch({
+        dbConnect(duckdb(db_path, read_only))
+    }, error = function(e) {
+        ## e.g., because database created by older version of duckdb
+        spdl::warn("{}", conditionMessage(e))
+        stop(
+            "failed to connect to DuckDB database, ",
+            "see 'Issues & Solutions' vignette"
+        )
+    })
+
+    db
 }
 
 #' @rdname db
@@ -64,43 +95,22 @@ db_connect <-
         is_scalar_logical(read_only)
     )
 
-    db_connection_name <- db_connection_name(record, bfc, read_only)
+    connection_id <- db_connection_id(record, bfc, read_only)
 
-    create_entry <-
+    create <-
         ## explicitly requested...
         !managed ||
         ## ...or does not yet exist...
-        !exists(db_connection_name, envir = DB_CONNECTION) ||
+        !exists(connection_id, envir = DB_CONNECTION) ||
         ## ...or has been disconnected
-        !dbIsValid(DB_CONNECTION[[db_connection_name]])
-    if (create_entry) {
-        spdl::debug(
-            "creating db connection for record '{}', read only '{}'",
-            record, read_only
-        )
-        rname <- paste0("AlphaMissense_", record)
-        if (!NROW(bfcquery(bfc, rname))) {
-            ## create the BiocFileCache record
-            db_path <- bfcnew(bfc, rname)
-            ## open read-write to initialize
-            db0 <- dbConnect(duckdb(db_path))
-            dbDisconnect(db0, shutdown = TRUE)
-        }
-        db_path <- bfcrpath(bfc, rname)
-        db <- tryCatch({
-            dbConnect(duckdb(db_path, read_only))
-        }, error = function(e) {
-            spdl::warn("{}", conditionMessage(e))
-            stop(
-                "failed to connect to DuckDB database, ",
-                "see 'Issues & Solutions' vignette"
-            )
-        })
+        !dbIsValid(DB_CONNECTION[[connection_id]])
+    if (create) {
+        db <- db_connect_create(record, bfc, read_only)
         if (managed)
-            DB_CONNECTION[[db_connection_name]] <- db
+            DB_CONNECTION[[connection_id]] <- db
     } else {
         ## re-use existing connection
-        db <- DB_CONNECTION[[db_connection_name]]
+        db <- DB_CONNECTION[[connection_id]]
     }
 
     db
@@ -115,8 +125,8 @@ db_connect_or_renew <-
         return(db_connect(record, bfc, read_only, managed))
     }
 
-    db_connection_name <- db_connection_name(record, bfc, read_only)
-    if (db_connection_name %in% names(DB_CONNECTION)) {
+    connection_id <- db_connection_id(record, bfc, read_only)
+    if (connection_id %in% names(DB_CONNECTION)) {
         ## renew
         spdl::info(paste0(
             "renewing managed connection to record '{}',\n",
