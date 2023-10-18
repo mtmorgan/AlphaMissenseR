@@ -7,6 +7,8 @@
 \alias{db_range_join}
 \alias{db_disconnect}
 \alias{db_disconnect_all}
+\alias{tbl.AlphaMissenseR_db}
+\alias{print.AlphaMissenseR_db}
 \title{Manipulate the Database of Missense Mutations}
 \usage{
 db_connect(
@@ -25,6 +27,10 @@ db_range_join(db, key, join, to)
 db_disconnect(db = db_connect())
 
 db_disconnect_all()
+
+\method{tbl}{AlphaMissenseR_db}(src, from, ...)
+
+\method{print}{AlphaMissenseR_db}(x, ...)
 }
 \arguments{
 \item{record}{character(1) Zenodo record for the AlphaMissense data
@@ -54,6 +60,17 @@ mutation coordinates.}
 
 \item{join}{a character(1) table name in \code{db} containing ranges to
 be used for joining with (filtering) \code{key}.}
+
+\item{src}{for \code{tbl.AlphaMissenseR_db}, an object returned by
+\code{db_connect()}.}
+
+\item{from}{character(1) name of the table to be used}
+
+\item{...}{Ignored for \code{tbl.AlphaMissenseR_db} and
+\code{print.AlphaMissenseR_db}.}
+
+\item{x}{for \code{print.AlphaMissenseR_db} an object returned by
+\code{db_connect()}.}
 }
 \value{
 \code{db_connect()} returns an open \code{duckdb_connection} to the
@@ -75,6 +92,9 @@ invisibly.
 
 \code{db_disconnect_all()} returns the \code{db_disconnect()} value
 for each connection, invisibly.
+
+\code{tbl()} returns a dbplyr tibble representing the DuckDB
+table.
 }
 \description{
 \code{db_connect()} manages connections to AlphaMissense
@@ -97,6 +117,8 @@ connection. Temporary tables are lost.
 
 \code{db_disconnect_all()} disconnects all managed duckdb
 database connection.
+
+\code{tbl()} creates a dbplyr tibble from the database.
 }
 \details{
 For \code{db_connect()}, set \code{managed = FALSE} when, for instance,
@@ -151,5 +173,7 @@ db_disconnect(db_rw)  # explicit read-write connection
 db_disconnect()       # implicit read-only connection
 
 db_disconnect_all()
+
+tbl(db_connect(), "hg38")  # alternative to am_data("hg38")
 
 }

@@ -95,25 +95,34 @@ db_connect <-
         is_scalar_logical(read_only)
     )
 
-    connection_id <- db_connection_id(record, bfc, read_only)
+    id <- db_connection_id(record, bfc, read_only)
 
     create <-
         ## explicitly requested...
         !managed ||
         ## ...or does not yet exist...
-        !exists(connection_id, envir = DB_CONNECTION) ||
+        !exists(id, envir = DB_CONNECTION) ||
         ## ...or has been disconnected
-        !dbIsValid(DB_CONNECTION[[connection_id]])
+        !dbIsValid(DB_CONNECTION[[id]])
     if (create) {
         db <- db_connect_create(record, bfc, read_only)
         if (managed)
-            DB_CONNECTION[[connection_id]] <- db
+            DB_CONNECTION[[id]] <- db
     } else {
         ## re-use existing connection
-        db <- DB_CONNECTION[[connection_id]]
+        db <- DB_CONNECTION[[id]]
     }
 
-    db
+    structure(
+        list(
+            db = db,
+            id = id,
+            record = record,
+            read_only = read_only,
+            managed = managed
+        ),
+        class = "AlphaMissenseR_db"
+    )
 }
 
 db_connect_or_renew <-
@@ -125,8 +134,8 @@ db_connect_or_renew <-
         return(db_connect(record, bfc, read_only, managed))
     }
 
-    connection_id <- db_connection_id(record, bfc, read_only)
-    if (connection_id %in% names(DB_CONNECTION)) {
+    id <- db_connection_id(record, bfc, read_only)
+    if (id %in% names(DB_CONNECTION)) {
         ## renew
         spdl::info(paste0(
             "renewing managed connection to record '{}',\n",
@@ -153,31 +162,16 @@ db_connect_or_renew <-
 #' db_tables()           # connections initially share the same tables
 #' db_tables(db_rw)
 #'
-#' @importFrom DBI dbListTables dbWriteTable
-#'
 #' @export
 db_tables <-
     function(db = db_connect())
 {
     stopifnot(
-        inherits(db, "duckdb_connection"),
-        dbIsValid(db)
+        inherits(db, "AlphaMissenseR_db"),
+        db_is_valid(db)
     )
 
-    dbListTables(db)
-}
-
-#' @importFrom DBI dbListFields
-db_table_fields <-
-    function(db = db_connect(), table)
-{
-    stopifnot(
-        inherits(db, "duckdb_connection"),
-        is_scalar_character(table),
-        table %in% db_tables(db)
-    )
-
-    dbListFields(db, table)
+    db_list_tables(db)
 }
 
 #' @rdname db
@@ -214,7 +208,7 @@ db_temporary_table <-
     function(db, value, to)
 {
     stopifnot(
-        inherits(db, "duckdb_connection"),
+        inherits(db, "AlphaMissenseR_db"),
         is_scalar_character(to),
         inherits(value, "data.frame")
     )
@@ -222,7 +216,7 @@ db_temporary_table <-
     if (to %in% db_tables(db))
         spdl::info("overwriting existing table '{}'", to)
 
-    dbWriteTable(db, to, value, temporary = TRUE, overwrite = TRUE)
+    db_write_table(db, to, value, temporary = TRUE, overwrite = TRUE)
 
     tbl(db, to)
 }
@@ -265,13 +259,13 @@ db_range_join <-
     function(db, key, join, to)
 {
     stopifnot(
-        inherits(db, "duckdb_connection"),
+        inherits(db, "AlphaMissenseR_db"),
 
         is_scalar_character(key) && key %in% db_tables(db),
-        all(c("CHROM", "POS") %in% db_table_fields(db, key)),
+        all(c("CHROM", "POS") %in% db_list_fields(db, key)),
 
         is_scalar_character(join) && join %in% db_tables(db),
-        all(c("CHROM", "start", "end") %in% db_table_fields(db, join)),
+        all(c("CHROM", "start", "end") %in% db_list_fields(db, join)),
 
         is_scalar_character(to)
     )
@@ -281,9 +275,23 @@ db_range_join <-
 
     spdl::debug("doing range join of '{}' with '{}'", key, join)
     sql <- sql_template("range_join", key = key, join = join, to = to)
-    dbExecute(db, sql)
+    db_execute(db, sql)
 
     tbl(db, to)
+}
+
+#' @importFrom DBI dbIsValid dbDisconnect
+db_disconnect_duckdb <-
+    function(db)
+{
+    ## shut down this connection
+    result <- dbIsValid(db) && dbDisconnect(db, shutdown = TRUE)
+    ## remove from DB_CONNECTION environment
+    is_valid <- unlist(eapply(DB_CONNECTION, dbIsValid))
+    if (length(is_valid) && any(!is_valid))
+        rm(list = names(is_valid)[!is_valid], envir = DB_CONNECTION)
+
+    invisible(result)
 }
 
 #' @rdname db
@@ -305,24 +313,15 @@ db_range_join <-
 #' db_disconnect(db_rw)  # explicit read-write connection
 #' db_disconnect()       # implicit read-only connection
 #'
-#' @importFrom DBI dbIsValid dbDisconnect
-#'
 #' @export
 db_disconnect <-
     function(db = db_connect())
 {
     stopifnot(
-        inherits(db, "duckdb_connection")
+        inherits(db, "AlphaMissenseR_db")
     )
 
-    ## shut down this connection
-    result <- dbIsValid(db) && dbDisconnect(db, shutdown = TRUE)
-    ## remove from DB_CONNECTION environment
-    is_valid <- unlist(eapply(DB_CONNECTION, dbIsValid))
-    if (length(is_valid) && any(!is_valid))
-        rm(list = names(is_valid)[!is_valid], envir = DB_CONNECTION)
-
-    invisible(result)
+    db_disconnect_duckdb(db$db)
 }
 
 #' @rdname db
@@ -340,5 +339,93 @@ db_disconnect <-
 db_disconnect_all <-
     function()
 {
-    invisible(unlist(eapply(DB_CONNECTION, db_disconnect)))
+    ## operates on 'db', not 'AlphaMissenseR_db'
+    invisible(unlist(eapply(DB_CONNECTION, db_disconnect_duckdb)))
+}
+
+#' @rdname db
+#'
+#' @description `tbl()` creates a dbplyr tibble from the database.
+#'
+#' @param src for `tbl.AlphaMissenseR_db`, an object returned by
+#'     `db_connect()`.
+#'
+#' @param from character(1) name of the table to be used
+#'
+#' @param x for `print.AlphaMissenseR_db` an object returned by
+#'     `db_connect()`.
+#'
+#' @param ... Ignored for `tbl.AlphaMissenseR_db` and
+#'     `print.AlphaMissenseR_db`.
+#'
+#' @return `tbl()` returns a dbplyr tibble representing the DuckDB
+#'     table.
+#'
+#' @examples
+#' tbl(db_connect(), "hg38")  # alternative to am_data("hg38")
+#'
+#' @importFrom dplyr tbl
+#'
+#' @export
+tbl.AlphaMissenseR_db <-
+    function(src, from, ...)
+{
+    tbl(src$db, from, ...)
+}
+
+#' @rdname db
+#'
+#' @export
+print.AlphaMissenseR_db <-
+    function(x, ...)
+{
+    is_valid <- db_is_valid(x)
+    status <- paste0("(read_only: ", x$read_only, "; managed: ", x$managed, ")")
+
+    cat(
+        "AlphaMissenseR_db ", status, "\n",
+        "record: '", x$record, "'\n",
+        "connected: ", is_valid, "\n",
+        "tables: ", if (is_valid) paste(db_tables(x), collapse = ", "), "\n",
+        sep = ""
+    )
+}
+
+## non-exported functions supporting AlphaMissenseR_db
+## abstraction. AlphaMissenseR_db could be an S4 class and these S4
+## methods, but that seems like a 'heavy' implementation.
+
+#' @importFrom DBI dbIsValid
+db_is_valid <-
+    function(db)
+{
+    dbIsValid(db$db)
+}
+
+#' @importFrom DBI dbListTables
+db_list_tables <-
+    function(db)
+{
+    dbListTables(db$db)
+}
+
+#' @importFrom DBI dbListFields
+db_list_fields <-
+    function(db, ...)
+{
+    dbListFields(db$db, ...)
+}
+
+#' @importFrom DBI dbExecute
+db_execute <-
+    function(db, ...)
+{
+    dbExecute(db$db, ...)
+}
+
+#' @importFrom DBI dbWriteTable
+db_write_table <-
+    function(db, ...)
+{
+    dbWriteTable(db$db, ...)
 }
