@@ -56,7 +56,7 @@ am_data_license <-
 {
     if (internet_available()) {
         json <- am_record_json(record)
-        license <- jmespath(json, "metadata.license")
+        license <- jmespath(json, "metadata.license.id")
     } else {
         license <- "unknown (internet not available)"
     }
@@ -83,13 +83,10 @@ am_available_from_internet <-
         spdl::info("{} is not the most recent version", record)
 
     ## exclude 'README.md'
-    files <- jmespath(json, "files[?!ends_with(filename, '.md')]")
-    filename <- rjmespath(files, "[*].filename")
-    key <- sub(
-        "AlphaMissense_(.*)\\.tsv\\.gz", "\\1",
-        rjmespath(files, "[*].filename")
-    )
-    size <- rjmespath(files, "[*].filesize")
+    files <- jmespath(json, "files[?!ends_with(key, '.md')]")
+    filename <- rjmespath(files, "[*].key")
+    key <- sub("AlphaMissense_(.*)\\.tsv\\.gz", "\\1", filename)
+    size <- rjmespath(files, "[*].size")
     db <- db_connect(record, bfc, managed = FALSE)
     cached <- key %in% db_tables(db)
     db_disconnect(db)

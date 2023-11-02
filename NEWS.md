@@ -1,5 +1,6 @@
 # AlphaMissenseR 1.0.0
 
+* (v. 0.99.7) Update to revised Zenodo API.
 * (v. 0.99.5) BREAKING change. Requires duckdb >= 0.9.1, which cannot
   read DuckDB databases created with earlier versions. Also introduces
   changes to local cache naming. See the 'Issues & Solutions' vignette.
