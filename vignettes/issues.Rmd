@@ -79,6 +79,26 @@ with duckdb 0.9.1.
 
 [duckdb]: https://CRAN.R-project.org/package=duckdb
 
+# Resource temporarily unavailable
+
+Trying to access a data resource with `am_data()` may sometimes result
+in a DuckDB errors about "Resource unavailable".
+
+```
+> am_data("hg38")
+
+* [10:05:09][warning] error in evaluating the argument 'drv' in selecting a
+  method for function 'dbConnect': rapi_startup: Failed to open database:
+  IO Error: Could not set lock on file "/Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2":
+  Resource unavailable
+
+Error in value[[3L]](cond) :
+  failed to connect to DuckDB database, see 'Issues & Solutions' vignette
+```
+
+This occures when the database is being used by an independent *R*
+process. The solution is to identify the process and disconnect from
+the database using, e.g., `db_disconnect_all()`.
 
 # Finally
 
