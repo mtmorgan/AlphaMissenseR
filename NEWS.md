@@ -1,5 +1,6 @@
 # AlphaMissenseR 1.0.0
 
+* (v. 0.99.10) Introduce visualization on AlphaFold predictions
 * (v. 0.99.9) Update maintainer email address, add 'Resource unavailable' section
   to 'Issues & Solutions' vignette
 * (v. 0.99.7) Update to revised Zenodo API.

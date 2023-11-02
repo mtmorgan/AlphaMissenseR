@@ -13,8 +13,20 @@
 sql_template <-
     function(name, ...)
 {
-    file <- paste0(name, ".sql")
-    path <- system.file(package = "AlphaMissenseR", "sql", file)
+    language_template("sql", name, ...)
+}
+
+js_template <-
+    function(name, ...)
+{
+    language_template("js", name, ...)
+}
+
+language_template <-
+    function(language, name, ...)
+{
+    file <- paste0(name, ".", language)
+    path <- system.file(package = "AlphaMissenseR", language, file)
     lines <- readLines(path)
     template <- paste(lines, collapse = "\n")
     whisker.render(template, list(...))
