@@ -1,10 +1,10 @@
 Package: AlphaMissenseR
 Title: Accessing AlphaMissense Data Resources in R
-Version: 0.99.7
+Version: 0.99.8
 Authors@R: 
     c(person(
         "Martin", "Morgan", role = c("aut", "cre"),
-        email = "mtmorgan.bioc@gmail.com",
+        email = "mtmorgan.xyz@gmail.com",
         comment = c(ORCID = "0000-0002-5874-8148")
     ), person(
         "Chan Zuckerberg Initiative DAF CZF2019-002443",
