@@ -163,17 +163,17 @@ am_data_import_csv <-
         sql <- sql_template(
             "import_csv", db_tbl_name = db_tbl_name, file_path = file_path
         )
-        db_execute(db_rw, sql)
+        dbExecute(db_rw, sql)
 
         renew <- TRUE
     }
-    if ("#CHROM" %in% db_list_fields(db_rw, db_tbl_name)) {
+    if ("#CHROM" %in% dbListFields(db_rw, db_tbl_name)) {
         spdl::info("renaming '#CHROM' to 'CHROM' in table '{}'", db_tbl_name)
         sql <- sql_template(
             "rename_column",
             db_tbl_name = db_tbl_name, from = "#CHROM", to = "CHROM"
         )
-        db_execute(db_rw, sql)
+        dbExecute(db_rw, sql)
 
         renew <- TRUE
     }

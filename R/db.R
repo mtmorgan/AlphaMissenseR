@@ -113,15 +113,12 @@ db_connect <-
         db <- DB_CONNECTION[[id]]
     }
 
-    structure(
-        list(
-            db = db,
-            id = id,
-            record = record,
-            read_only = read_only,
-            managed = managed
-        ),
-        class = "AlphaMissenseR_db"
+    alphamissense_connection(
+        db,
+        id = id,
+        record = record,
+        read_only = read_only,
+        managed = managed
     )
 }
 
@@ -167,11 +164,11 @@ db_tables <-
     function(db = db_connect())
 {
     stopifnot(
-        inherits(db, "AlphaMissenseR_db"),
-        db_is_valid(db)
+        is(db, "alphamissense_connection"),
+        dbIsValid(db)
     )
 
-    db_list_tables(db)
+    dbListTables(db)
 }
 
 #' @rdname db
@@ -208,7 +205,7 @@ db_temporary_table <-
     function(db, value, to)
 {
     stopifnot(
-        inherits(db, "AlphaMissenseR_db"),
+        is(db, "alphamissense_connection"),
         is_scalar_character(to),
         inherits(value, "data.frame")
     )
@@ -216,7 +213,7 @@ db_temporary_table <-
     if (to %in% db_tables(db))
         spdl::info("overwriting existing table '{}'", to)
 
-    db_write_table(db, to, value, temporary = TRUE, overwrite = TRUE)
+    dbWriteTable(db, to, value, temporary = TRUE, overwrite = TRUE)
 
     tbl(db, to)
 }
@@ -259,13 +256,13 @@ db_range_join <-
     function(db, key, join, to)
 {
     stopifnot(
-        inherits(db, "AlphaMissenseR_db"),
+        is(db, "alphamissense_connection"),
 
         is_scalar_character(key) && key %in% db_tables(db),
-        all(c("CHROM", "POS") %in% db_list_fields(db, key)),
+        all(c("CHROM", "POS") %in% dbListFields(db, key)),
 
         is_scalar_character(join) && join %in% db_tables(db),
-        all(c("CHROM", "start", "end") %in% db_list_fields(db, join)),
+        all(c("CHROM", "start", "end") %in% dbListFields(db, join)),
 
         is_scalar_character(to)
     )
@@ -275,7 +272,7 @@ db_range_join <-
 
     spdl::debug("doing range join of '{}' with '{}'", key, join)
     sql <- sql_template("range_join", key = key, join = join, to = to)
-    db_execute(db, sql)
+    dbExecute(db, sql)
 
     tbl(db, to)
 }
@@ -318,10 +315,10 @@ db_disconnect <-
     function(db = db_connect())
 {
     stopifnot(
-        inherits(db, "AlphaMissenseR_db")
+        is(db, "alphamissense_connection")
     )
 
-    db_disconnect_duckdb(db$db)
+    db_disconnect_duckdb(db)
 }
 
 #' @rdname db
@@ -339,93 +336,5 @@ db_disconnect <-
 db_disconnect_all <-
     function()
 {
-    ## operates on 'db', not 'AlphaMissenseR_db'
     invisible(unlist(eapply(DB_CONNECTION, db_disconnect_duckdb)))
-}
-
-#' @rdname db
-#'
-#' @description `tbl()` creates a dbplyr tibble from the database.
-#'
-#' @param src for `tbl.AlphaMissenseR_db`, an object returned by
-#'     `db_connect()`.
-#'
-#' @param from character(1) name of the table to be used
-#'
-#' @param x for `print.AlphaMissenseR_db` an object returned by
-#'     `db_connect()`.
-#'
-#' @param ... Ignored for `tbl.AlphaMissenseR_db` and
-#'     `print.AlphaMissenseR_db`.
-#'
-#' @return `tbl()` returns a dbplyr tibble representing the DuckDB
-#'     table.
-#'
-#' @examples
-#' tbl(db_connect(), "hg38")  # alternative to am_data("hg38")
-#'
-#' @importFrom dplyr tbl
-#'
-#' @export
-tbl.AlphaMissenseR_db <-
-    function(src, from, ...)
-{
-    tbl(src$db, from, ...)
-}
-
-#' @rdname db
-#'
-#' @export
-print.AlphaMissenseR_db <-
-    function(x, ...)
-{
-    is_valid <- db_is_valid(x)
-    status <- paste0("(read_only: ", x$read_only, "; managed: ", x$managed, ")")
-
-    cat(
-        "AlphaMissenseR_db ", status, "\n",
-        "record: '", x$record, "'\n",
-        "connected: ", is_valid, "\n",
-        "tables: ", if (is_valid) paste(db_tables(x), collapse = ", "), "\n",
-        sep = ""
-    )
-}
-
-## non-exported functions supporting AlphaMissenseR_db
-## abstraction. AlphaMissenseR_db could be an S4 class and these S4
-## methods, but that seems like a 'heavy' implementation.
-
-#' @importFrom DBI dbIsValid
-db_is_valid <-
-    function(db)
-{
-    dbIsValid(db$db)
-}
-
-#' @importFrom DBI dbListTables
-db_list_tables <-
-    function(db)
-{
-    dbListTables(db$db)
-}
-
-#' @importFrom DBI dbListFields
-db_list_fields <-
-    function(db, ...)
-{
-    dbListFields(db$db, ...)
-}
-
-#' @importFrom DBI dbExecute
-db_execute <-
-    function(db, ...)
-{
-    dbExecute(db$db, ...)
-}
-
-#' @importFrom DBI dbWriteTable
-db_write_table <-
-    function(db, ...)
-{
-    dbWriteTable(db$db, ...)
 }

@@ -4,12 +4,12 @@ test_that("'db_connect()' works", {
 
     ## read-only connection
     db <- db_connect(ALPHAMISSENSE_RECORD, bfc)
-    expect_true(db_is_valid(db))
+    expect_true(DBI::dbIsValid(db))
     expect_identical(db, db_connect(ALPHAMISSENSE_RECORD, bfc))
 
     ## read-write connection; default: not managed
     db_rw <- db_connect(ALPHAMISSENSE_RECORD, bfc, read_only = FALSE)
-    expect_true(db_is_valid(db))
+    expect_true(DBI::dbIsValid(db))
     db_rw_1 <- db_connect(ALPHAMISSENSE_RECORD, bfc, read_only = FALSE)
     expect_false(identical(db_rw, db_rw_1))
     db_disconnect(db_rw_1)
@@ -18,7 +18,7 @@ test_that("'db_connect()' works", {
     ## different connections
     expect_true(!identical(db, db_rw))
     db_unmanaged <- db_connect(ALPHAMISSENSE_RECORD, bfc, managed = FALSE)
-    expect_true(db_is_valid(db_unmanaged))
+    expect_true(DBI::dbIsValid(db_unmanaged))
     expect_true(!identical(db, db_unmanaged))
     db_disconnect(db_unmanaged)
 
@@ -31,18 +31,18 @@ test_that("'db_connect_or_renew()' works", {
     bfc <- BiocFileCache::BiocFileCache(fl)
 
     db <- db_connect_or_renew(ALPHAMISSENSE_RECORD, bfc)
-    expect_true(db_is_valid(db))
+    expect_true(DBI::dbIsValid(db))
     expect_output(db1 <- db_connect_or_renew(ALPHAMISSENSE_RECORD, bfc))
-    expect_false(db_is_valid(db)) # invalidates previous connection
-    expect_true(db_is_valid(db1))
+    expect_false(DBI::dbIsValid(db)) # invalidates previous connection
+    expect_true(DBI::dbIsValid(db1))
     db_disconnect(db1)
 
     ## managed connections are never renewed
     db0 <- db_connect_or_renew(ALPHAMISSENSE_RECORD, bfc, managed = FALSE)
     db1 <- db_connect_or_renew(ALPHAMISSENSE_RECORD, bfc, managed = FALSE)
     expect_false(identical(db0, db1))
-    expect_true(db_is_valid(db0))
-    expect_true(db_is_valid(db1))
+    expect_true(DBI::dbIsValid(db0))
+    expect_true(DBI::dbIsValid(db1))
     db_disconnect(db0)
     db_disconnect(db1)
 })
@@ -58,7 +58,7 @@ test_that("'db_tables() works", {
     ## new table seen by db_table(); requires rw connection
     db_rw <- db_connect(ALPHAMISSENSE_RECORD, bfc, read_only = FALSE)
     expect_identical(db_tables(db_rw), character(0))
-    db_write_table(db_rw, "mtcars", mtcars)
+    DBI::dbWriteTable(db_rw, "mtcars", mtcars)
     expect_identical(db_tables(db_rw), "mtcars")
     db_disconnect(db_rw)
 
@@ -74,7 +74,7 @@ test_that("'db_temporary_table()' works", {
 
     ## can't write table to read-only database
     db <- db_connect(ALPHAMISSENSE_RECORD, bfc)
-    expect_error(db_write_table(db, "mtcars", mtcars))
+    expect_error(DBI::dbWriteTable(db, "mtcars", mtcars))
 
     ## can write temporary table
     tbl <- db_temporary_table(db, mtcars, "mtcars")
@@ -145,8 +145,8 @@ test_that("'db_disconnect()' works", {
     bfc <- BiocFileCache::BiocFileCache(fl)
 
     db <- db_connect(ALPHAMISSENSE_RECORD, bfc)
-    expect_true(db_is_valid(db))
+    expect_true(DBI::dbIsValid(db))
     expect_identical(db_disconnect(db), TRUE)  # return value is invisible
     expect_identical(db_disconnect(db), FALSE) # signal db already closed
-    expect_false(db_is_valid(db))
+    expect_false(DBI::dbIsValid(db))
 })
