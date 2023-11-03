@@ -13,6 +13,9 @@
     <loc>https://mtmorgan.github.io/AlphaMissenseR/articles/issues.html</loc>
   </url>
   <url>
+    <loc>https://mtmorgan.github.io/AlphaMissenseR/articles/visualization.html</loc>
+  </url>
+  <url>
     <loc>https://mtmorgan.github.io/AlphaMissenseR/authors.html</loc>
   </url>
   <url>
@@ -22,10 +25,16 @@
     <loc>https://mtmorgan.github.io/AlphaMissenseR/news/index.html</loc>
   </url>
   <url>
+    <loc>https://mtmorgan.github.io/AlphaMissenseR/reference/AlphaFold.html</loc>
+  </url>
+  <url>
     <loc>https://mtmorgan.github.io/AlphaMissenseR/reference/AlphaMissense.html</loc>
   </url>
   <url>
     <loc>https://mtmorgan.github.io/AlphaMissenseR/reference/GenomicRanges.html</loc>
+  </url>
+  <url>
+    <loc>https://mtmorgan.github.io/AlphaMissenseR/reference/am_aa.html</loc>
   </url>
   <url>
     <loc>https://mtmorgan.github.io/AlphaMissenseR/reference/db.html</loc>

@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">AlphaMissenseR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.11</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,6 +43,7 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/introduction.html">Accessing AlphaMissense Resources in R</a>
     <a class="dropdown-item" href="../articles/issues.html">Issues &amp; Solutions</a>
+    <a class="dropdown-item" href="../articles/visualization.html">Visualization</a>
   </div>
 </li>
 <li class="nav-item">
@@ -131,7 +132,7 @@ cached. The command</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/AlphaMissense.html">am_data</a></span><span class="op">(</span><span class="st">"gene_hg38"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   table&lt;gene_hg38&gt; [?? x 2]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.9.1 [ma38727@Darwin 21.6.0:R 4.3.1//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.9.1 [ma38727@Darwin 21.6.0:R 4.4.0//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2]</span></span></span>
 <span><span class="co">#&gt;    transcript_id      mean_am_pathogenicity</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> ENST00000000233.10                 0.742</span></span>
@@ -149,11 +150,30 @@ cached. The command</p>
 functions with duckdb 0.9.1.</p>
 </div>
 <div class="section level2">
+<h2 id="resource-temporarily-unavailable">Resource temporarily unavailable<a class="anchor" aria-label="anchor" href="#resource-temporarily-unavailable"></a>
+</h2>
+<p>Trying to access a data resource with <code><a href="../reference/AlphaMissense.html">am_data()</a></code> may
+sometimes result in a DuckDB errors about “Resource unavailable”.</p>
+<pre><code>&gt; am_data("hg38")
+
+* [10:05:09][warning] error in evaluating the argument 'drv' in selecting a
+  method for function 'dbConnect': rapi_startup: Failed to open database:
+  IO Error: Could not set lock on file "/Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2":
+  Resource unavailable
+
+Error in value[[3L]](cond) :
+  failed to connect to DuckDB database, see 'Issues &amp; Solutions' vignette</code></pre>
+<p>This occures when the database is being used by an independent
+<em>R</em> process. The solution is to identify the process and
+disconnect from the database using, e.g.,
+<code><a href="../reference/db.html">db_disconnect_all()</a></code>.</p>
+</div>
+<div class="section level2">
 <h2 id="finally">Finally<a class="anchor" aria-label="anchor" href="#finally"></a>
 </h2>
 <p>Remember to disconnect and shutdown all managed DuckDB
 connections.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/db.html">db_disconnect_all</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Database connections that are not closed correctly trigger warning
 messages.</p>
@@ -161,15 +181,15 @@ messages.</p>
 <div class="section level2">
 <h2 class="unnumbered" id="session-information">Session information<a class="anchor" aria-label="anchor" href="#session-information"></a>
 </h2>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; R version 4.3.1 Patched (2023-10-10 r85312)</span></span>
-<span><span class="co">#&gt; Platform: aarch64-apple-darwin21.6.0 (64-bit)</span></span>
+<span><span class="co">#&gt; R Under development (unstable) (2023-10-30 r85438)</span></span>
+<span><span class="co">#&gt; Platform: aarch64-apple-darwin21.6.0</span></span>
 <span><span class="co">#&gt; Running under: macOS Monterey 12.6.8</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Matrix products: default</span></span>
-<span><span class="co">#&gt; BLAS:   /Users/ma38727/bin/R-4-3-branch/lib/libRblas.dylib </span></span>
-<span><span class="co">#&gt; LAPACK: /Users/ma38727/bin/R-4-3-branch/lib/libRlapack.dylib;  LAPACK version 3.11.0</span></span>
+<span><span class="co">#&gt; BLAS:   /Users/ma38727/bin/R-devel/lib/libRblas.dylib </span></span>
+<span><span class="co">#&gt; LAPACK: /Users/ma38727/bin/R-devel/lib/libRlapack.dylib;  LAPACK version 3.11.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; locale:</span></span>
 <span><span class="co">#&gt; [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span></span>
@@ -181,28 +201,28 @@ messages.</p>
 <span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt; [1] AlphaMissenseR_0.99.5 dplyr_1.1.3          </span></span>
+<span><span class="co">#&gt; [1] AlphaMissenseR_0.99.11 dplyr_1.1.3           </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;  [1] sass_0.4.7          utf8_1.2.3          generics_0.1.3     </span></span>
-<span><span class="co">#&gt;  [4] spdl_0.0.5          RSQLite_2.3.1       stringi_1.7.12     </span></span>
-<span><span class="co">#&gt;  [7] digest_0.6.33       magrittr_2.0.3      evaluate_0.22      </span></span>
-<span><span class="co">#&gt; [10] fastmap_1.1.1       blob_1.2.4          rprojroot_2.0.3    </span></span>
-<span><span class="co">#&gt; [13] jsonlite_1.8.7      whisker_0.4.1       DBI_1.1.3          </span></span>
-<span><span class="co">#&gt; [16] httr_1.4.7          purrr_1.0.2         fansi_1.0.5        </span></span>
-<span><span class="co">#&gt; [19] textshaping_0.3.7   jquerylib_0.1.4     duckdb_0.9.1       </span></span>
-<span><span class="co">#&gt; [22] cli_3.6.1           rlang_1.1.1         dbplyr_2.3.4       </span></span>
-<span><span class="co">#&gt; [25] bit64_4.0.5         withr_2.5.1         cachem_1.0.8       </span></span>
-<span><span class="co">#&gt; [28] yaml_2.3.7          tools_4.3.1         memoise_2.0.1      </span></span>
-<span><span class="co">#&gt; [31] filelock_1.0.2      curl_5.1.0          vctrs_0.6.4        </span></span>
-<span><span class="co">#&gt; [34] rjsoncons_1.0.0     R6_2.5.1            BiocFileCache_2.9.1</span></span>
-<span><span class="co">#&gt; [37] lifecycle_1.0.3     RcppSpdlog_0.0.14   stringr_1.5.0      </span></span>
-<span><span class="co">#&gt; [40] fs_1.6.3            bit_4.0.5           ragg_1.2.6         </span></span>
-<span><span class="co">#&gt; [43] pkgconfig_2.0.3     desc_1.4.2          pkgdown_2.0.7      </span></span>
-<span><span class="co">#&gt; [46] pillar_1.9.0        bslib_0.5.1         Rcpp_1.0.11        </span></span>
-<span><span class="co">#&gt; [49] glue_1.6.2          systemfonts_1.0.5   xfun_0.40          </span></span>
-<span><span class="co">#&gt; [52] tibble_3.2.1        tidyselect_1.2.0    knitr_1.44         </span></span>
-<span><span class="co">#&gt; [55] htmltools_0.5.6.1   rmarkdown_2.25      compiler_4.3.1</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] sass_0.4.7           utf8_1.2.4           generics_0.1.3      </span></span>
+<span><span class="co">#&gt;  [4] spdl_0.0.5           RSQLite_2.3.2        stringi_1.7.12      </span></span>
+<span><span class="co">#&gt;  [7] digest_0.6.33        magrittr_2.0.3       evaluate_0.22       </span></span>
+<span><span class="co">#&gt; [10] fastmap_1.1.1        blob_1.2.4           rprojroot_2.0.3     </span></span>
+<span><span class="co">#&gt; [13] jsonlite_1.8.7       whisker_0.4.1        DBI_1.1.3           </span></span>
+<span><span class="co">#&gt; [16] httr_1.4.7           purrr_1.0.2          fansi_1.0.5         </span></span>
+<span><span class="co">#&gt; [19] textshaping_0.3.7    jquerylib_0.1.4      duckdb_0.9.1-1      </span></span>
+<span><span class="co">#&gt; [22] cli_3.6.1            rlang_1.1.1          dbplyr_2.4.0        </span></span>
+<span><span class="co">#&gt; [25] bit64_4.0.5          withr_2.5.2          cachem_1.0.8        </span></span>
+<span><span class="co">#&gt; [28] yaml_2.3.7           tools_4.4.0          memoise_2.0.1       </span></span>
+<span><span class="co">#&gt; [31] filelock_1.0.2       curl_5.1.0           vctrs_0.6.4         </span></span>
+<span><span class="co">#&gt; [34] rjsoncons_1.0.0      R6_2.5.1             BiocFileCache_2.11.1</span></span>
+<span><span class="co">#&gt; [37] lifecycle_1.0.3      RcppSpdlog_0.0.14    stringr_1.5.0       </span></span>
+<span><span class="co">#&gt; [40] fs_1.6.3             bit_4.0.5            ragg_1.2.6          </span></span>
+<span><span class="co">#&gt; [43] pkgconfig_2.0.3      desc_1.4.2           pkgdown_2.0.7       </span></span>
+<span><span class="co">#&gt; [46] pillar_1.9.0         bslib_0.5.1          Rcpp_1.0.11         </span></span>
+<span><span class="co">#&gt; [49] glue_1.6.2           systemfonts_1.0.5    xfun_0.40           </span></span>
+<span><span class="co">#&gt; [52] tibble_3.2.1         tidyselect_1.2.0     knitr_1.45          </span></span>
+<span><span class="co">#&gt; [55] htmltools_0.5.6.1    rmarkdown_2.25       compiler_4.4.0</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
