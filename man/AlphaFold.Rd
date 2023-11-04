@@ -11,13 +11,13 @@ af_predictions(uniprot_ids)
 af_prediction_view(tbl, bfc = BiocFileCache())
 
 af_colorfunc_by_position(
-  tbl,
-  pos,
-  value,
-  pos_max = NULL,
-  palette = colorspace::diverging_hcl(11),
-  palette_min = NULL,
-  palette_max = NULL
+    tbl,
+    pos,
+    value,
+    pos_max = NULL,
+    palette = colorspace::diverging_hcl(11),
+    palette_min = NULL,
+    palette_max = NULL
 )
 }
 \arguments{
@@ -70,16 +70,17 @@ accession. Columns include:
 \itemize{
 \item \code{entryId}: AlphaFold identifier.
 \item \code{gene}: gene symbol corresponding to UniProt protein.
-\item \code{uniprotAccession}, \code{uniprotId}, \code{uniprotDescription}: UniProt
-characterization. AlphaMissense's \code{uniprot_id} is AlphaFold's
-\code{uniprotAccession}.
+\item \code{uniprotAccession}, \code{uniprotId}, \code{uniprotDescription}:
+UniProt characterization. AlphaMissense's \code{uniprot_id} is
+AlphaFold's \code{uniprotAccession}.
 \item \code{taxId}, \code{organismScientificName}: Organism information.
-\item \code{uniprotStart}, \code{uniprotEnd}, \code{uniprotSequence}: protein sequence
+\item \code{uniprotStart}, \code{uniprotEnd}, \code{uniprotSequence}:
+protein sequence information.
+\item \code{modelCreatedDate}, \code{latestVersion}, \code{allVersions},
+\code{isReviewed}, \code{isReferenceProteome}: AlphaFold provenance
 information.
-\item \code{modelCreatedDate}, \code{latestVersion}, \code{allVersions}, \code{isReviewed},
-\code{isReferenceProteome}: AlphaFold provenance information.
-\item \code{cifUrl}, \code{bcifUrl}, \code{pdbUrl}: URLs to AlphaFold 3-dimensional
-molecular representations.
+\item \code{cifUrl}, \code{bcifUrl}, \code{pdbUrl}:
+URLs to AlphaFold 3-dimensional molecular representations.
 \item \code{paeImageUrl}, \code{paeDocUrl}: 'Predicted Aligned Error' heat map
 and underlying data. These can be used to assess the confidence
 in relative orientation of residues in different domains, as

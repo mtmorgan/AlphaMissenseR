@@ -48,16 +48,17 @@ af_prediction <-
 #'
 #' - `entryId`: AlphaFold identifier.
 #' - `gene`: gene symbol corresponding to UniProt protein.
-#' - `uniprotAccession`, `uniprotId`, `uniprotDescription`: UniProt
-#'   characterization. AlphaMissense's `uniprot_id` is AlphaFold's
-#'   `uniprotAccession`.
+#' - `uniprotAccession`, `uniprotId`, `uniprotDescription`:
+#'   UniProt characterization. AlphaMissense's `uniprot_id` is
+#'   AlphaFold's `uniprotAccession`.
 #' - `taxId`, `organismScientificName`: Organism information.
-#' - `uniprotStart`, `uniprotEnd`, `uniprotSequence`: protein sequence
+#' - `uniprotStart`, `uniprotEnd`, `uniprotSequence`:
+#'   protein sequence information.
+#' - `modelCreatedDate`, `latestVersion`, `allVersions`,
+#'   `isReviewed`, `isReferenceProteome`: AlphaFold provenance
 #'   information.
-#' - `modelCreatedDate`, `latestVersion`, `allVersions`, `isReviewed`,
-#'   `isReferenceProteome`: AlphaFold provenance information.
-#' - `cifUrl`, `bcifUrl`, `pdbUrl`: URLs to AlphaFold 3-dimensional
-#'   molecular representations.
+#' - `cifUrl`, `bcifUrl`, `pdbUrl`:
+#'   URLs to AlphaFold 3-dimensional molecular representations.
 #' - `paeImageUrl`, `paeDocUrl`: 'Predicted Aligned Error' heat map
 #'   and underlying data. These can be used to assess the confidence
 #'   in relative orientation of residues in different domains, as
@@ -107,6 +108,31 @@ af_predictions <-
     }
 
     bind_rows(results)
+}
+
+af_prediction_view_validate <-
+    function(tbl, bfc)
+{
+    ## AlphaMissenseR 'Suggests: r3dmol'; r3dmol 'Imports: bio3d'
+    if (!requireNamespace("r3dmol", quietly = TRUE))
+        stop("'af_view_predictions()' requires package 'r3dmol'")
+
+    ## validation
+    required_columns <- c(
+        "uniprot_id", "protein_variant", "am_pathogenicity", "am_class"
+    )
+    stopifnot(
+        inherits(tbl, "tbl"),
+        all(required_columns %in% colnames(tbl)),
+        inherits(bfc, "BiocFileCache")
+    )
+    uniprot_id <-
+        distinct(tbl, .data$uniprot_id) |>
+        pull("uniprot_id")
+    stopifnot(
+        `'tbl' must contain a single uniprot_id` =
+            identical(length(uniprot_id), 1L)
+    )
 }
 
 #' @rdname AlphaFold
@@ -172,26 +198,7 @@ af_predictions <-
 af_prediction_view <-
     function(tbl, bfc = BiocFileCache())
 {
-    ## AlphaMissenseR 'Suggests: r3dmol'; r3dmol 'Imports: bio3d'
-    if (!requireNamespace("r3dmol", quietly = TRUE))
-        stop("'af_view_predictions()' requires package 'r3dmol'")
-
-    ## validation
-    required_columns <- c(
-        "uniprot_id", "protein_variant", "am_pathogenicity", "am_class"
-    )
-    stopifnot(
-        inherits(tbl, "tbl"),
-        all(required_columns %in% colnames(tbl)),
-        inherits(bfc, "BiocFileCache")
-    )
-    uniprot_id <-
-        distinct(tbl, .data$uniprot_id) |>
-        pull("uniprot_id")
-    stopifnot(
-        `'tbl' must contain a single uniprot_id` =
-            identical(length(uniprot_id), 1L)
-    )
+    af_prediction_view_validate(tbl, bfc)
 
     ## summarize amino acid position pathogenicity
     pathogenicity <- am_aa_pathogenicity(tbl)
@@ -219,20 +226,15 @@ af_prediction_view <-
             palette_min = 0, palette_max = 1
         )
 
-
     ## visualize using r3dmol
-    result <-
-        r3dmol::r3dmol() |>
+    r3dmol::r3dmol() |>
         r3dmol::m_add_model(r3dmol::m_bio3d(pdb)) |>
         r3dmol::m_set_style(
             style = r3dmol::m_style_cartoon(
                 arrows = TRUE, colorfunc = colorfunc
             )
         ) |>
-        ## zoom to include molecule
         r3dmol::m_zoom_to()
-
-    result
 }
 
 #' @rdname AlphaFold
@@ -241,6 +243,17 @@ af_prediction_view <-
 #'     function to be used in `rd3mol::m_set_style()` to color
 #'     residues by position, e.g., when visualizing median predicted
 #'     pathogenicity.
+#'
+#' @usage
+#' af_colorfunc_by_position(
+#'     tbl,
+#'     pos,
+#'     value,
+#'     pos_max = NULL,
+#'     palette = colorspace::diverging_hcl(11),
+#'     palette_min = NULL,
+#'     palette_max = NULL
+#' )
 #'
 #' @param pos the symbol or name of the column in `tbl` containing
 #'     amino acid residue positions in the protein.

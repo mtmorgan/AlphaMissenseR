@@ -17,7 +17,8 @@ details.}
 \value{
 \code{am_aa_pos()} returns the original table with additional columns
 \itemize{
-\item \code{aa_pos}: the position of the protein variant, as an \code{integer()}.
+\item \code{aa_pos}: the position of the protein variant,
+as an \code{integer()}.
 \item \code{aa_ref}: the single-character reference amino acid in the
 protein variant.
 \item \code{aa_alt}: the single-character alternate amino acid in the

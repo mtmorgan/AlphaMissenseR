@@ -21,7 +21,8 @@
 #'
 #' `am_aa_pos()` returns the original table with additional columns
 #'
-#' - `aa_pos`: the position of the protein variant, as an `integer()`.
+#' - `aa_pos`: the position of the protein variant,
+#'   as an `integer()`.
 #' - `aa_ref`: the single-character reference amino acid in the
 #'   protein variant.
 #' - `aa_alt`: the single-character alternate amino acid in the
