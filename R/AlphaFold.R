@@ -133,6 +133,8 @@ af_prediction_view_validate <-
         `'tbl' must contain a single uniprot_id` =
             identical(length(uniprot_id), 1L)
     )
+
+    uniprot_id
 }
 
 #' @rdname AlphaFold
@@ -198,7 +200,7 @@ af_prediction_view_validate <-
 af_prediction_view <-
     function(tbl, bfc = BiocFileCache())
 {
-    af_prediction_view_validate(tbl, bfc)
+    uniprot_id <- af_prediction_view_validate(tbl, bfc)
 
     ## summarize amino acid position pathogenicity
     pathogenicity <- am_aa_pathogenicity(tbl)

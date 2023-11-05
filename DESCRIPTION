@@ -1,7 +1,7 @@
 Package: AlphaMissenseR
 Title: Accessing AlphaMissense Data Resources in R
-Version: 0.99.13
-Authors@R: 
+Version: 0.99.14
+Authors@R:
     c(person(
         "Martin", "Morgan", role = c("aut", "cre"),
         email = "mtmorgan.xyz@gmail.com",
