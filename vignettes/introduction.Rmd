@@ -312,17 +312,22 @@ rng |>
     tidyr::pivot_wider(names_from = "am_class", values_from = "n")
 ```
 
-It is perhaps instructive to review the range join ([whisker][])
-template as a source of inspiration for other computations that might
-be of interest.
+It is perhaps instructive to review the range join as a source of
+inspiration for other computations that might be of interest.
 
-[whisker]: https://cran.r-project.org/package=whisker
-
-```{r range-join-template}
-AlphaMissenseR:::sql_template(
-    "range_join",
-    key = "hg38", join = "bcl2l11", to = "bcl2l11_overlaps"
-) |> cat("\n")
+``` sql
+-- range join of 'hg38' with 'bcl2l11'; overwrite any existing table
+-- 'bcl2l11_overlaps'
+DROP TABLE IF EXISTS bcl2l11_overlaps;
+CREATE TEMP TABLE bcl2l11_overlaps AS
+SELECT
+    hg38.*,
+    bcl2l11.* EXCLUDE (CHROM)
+FROM hg38
+JOIN bcl2l11
+    ON bcl2l11.CHROM = hg38.CHROM
+    AND bcl2l11.start <= hg38.POS
+    AND bcl2l11.end >= hg38.POS;
 ```
 
 As best practice, disconnect from the writable database connection
