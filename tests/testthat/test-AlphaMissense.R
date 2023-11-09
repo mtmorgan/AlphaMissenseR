@@ -4,7 +4,7 @@ test_that("ALPHAMISSENSE_RECORD is defined", {
 
 test_that("'am_record_json()' returns", {
     json <- am_record_json(ALPHAMISSENSE_RECORD)
-    expect_true(is_scalar_character(json))
+    expect_true(isScalarCharacter(json))
 })
 
 test_that("'am_data_license()' reports appropriate license", {

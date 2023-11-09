@@ -1,7 +1,7 @@
 test_that("sql templates exist with expected variables", {
     ## 'range_join' args 'key', 'join', 'to'
     sql <- sql_template("range_join")
-    expect_true(is_scalar_character(sql))
+    expect_true(isScalarCharacter(sql))
 
     sql <- sql_template(
         "range_join",
@@ -17,7 +17,7 @@ test_that("sql templates exist with expected variables", {
 
     ## 'import_csv' args 'db_tbl_name', 'file_path'
     sql <- sql_template("import_csv")
-    expect_true(is_scalar_character(sql))
+    expect_true(isScalarCharacter(sql))
 
     sql <- sql_template(
         "import_csv",

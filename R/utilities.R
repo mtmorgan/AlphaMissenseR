@@ -1,28 +1,7 @@
 ALPHAMISSENSE_STATE <- new.env(parent = emptyenv())
 
-is_character <-
-    function(x)
-{
-    is.character(x) && !anyNA(x)
-}
-
-is_scalar_character <-
-    function(x)
-{
-    is_character(x) && length(x) == 1L
-}
-
-is_scalar_logical <-
-    function(x)
-{
-    is.logical(x) && length(x) == 1L && !is.na(x)
-}
-
-is_scalar_numeric <-
-    function(x)
-{
-    is.numeric(x) && length(x) == 1L && !is.na(x)
-}
+#' @importFrom BiocBaseUtils isCharacter isScalarCharacter
+#'     isScalarLogical isScalarNumber
 
 #' @importFrom rjsoncons jmespath
 #'

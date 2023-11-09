@@ -90,9 +90,9 @@ db_connect <-
         read_only = TRUE, managed = read_only)
 {
     stopifnot(
-        is_scalar_character(record),
-        is_scalar_logical(managed),
-        is_scalar_logical(read_only)
+        isScalarCharacter(record),
+        isScalarLogical(managed),
+        isScalarLogical(read_only)
     )
 
     id <- db_connection_id(record, bfc, read_only)
@@ -206,7 +206,7 @@ db_temporary_table <-
 {
     stopifnot(
         is(db, "alphamissense_connection"),
-        is_scalar_character(to),
+        isScalarCharacter(to),
         inherits(value, "data.frame")
     )
 
@@ -258,13 +258,13 @@ db_range_join <-
     stopifnot(
         is(db, "alphamissense_connection"),
 
-        is_scalar_character(key) && key %in% db_tables(db),
+        isScalarCharacter(key) && key %in% db_tables(db),
         all(c("CHROM", "POS") %in% dbListFields(db, key)),
 
-        is_scalar_character(join) && join %in% db_tables(db),
+        isScalarCharacter(join) && join %in% db_tables(db),
         all(c("CHROM", "start", "end") %in% dbListFields(db, join)),
 
-        is_scalar_character(to)
+        isScalarCharacter(to)
     )
 
     if (to %in% db_tables(db))

@@ -37,7 +37,7 @@ ALPHAMISSENSE_ZENODO <- "https://zenodo.org"
 am_browse <-
     function(record = ALPHAMISSENSE_RECORD)
 {
-    stopifnot(is_scalar_character(record))
+    stopifnot(isScalarCharacter(record))
 
     url <- paste0(ALPHAMISSENSE_ZENODO, "/record/", record)
     browseURL(url)
@@ -139,7 +139,7 @@ am_available_from_cache <-
 am_available <-
     function(record = ALPHAMISSENSE_RECORD, bfc = BiocFileCache())
 {
-    stopifnot(is_scalar_character(record))
+    stopifnot(isScalarCharacter(record))
 
     if (internet_available()) {
         am_available_from_internet(record, bfc)

@@ -30,8 +30,8 @@ Depends:
     dplyr
 Imports:
     rjsoncons, jsonlite, DBI, duckdb (>= 0.9.1), rlang,
-    curl, BiocFileCache, spdl, memoise, utils, stats, methods,
-    whisker
+    curl, BiocFileCache, spdl, memoise, BiocBaseUtils,
+    utils, stats, methods, whisker
 Suggests:
     BiocManager,
     BiocGenerics,

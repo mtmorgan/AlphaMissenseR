@@ -88,7 +88,7 @@ af_predictions <-
 {
     stopifnot(
         length(uniprot_ids) >= 1L,
-        is_character(uniprot_ids)
+        isCharacter(uniprot_ids)
     )
 
     results <- lapply(uniprot_ids, af_prediction)
@@ -328,13 +328,13 @@ af_colorfunc_by_position <-
     ## validation
     stopifnot(
         inherits(tbl, "data.frame"),
-        is_scalar_character(pos),
-        is_scalar_character(value),
+        isScalarCharacter(pos),
+        isScalarCharacter(value),
         all(c(pos, value) %in% colnames(tbl)),
-        is.null(pos_max) || is_scalar_numeric(pos_max),
-        is_character(palette),
-        is.null(palette_min) || is_scalar_numeric(palette_min),
-        is.null(palette_max) || is_scalar_numeric(palette_max)
+        is.null(pos_max) || isScalarNumber(pos_max),
+        isCharacter(palette),
+        is.null(palette_min) || isScalarNumber(palette_min),
+        is.null(palette_max) || isScalarNumber(palette_max)
     )
 
     pos <- pull(tbl, pos)
