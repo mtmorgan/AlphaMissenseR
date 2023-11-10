@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">AlphaMissenseR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.15</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,14 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.0" id="alphamissenser-100">AlphaMissenseR 1.0.0<a class="anchor" aria-label="anchor" href="#alphamissenser-100"></a></h2>
-<ul><li>(v. 0.99.11) Use an S4 class for <code>alphamissense_connection</code>, extending <code>duckdb_connection</code>.</li>
+<ul><li>(v. 0.99.15) Respond to Bioconductor reviewer comments
+<ul><li>Use BiocBaseUtils for input assertions.</li>
+<li>Include range join SQL directly rather than via a non-exported function.</li>
+<li>Report file size when downloading.</li>
+<li>Improve test coverage.</li>
+<li>See <a href="https://github.com/Bioconductor/Contributions/issues/3221#issuecomment-1804040387" class="external-link uri">https://github.com/Bioconductor/Contributions/issues/3221#issuecomment-1804040387</a>; thanks <a href="https://github.com/LiNk-NY" class="external-link">@LiNk-NY</a></li>
+</ul></li>
+<li>(v. 0.99.11) Use an S4 class for <code>alphamissense_connection</code>, extending <code>duckdb_connection</code>.</li>
 <li>(v. 0.99.10) Introduce visualization on AlphaFold predictions.</li>
 <li>(v. 0.99.9) Update maintainer email address, add ‘Resource unavailable’ section to ‘Issues &amp; Solutions’ vignette.</li>
 <li>(v. 0.99.7) Update to revised Zenodo API.</li>
