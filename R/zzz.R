@@ -5,6 +5,7 @@
     spdl::set_level("info")
     spdl::set_pattern("* [%T][%l] %v")
 
+    ## initialize 'ALPHAMISSENSE_STATE[["internet_available"]]
     internet_available()
 
     ALPHAMISSENSE_RECORD <<- Sys.getenv("ALPHAMISSENSE_RECORD", "8360242")

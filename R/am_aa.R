@@ -66,6 +66,19 @@ am_aa_pos <-
     result
 }
 
+am_aa_class_mode <-
+    function(x)
+{
+    am_class_levels <- c("likely_benign", "ambiguous", "likely_pathogenic")
+    if (length(x)) {
+        n <- tabulate(match(x, am_class_levels))
+        ## ties go to lower-pathogenicity level
+        x <- am_class_levels[which.max(n)]
+    }
+    ## return as factor
+    factor(x, am_class_levels)
+}
+
 #' @rdname am_aa
 #'
 #' @description `am_aa_pathogenicity()` summarizes pathogenicity
@@ -115,14 +128,6 @@ am_aa_pathogenicity <-
     if (!"aa_pos" %in% colnames(tbl))
         tbl <- am_aa_pos(tbl)
 
-    ## am_class modal value
-    am_class_levels <- c("likely_benign", "ambiguous", "likely_pathogenic")
-    am_class_mode <- function(x, levels) {
-        n <- tabulate(match(x, levels))
-        ## ties go to lower-pathogenicity level
-        levels[which.max(n)]
-    }
-
     aa_summary <-
         tbl |>
         group_by(.data$uniprot_id, .data$aa_pos, .data$aa_ref) |>
@@ -132,16 +137,9 @@ am_aa_pathogenicity <-
             aa_pathogenicity_median = median(.data$am_pathogenicity),
             aa_pathogenicity_min = min(.data$am_pathogenicity),
             aa_pathogenicity_max = max(.data$am_pathogenicity),
-            aa_pathogenicity_mode = am_class_mode(
-                .data$am_class, am_class_levels
-            )
+            aa_pathogenicity_mode = am_aa_class_mode(.data$am_class)
         ) |>
-        ungroup() |>
-        mutate(
-            ## make aa_pathogenicity_mode a factor
-            aa_pathogenicity_mode =
-                factor(.data$aa_pathogenicity_mode, levels = am_class_levels)
-        )
+        ungroup()
 
     aa_summary
 }

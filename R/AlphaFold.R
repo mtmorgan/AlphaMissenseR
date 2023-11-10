@@ -14,7 +14,7 @@ af_prediction <-
     if (httr::status_code(response) < 400L) {
         record <- httr::content(response)
         tibble(record) |>
-            tidyr::unnest_wider(.data$record)
+            tidyr::unnest_wider("record")
     } else {
         spdl::debug(
             "af_prediction() accession '{}' status_code '{}'",
@@ -208,10 +208,11 @@ af_prediction_view <-
     ## retrieve AlphaFold prediction
     prediction <- af_prediction(uniprot_id)
     if (identical(prediction, NA)) {
-        stop(spdl::fmt(
+        text <- spdl::fmt(
             "'af_prediction_view()' could not find UniProt accession '{}'",
             uniprot_id
-        ))
+        )
+        stop(text)
     }
 
     ## retrieve PDB model, using BiocFileCache
@@ -237,6 +238,33 @@ af_prediction_view <-
             )
         ) |>
         r3dmol::m_zoom_to()
+}
+
+af_colorfunc_by_position_colors <-
+    function(
+        pos, value, pos_max,
+        palette_min, palette_max, palette
+    )
+{
+    ## default values
+    if  (is.null(pos_max))
+        pos_max <- max(pos)
+    if (is.null(palette_min))
+        palette_min <- min(value)
+    if (is.null(palette_max))
+        palette_max <- max(value)
+
+    ## generate vector of colors
+    colors <- character(pos_max)
+    colors[] <- "gray" # default
+    breaks <- seq(
+        palette_min,
+        palette_max * (1 + .Machine$double.eps),
+        length.out = length(palette) + 1L
+    )
+    colors[pos] <- palette[findInterval(value, breaks)]
+
+    colors
 }
 
 #' @rdname AlphaFold
@@ -340,23 +368,10 @@ af_colorfunc_by_position <-
     pos <- pull(tbl, pos)
     value <- pull(tbl, value)
 
-    ## default values
-    if  (is.null(pos_max))
-        pos_max <- max(pos)
-    if (is.null(palette_min))
-        palette_min <- min(value)
-    if (is.null(palette_max))
-        palette_max <- max(value)
-
-    ## generate vector of colors
-    colors <- character(pos_max)
-    colors[] <- "gray" # default
-    breaks <- seq(
-        palette_min,
-        palette_max * (1 + .Machine$double.eps),
-        length.out = length(palette) + 1L
+    colors <- af_colorfunc_by_position_colors(
+        pos, value, pos_max,
+        palette_min, palette_max, palette
     )
-    colors[pos] <- palette[findInterval(value, breaks)]
 
     ## create the function using the template
     colors <- paste(sQuote(colors, q = FALSE), collapse = ", ")
