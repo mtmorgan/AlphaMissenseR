@@ -1,5 +1,12 @@
 # AlphaMissenseR 1.0.0
 
+* (v. 0.99.15) Respond to Bioconductor reviewer comments
+  - Use BiocBaseUtils for input assertions.
+  - Include range join SQL directly rather than via a non-exported function.
+  - Report file size when downloading.
+  - Improve test coverage.
+  - See <https://github.com/Bioconductor/Contributions/issues/3221#issuecomment-1804040387>; thanks @LiNk-NY
+
 * (v. 0.99.11) Use an S4 class for `alphamissense_connection`,
   extending `duckdb_connection`.
 * (v. 0.99.10) Introduce visualization on AlphaFold predictions.
