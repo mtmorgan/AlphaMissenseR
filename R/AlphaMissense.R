@@ -267,7 +267,11 @@ am_data <-
     stopifnot(NROW(key) == 1L)
 
     if (!NROW(bfcquery(bfc, key$filename))) {
-        spdl::info("retrieving file name '{}'", key$filename)
+        size <- structure(key$size, class = "object_size")
+        spdl::info(
+            "retrieving file name '{}' ({})",
+            key$filename, format(size, units = "auto")
+        )
         am_data_license(record)
     }
 
