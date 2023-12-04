@@ -1,6 +1,6 @@
 Package: AlphaMissenseR
 Title: Accessing AlphaMissense Data Resources in R
-Version: 0.99.15
+Version: 0.99.16
 Authors@R:
     c(person(
         "Martin", "Morgan", role = c("aut", "cre"),
@@ -11,6 +11,12 @@ Authors@R:
         role = "fnd"
     ), person(
         "NIH NCI ITCR U24CA180996",
+        role = "fnd"
+    ), person(
+        "NIH NCI IOTN U24CA232979",
+        role = "fnd"
+    ), person(
+        "NIH NCI ARTNet U24CA274159",
         role = "fnd"
     ))
 Description:
@@ -47,7 +53,7 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0)
 biocViews: SNP, Annotation, FunctionalGenomics, StructuralPrediction,
-    Transcriptomics, VariantAnnotation, GenePrediction
+    Transcriptomics, VariantAnnotation, GenePrediction, ImmunoOncology
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3

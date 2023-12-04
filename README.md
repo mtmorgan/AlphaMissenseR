@@ -23,12 +23,16 @@ Install the package from Bioconductor or GitHub, ensuring correct
 When the package is available on *Bioconductor*, use
 
 ``` r
+if (!"BiocManager" %in% rownames(installed.packages()))
+    install.packages("BiocManager", repos = "https://cloud.R-project.org")
 BiocManager::install("AlphaMissenseR")
 ```
 
 Use the pre-release or devel version with
 
 ``` r
+if (!"remotes" %in% rownames(installed.packages()))
+    install.packages("remotes", repos = "https://cloud.R-project.org")
 remotes::install_github(
     "mtmorgan/AlphaMissenseR",
     repos = BiocManager::repositories()
@@ -43,7 +47,9 @@ library(AlphaMissenseR)
 
 ## Next steps
 
-Visit the [introductory article][intro] to learn more about using this
-package.
+Visit the [introductory][intro] article to learn more about using this
+package. The [visualization][viz] article shows how missense effects
+can be plotted on (AlphaFold or other) protein structures.
 
-[intro]: https://mtmorgan.github.io/AlphaMissenseR/articles/introduction.html
+[intro]: ./articles/a_introduction.html
+[viz]: ./articles/b_visualization.html

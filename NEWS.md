@@ -1,12 +1,15 @@
 # AlphaMissenseR 1.0.0
 
+* (v. 0.99.16) Housekeeping
+  - Order vignettes introduction, visualization, issues.
+  - Use rjsoncons (>= 1.0.1), so that jsonlite is not a hard dependency.
+  - Acknowledge additional funding sources; add ImmunoOncology biocViews term.
 * (v. 0.99.15) Respond to Bioconductor reviewer comments
   - Use BiocBaseUtils for input assertions.
   - Include range join SQL directly rather than via a non-exported function.
   - Report file size when downloading.
   - Improve test coverage.
-  - See <https://github.com/Bioconductor/Contributions/issues/3221#issuecomment-1804040387>; thanks @LiNk-NY
-
+  - See GitHub [issue comment][]; thanks @LiNk-NY
 * (v. 0.99.11) Use an S4 class for `alphamissense_connection`,
   extending `duckdb_connection`.
 * (v. 0.99.10) Introduce visualization on AlphaFold predictions.
@@ -21,8 +24,10 @@
 * (v. 0.99.1) Change to Bioconductor 'Annotation' package.
 * (v. 0.99.1) Update to change in Zenodo API.
 
-# AlphaMissense 0.99.0
+# AlphaMissenseR 0.99.0
 
 * (v. 0.0.18) Rename (including updating existing tables) '#CHROM' to
   'CHROM' in hg19 / hg38 tables
 * (v. 0.0.17) Initial Bioconductor submission.
+
+[issue comment]: https://github.com/Bioconductor/Contributions/issues/3221#issuecomment-1804040387
