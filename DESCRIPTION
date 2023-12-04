@@ -29,7 +29,7 @@ BugReports: https://github.com/mtmorgan/AlphaMissenseR/issues
 Depends:
     dplyr
 Imports:
-    rjsoncons, jsonlite, DBI, duckdb (>= 0.9.1), rlang,
+    rjsoncons (>= 1.0.1), DBI, duckdb (>= 0.9.1), rlang,
     curl, BiocFileCache, spdl, memoise, BiocBaseUtils,
     utils, stats, methods, whisker
 Suggests:

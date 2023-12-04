@@ -84,13 +84,13 @@ am_available_from_internet <-
 
     ## exclude 'README.md'
     files <- jmespath(json, "files[?!ends_with(key, '.md')]")
-    filename <- rjmespath(files, "[*].key")
+    filename <- jmespath(files, "[*].key", as = "R")
     key <- sub("AlphaMissense_(.*)\\.tsv\\.gz", "\\1", filename)
-    size <- rjmespath(files, "[*].size")
+    size <- jmespath(files, "[*].size", as = "R")
     db <- db_connect(record, bfc, managed = FALSE)
     cached <- key %in% db_tables(db)
     db_disconnect(db)
-    link <- rjmespath(files, "[*].links[].self")
+    link <- jmespath(files, "[*].links[].self", as = "R")
     link <- sub("(.*/files/).*", "\\1", link)
     link <- paste0(link, filename, "/content")
     tibble(record, key, size, cached, filename, link)
