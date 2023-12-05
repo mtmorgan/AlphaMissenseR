@@ -25,7 +25,14 @@ When the package is available on *Bioconductor*, use
 ``` r
 if (!"BiocManager" %in% rownames(installed.packages()))
     install.packages("BiocManager", repos = "https://cloud.R-project.org")
-BiocManager::install("AlphaMissenseR")
+if (BiocManager::version() >= "3.19") {
+    BiocManager::install("AlphaMissenseR")
+} else {
+    stop(
+        "'AlphaMissenseR' requires Bioconductor version 3.19 or later, ",
+        "install from GitHub?"
+    )
+}
 ```
 
 Use the pre-release or devel version with
