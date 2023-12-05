@@ -44,7 +44,7 @@
     
     <a class="navbar-brand me-2" href="index.html">AlphaMissenseR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.15</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.16</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,9 +59,9 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="articles/introduction.html">Accessing AlphaMissense Resources in R</a>
-    <a class="dropdown-item" href="articles/issues.html">Issues &amp; Solutions</a>
-    <a class="dropdown-item" href="articles/visualization.html">Visualization</a>
+    <a class="dropdown-item" href="articles/a_introduction.html">Accessing AlphaMissense Resources in R</a>
+    <a class="dropdown-item" href="articles/b_visualization.html">Visualization</a>
+    <a class="dropdown-item" href="articles/c_issues.html">Issues &amp; Solutions</a>
   </div>
 </li>
 <li class="nav-item">
@@ -99,10 +99,21 @@
 <p>Install the package from Bioconductor or GitHub, ensuring correct <em>Bioconductor</em> dependencies.</p>
 <p>When the package is available on <em>Bioconductor</em>, use</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"AlphaMissenseR"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="st">"BiocManager"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/installed.packages.html" class="external-link">installed.packages</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, repos <span class="op">=</span> <span class="st">"https://cloud.R-project.org"</span><span class="op">)</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/version.html" class="external-link">version</a></span><span class="op">(</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="st">"3.19"</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"AlphaMissenseR"</span><span class="op">)</span></span>
+<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span></span>
+<span>        <span class="st">"'AlphaMissenseR' requires Bioconductor version 3.19 or later, "</span>,</span>
+<span>        <span class="st">"install from GitHub?"</span></span>
+<span>    <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>Use the pre-release or devel version with</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="st">"remotes"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/installed.packages.html" class="external-link">installed.packages</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span>, repos <span class="op">=</span> <span class="st">"https://cloud.R-project.org"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span></span>
 <span>    <span class="st">"mtmorgan/AlphaMissenseR"</span>,</span>
 <span>    repos <span class="op">=</span> <span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/repositories.html" class="external-link">repositories</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -113,7 +124,7 @@
 <div class="section level2">
 <h2 id="next-steps">Next steps<a class="anchor" aria-label="anchor" href="#next-steps"></a>
 </h2>
-<p>Visit the <a href="https://mtmorgan.github.io/AlphaMissenseR/articles/introduction.html">introductory article</a> to learn more about using this package.</p>
+<p>Visit the <a href="./articles/a_introduction.html">introductory</a> article to learn more about using this package. The <a href="./articles/b_visualization.html">visualization</a> article shows how missense effects can be plotted on (AlphaFold or other) protein structures.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -145,6 +156,8 @@
 <li>Martin Morgan <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-5874-8148" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Chan Zuckerberg Initiative DAF CZF2019-002443 <br><small class="roles"> Funder </small>  </li>
 <li>NIH NCI ITCR U24CA180996 <br><small class="roles"> Funder </small>  </li>
+<li>NIH NCI IOTN U24CA232979 <br><small class="roles"> Funder </small>  </li>
+<li>NIH NCI ARTNet U24CA274159 <br><small class="roles"> Funder </small>  </li>
 </ul>
 </div>
 
@@ -156,7 +169,7 @@
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by Martin Morgan, Chan Zuckerberg Initiative DAF CZF2019-002443, NIH NCI ITCR U24CA180996.</p>
+<p>Developed by Martin Morgan, Chan Zuckerberg Initiative DAF CZF2019-002443, NIH NCI ITCR U24CA180996, NIH NCI IOTN U24CA232979, NIH NCI ARTNet U24CA274159.</p>
 </div>
 
 <div class="pkgdown-footer-right">
