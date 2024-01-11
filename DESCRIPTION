@@ -1,6 +1,6 @@
 Package: AlphaMissenseR
 Title: Accessing AlphaMissense Data Resources in R
-Version: 0.99.16
+Version: 0.99.17
 Authors@R:
     c(person(
         "Martin", "Morgan", role = c("aut", "cre"),
@@ -47,7 +47,7 @@ Suggests:
     ensembldb,
     httr,
     tidyr,
-    r3dmol, bio3d,
+    r3dmol, bio3d, shiny,
     colorspace,
     knitr,
     rmarkdown,
