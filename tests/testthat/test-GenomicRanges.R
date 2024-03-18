@@ -13,7 +13,8 @@ test_that("to_GPos() works", {
         extra = letters[1:8],
         genome = "hg38"
     )
-    expect_no_condition(gpos <- to_GPos(tbl))
+    expect_no_condition(to_GPos(tbl))
+    gpos <- to_GPos(tbl)
     expect_identical(NROW(gpos), 8L)
     expect_identical(as.character(seqnames(gpos)), chr)
     expect_identical(pos(gpos), 1:8)
