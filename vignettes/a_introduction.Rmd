@@ -183,7 +183,7 @@ the [GenomicRanges][] package.
 
 ```{r, eval = FALSE}
 if (!requireNamespace("GenomicRanges", quietly = TRUE))
-    BiocManager::install("GeomicRanges")
+    BiocManager::install("GenomicRanges")
 ```
 
 Select the `hg38` data resource, and filter to a subset of variants;
