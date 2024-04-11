@@ -28,7 +28,7 @@ database."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/m
     
     <a class="navbar-brand me-2" href="../index.html">AlphaMissenseR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.18</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.19</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -156,26 +156,26 @@ file and the corresponding DuckDB database.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">ALPHAMISSENSE_RECORD</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "8360242"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "10813168"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu">am_browse</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">am_available</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 7 × 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   record  key                             size cached filename             link </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 8360242 gene_hg38                     <span style="text-decoration: underline;">253</span>636 TRUE   AlphaMissense_gene_… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 8360242 isoforms_hg38             <span style="text-decoration: underline;">1</span>177<span style="text-decoration: underline;">361</span>934 TRUE   AlphaMissense_isofo… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 8360242 isoforms_aa_substitutions <span style="text-decoration: underline;">2</span>461<span style="text-decoration: underline;">351</span>945 FALSE  AlphaMissense_isofo… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 8360242 hg38                       642<span style="text-decoration: underline;">961</span>469 TRUE   AlphaMissense_hg38.… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 8360242 hg19                       622<span style="text-decoration: underline;">293</span>310 FALSE  AlphaMissense_hg19.… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 8360242 gene_hg19                     <span style="text-decoration: underline;">243</span>943 FALSE  AlphaMissense_gene_… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> 8360242 aa_substitutions          <span style="text-decoration: underline;">1</span>207<span style="text-decoration: underline;">278</span>510 TRUE   AlphaMissense_aa_su… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   record   key                             size cached filename            link </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 10813168 gene_hg38                     <span style="text-decoration: underline;">253</span>636 FALSE  AlphaMissense_gene… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 10813168 isoforms_hg38             <span style="text-decoration: underline;">1</span>177<span style="text-decoration: underline;">361</span>934 FALSE  AlphaMissense_isof… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 10813168 isoforms_aa_substitutions <span style="text-decoration: underline;">2</span>461<span style="text-decoration: underline;">351</span>945 FALSE  AlphaMissense_isof… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 10813168 hg38                       642<span style="text-decoration: underline;">961</span>469 TRUE   AlphaMissense_hg38… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 10813168 hg19                       622<span style="text-decoration: underline;">293</span>310 FALSE  AlphaMissense_hg19… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 10813168 gene_hg19                     <span style="text-decoration: underline;">243</span>943 FALSE  AlphaMissense_gene… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> 10813168 aa_substitutions          <span style="text-decoration: underline;">1</span>207<span style="text-decoration: underline;">278</span>510 TRUE   AlphaMissense_aa_s… http…</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">am_data</span><span class="op">(</span><span class="st">"hg38"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Source:   table&lt;hg38&gt; [?? x 10]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database: DuckDB v0.10.0 [ma38727@Darwin 23.4.0:R 4.4.0//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database: DuckDB v0.10.0 [ma38727@Darwin 23.4.0:R 4.4.0//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/a3a01776fe5e_a3a01776fe5e]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    CHROM   POS REF   ALT   genome uniprot_id transcript_id     protein_variant</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> chr1  <span style="text-decoration: underline;">69</span>094 G     T     hg38   Q8NH21     ENST00000335137.4 V2L            </span>
