@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">AlphaMissenseR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.17</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.18</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -96,7 +96,7 @@ integration into <em>R</em> and <em>Bioconductor</em> workflows.</p>
 <p>Install the package from <em>Bioconductor</em> or GitHub, ensuring
 correct <em>Bioconductor</em> dependencies.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="st">"BiocManager"</span> <span class="op"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/installed.packages.html" class="external-link">installed.packages</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="st">"BiocManager"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/installed.packages.html" class="external-link">installed.packages</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, repos <span class="op">=</span> <span class="st">"https://cran.r-project.org"</span><span class="op">)</span></span></code></pre></div>
 <p>When the package is available on <em>Bioconductor</em>, use</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -157,7 +157,7 @@ so this operation is expensive only the first time. Each
 <code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AlphaMissense.html">am_data</a></span><span class="op">(</span><span class="st">"hg38"</span><span class="op">)</span></span>
 <span><span class="va">tbl</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   table&lt;hg38&gt; [?? x 10]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.9.2 [root@Darwin 23.2.0:R 4.4.0//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.0 [ma38727@Darwin 23.4.0:R 4.4.0//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2]</span></span></span>
 <span><span class="co">#&gt;    CHROM   POS REF   ALT   genome uniprot_id transcript_id     protein_variant</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> chr1  <span style="text-decoration: underline;">69</span>094 G     T     hg38   Q8NH21     ENST00000335137.4 V2L            </span></span>
@@ -187,10 +187,10 @@ the table of interest.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/db.html">db_tables</a></span><span class="op">(</span><span class="va">db</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "aa_substitutions" "gene_hg38"        "hg38"             "isoforms_hg38"</span></span>
 <span></span>
-<span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu">tbl</span><span class="op">(</span><span class="va">db</span>, <span class="st">"hg38"</span><span class="op">)</span></span>
+<span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">db</span>, <span class="st">"hg38"</span><span class="op">)</span></span>
 <span><span class="va">tbl</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   table&lt;hg38&gt; [?? x 10]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.9.2 [root@Darwin 23.2.0:R 4.4.0//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.0 [ma38727@Darwin 23.4.0:R 4.4.0//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2]</span></span></span>
 <span><span class="co">#&gt;    CHROM   POS REF   ALT   genome uniprot_id transcript_id     protein_variant</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> chr1  <span style="text-decoration: underline;">69</span>094 G     T     hg38   Q8NH21     ENST00000335137.4 V2L            </span></span>
@@ -209,21 +209,21 @@ the table of interest.</p>
 number of variants assigned to each pathogenicity class.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu">count</span><span class="op">(</span><span class="va">am_class</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">am_class</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [3 x 2]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.9.2 [root@Darwin 23.2.0:R 4.4.0//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.0 [ma38727@Darwin 23.4.0:R 4.4.0//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2]</span></span></span>
 <span><span class="co">#&gt;   am_class                 n</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> likely_benign     40<span style="text-decoration: underline;">917</span>351</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> likely_pathogenic 22<span style="text-decoration: underline;">770</span>557</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> ambiguous          8<span style="text-decoration: underline;">009</span>648</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> likely_pathogenic 22<span style="text-decoration: underline;">770</span>557</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> ambiguous          8<span style="text-decoration: underline;">009</span>648</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> likely_benign     40<span style="text-decoration: underline;">917</span>351</span></span></code></pre></div>
 <p>Or the average pathogenicity score in each class…</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu">group_by</span><span class="op">(</span><span class="va">am_class</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu">summarize</span><span class="op">(</span>n <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>, pathogenecity <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">am_pathogenicity</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">am_class</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>, pathogenecity <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">am_pathogenicity</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [3 x 3]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.9.2 [root@Darwin 23.2.0:R 4.4.0//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.0 [ma38727@Darwin 23.4.0:R 4.4.0//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2]</span></span></span>
 <span><span class="co">#&gt;   am_class                 n pathogenecity</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> likely_benign     40<span style="text-decoration: underline;">917</span>351         0.147</span></span>
@@ -233,12 +233,12 @@ number of variants assigned to each pathogenicity class.</p>
 <code>ALT</code> nucleotides across all variants.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu">count</span><span class="op">(</span><span class="va">REF</span>, <span class="va">ALT</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">REF</span>, <span class="va">ALT</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="st">"ALT"</span>, values_from <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/AnnotationDb-class.html" class="external-link">select</a></span><span class="op">(</span><span class="st">"REF"</span>, <span class="st">"A"</span>, <span class="st">"C"</span>, <span class="st">"G"</span>, <span class="st">"T"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu">arrange</span><span class="op">(</span><span class="va">REF</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="st">"REF"</span>, <span class="st">"A"</span>, <span class="st">"C"</span>, <span class="st">"G"</span>, <span class="st">"T"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">REF</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:     SQL [4 x 5]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database:   DuckDB v0.9.2 [root@Darwin 23.2.0:R 4.4.0//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database:   DuckDB v0.10.0 [ma38727@Darwin 23.4.0:R 4.4.0//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2]</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Ordered by: REF</span></span></span>
 <span><span class="co">#&gt;   REF         A       C       G       T</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
@@ -250,9 +250,9 @@ number of variants assigned to each pathogenicity class.</p>
 interest, e.g., the first 200000 nucleoties of chromosome 4.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/ensembldb/man/global-filters.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">CHROM</span> <span class="op">==</span> <span class="st">"chr4"</span>, <span class="va">POS</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="va">POS</span> <span class="op">&lt;=</span> <span class="fl">200000</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">CHROM</span> <span class="op">==</span> <span class="st">"chr4"</span>, <span class="va">POS</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="va">POS</span> <span class="op">&lt;=</span> <span class="fl">200000</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [?? x 10]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.9.2 [root@Darwin 23.2.0:R 4.4.0//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.0 [ma38727@Darwin 23.4.0:R 4.4.0//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2]</span></span></span>
 <span><span class="co">#&gt;    CHROM   POS REF   ALT   genome uniprot_id transcript_id     protein_variant</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> chr4  <span style="text-decoration: underline;">59</span>430 G     C     hg38   Q8IYB9     ENST00000610261.6 E2Q            </span></span>
@@ -289,14 +289,14 @@ necessary) the <a href="https://bioconductor.org/packages/GenomicRanges" class="
 package.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"GenomicRanges"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"GeomicRanges"</span><span class="op">)</span></span></code></pre></div>
+<span>    <span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"GenomicRanges"</span><span class="op">)</span></span></code></pre></div>
 <p>Select the <code>hg38</code> data resource, and filter to a subset of
 variants; <code>GPos</code> is an in-memory data structure and can
 easily manage 10’s of millions of variants.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">&lt;-</span></span>
 <span>    <span class="fu"><a href="../reference/AlphaMissense.html">am_data</a></span><span class="op">(</span><span class="st">"hg38"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/ensembldb/man/global-filters.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">CHROM</span> <span class="op">==</span> <span class="st">"chr2"</span>, <span class="va">POS</span> <span class="op">&lt;</span> <span class="fl">10000000</span>, <span class="va">REF</span> <span class="op">==</span> <span class="st">"G"</span><span class="op">)</span></span></code></pre></div>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">CHROM</span> <span class="op">==</span> <span class="st">"chr2"</span>, <span class="va">POS</span> <span class="op">&lt;</span> <span class="fl">10000000</span>, <span class="va">REF</span> <span class="op">==</span> <span class="st">"G"</span><span class="op">)</span></span></code></pre></div>
 <p>Use <code><a href="../reference/GenomicRanges.html">to_GPos()</a></code> to coerce to a <code>GPos</code>
 object.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
@@ -346,8 +346,8 @@ Sapiens</em>.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hub</span> <span class="op">&lt;-</span> <span class="fu">AnnotationHub</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationHub/man/AnnotationHub-class.html" class="external-link">AnnotationHub</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu">AnnotationHub</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationHub/man/AnnotationHub-class.html" class="external-link">query</a></span><span class="op">(</span><span class="va">hub</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"EnsDb"</span>, <span class="st">"Homo sapiens"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; AnnotationHub with 25 records</span></span>
-<span><span class="co">#&gt; # snapshotDate(): 2023-12-26</span></span>
+<span><span class="co">#&gt; AnnotationHub with 26 records</span></span>
+<span><span class="co">#&gt; # snapshotDate(): 2024-04-02</span></span>
 <span><span class="co">#&gt; # $dataprovider: Ensembl</span></span>
 <span><span class="co">#&gt; # $species: Homo sapiens</span></span>
 <span><span class="co">#&gt; # $rdataclass: EnsDb</span></span>
@@ -363,15 +363,15 @@ Sapiens</em>.</p>
 <span><span class="co">#&gt;   AH57757  | Ensembl 90 EnsDb for Homo Sapiens </span></span>
 <span><span class="co">#&gt;   AH60773  | Ensembl 91 EnsDb for Homo Sapiens </span></span>
 <span><span class="co">#&gt;   ...        ...                               </span></span>
-<span><span class="co">#&gt;   AH100643 | Ensembl 106 EnsDb for Homo sapiens</span></span>
 <span><span class="co">#&gt;   AH104864 | Ensembl 107 EnsDb for Homo sapiens</span></span>
 <span><span class="co">#&gt;   AH109336 | Ensembl 108 EnsDb for Homo sapiens</span></span>
 <span><span class="co">#&gt;   AH109606 | Ensembl 109 EnsDb for Homo sapiens</span></span>
 <span><span class="co">#&gt;   AH113665 | Ensembl 110 EnsDb for Homo sapiens</span></span>
+<span><span class="co">#&gt;   AH116291 | Ensembl 111 EnsDb for Homo sapiens</span></span>
 <span></span>
 <span><span class="fu">AnnotationHub</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationHub/man/AnnotationHub-class.html" class="external-link">AnnotationHub</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="st">"AH113665"</span><span class="op">]</span></span>
 <span><span class="co">#&gt; AnnotationHub with 1 record</span></span>
-<span><span class="co">#&gt; # snapshotDate(): 2023-12-26</span></span>
+<span><span class="co">#&gt; # snapshotDate(): 2024-04-02</span></span>
 <span><span class="co">#&gt; # names(): AH113665</span></span>
 <span><span class="co">#&gt; # $dataprovider: Ensembl</span></span>
 <span><span class="co">#&gt; # $species: Homo sapiens</span></span>
@@ -459,11 +459,11 @@ AlphaMissense data.</p>
 <span>    <span class="va">bcl2l11</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>CHROM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"chr"</span>, <span class="va">seqnames</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">CHROM</span>, <span class="fu">everything</span><span class="op">(</span><span class="op">)</span>, <span class="op">-</span><span class="va">seqnames</span><span class="op">)</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">CHROM</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>, <span class="op">-</span><span class="va">seqnames</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/db.html">db_temporary_table</a></span><span class="op">(</span><span class="va">db_rw</span>, <span class="va">bcl2l11_tbl</span>, <span class="st">"bcl2l11"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   table&lt;bcl2l11&gt; [4 x 9]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.9.2 [root@Darwin 23.2.0:R 4.4.0//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.0 [ma38727@Darwin 23.4.0:R 4.4.0//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2]</span></span></span>
 <span><span class="co">#&gt;   CHROM group group_name          start       end width strand exon_id exon_rank</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> chr2      1 ENST00000393256 111<span style="text-decoration: underline;">120</span>914 111<span style="text-decoration: underline;">121</span>188   275 +      ENSE00…         1</span></span>
@@ -495,7 +495,7 @@ in the current session.</p>
 <code class="sourceCode R"><span><span class="va">rng</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/db.html">db_range_join</a></span><span class="op">(</span><span class="va">db_rw</span>, <span class="st">"hg38"</span>, <span class="st">"bcl2l11"</span>, <span class="st">"bcl2l11_overlaps"</span><span class="op">)</span></span>
 <span><span class="va">rng</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   table&lt;bcl2l11_overlaps&gt; [?? x 18]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.9.2 [root@Darwin 23.2.0:R 4.4.0//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.0 [ma38727@Darwin 23.4.0:R 4.4.0//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2]</span></span></span>
 <span><span class="co">#&gt;    CHROM       POS REF   ALT   genome uniprot_id transcript_id   protein_variant</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> chr2  111<span style="text-decoration: underline;">164</span>133 G     A     hg38   O43521     ENST0000039325… V167I          </span></span>
@@ -522,12 +522,12 @@ pathogenecity class in each exon.</p>
 <span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">exon_id</span>, <span class="va">am_class</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="st">"am_class"</span>, values_from <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [3 x 4]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.9.2 [root@Darwin 23.2.0:R 4.4.0//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.0 [ma38727@Darwin 23.4.0:R 4.4.0//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/1ec5157ddaa2_1ec5157ddaa2]</span></span></span>
 <span><span class="co">#&gt;   exon_id         likely_benign likely_pathogenic ambiguous</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> ENSE00001008808           494               257       108</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> ENSE00001924953           172                16        19</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> ENSE00003483971           128                71        33</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> ENSE00003483971           128                71        33</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> ENSE00001008808           494               257       108</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> ENSE00001924953           172                16        19</span></span></code></pre></div>
 <p>It is perhaps instructive to review the range join as a source of
 inspiration for other computations that might be of interest.</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="co">-- range join of 'hg38' with 'bcl2l11'; overwrite any existing table</span></span>
@@ -623,13 +623,13 @@ messages.</p>
 </h2>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; R Under development (unstable) (2023-12-04 r85659)</span></span>
-<span><span class="co">#&gt; Platform: aarch64-apple-darwin23.1.0</span></span>
-<span><span class="co">#&gt; Running under: macOS Sonoma 14.2.1</span></span>
+<span><span class="co">#&gt; R Under development (unstable) (2024-03-18 r86148)</span></span>
+<span><span class="co">#&gt; Platform: aarch64-apple-darwin23.3.0</span></span>
+<span><span class="co">#&gt; Running under: macOS Sonoma 14.4</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Matrix products: default</span></span>
 <span><span class="co">#&gt; BLAS:   /Users/ma38727/bin/R-devel/lib/libRblas.dylib </span></span>
-<span><span class="co">#&gt; LAPACK: /Users/ma38727/bin/R-devel/lib/libRlapack.dylib;  LAPACK version 3.11.0</span></span>
+<span><span class="co">#&gt; LAPACK: /Users/ma38727/bin/R-devel/lib/libRlapack.dylib;  LAPACK version 3.12.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; locale:</span></span>
 <span><span class="co">#&gt; [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span></span>
@@ -642,62 +642,62 @@ messages.</p>
 <span><span class="co">#&gt; [8] base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt;  [1] ensembldb_2.27.1        AnnotationFilter_1.27.0 GenomicFeatures_1.55.1 </span></span>
-<span><span class="co">#&gt;  [4] AnnotationDbi_1.65.2    Biobase_2.63.0          GenomicRanges_1.55.1   </span></span>
-<span><span class="co">#&gt;  [7] GenomeInfoDb_1.39.5     IRanges_2.37.0          S4Vectors_0.41.3       </span></span>
-<span><span class="co">#&gt; [10] BiocGenerics_0.49.1     AlphaMissenseR_0.99.16  dplyr_1.1.4            </span></span>
+<span><span class="co">#&gt;  [1] ensembldb_2.27.1        AnnotationFilter_1.27.0 GenomicFeatures_1.55.4 </span></span>
+<span><span class="co">#&gt;  [4] AnnotationDbi_1.65.2    Biobase_2.63.0          GenomicRanges_1.55.3   </span></span>
+<span><span class="co">#&gt;  [7] GenomeInfoDb_1.39.9     IRanges_2.37.1          S4Vectors_0.41.4       </span></span>
+<span><span class="co">#&gt; [10] BiocGenerics_0.49.1     AlphaMissenseR_0.99.17  dplyr_1.1.4            </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;  [1] DBI_1.2.0                   bitops_1.0-7               </span></span>
-<span><span class="co">#&gt;  [3] biomaRt_2.59.0              rlang_1.1.3                </span></span>
-<span><span class="co">#&gt;  [5] magrittr_2.0.3              matrixStats_1.2.0          </span></span>
-<span><span class="co">#&gt;  [7] compiler_4.4.0              RSQLite_2.3.4              </span></span>
-<span><span class="co">#&gt;  [9] png_0.1-8                   systemfonts_1.0.5          </span></span>
-<span><span class="co">#&gt; [11] vctrs_0.6.5                 ProtGenerics_1.35.0        </span></span>
-<span><span class="co">#&gt; [13] stringr_1.5.1               pkgconfig_2.0.3            </span></span>
-<span><span class="co">#&gt; [15] crayon_1.5.2                fastmap_1.1.1              </span></span>
-<span><span class="co">#&gt; [17] dbplyr_2.4.0                XVector_0.43.1             </span></span>
-<span><span class="co">#&gt; [19] utf8_1.2.4                  Rsamtools_2.19.2           </span></span>
-<span><span class="co">#&gt; [21] rmarkdown_2.25              ragg_1.2.7                 </span></span>
-<span><span class="co">#&gt; [23] purrr_1.0.2                 bit_4.0.5                  </span></span>
-<span><span class="co">#&gt; [25] xfun_0.41                   zlibbioc_1.49.0            </span></span>
-<span><span class="co">#&gt; [27] cachem_1.0.8                jsonlite_1.8.8             </span></span>
-<span><span class="co">#&gt; [29] progress_1.2.3              blob_1.2.4                 </span></span>
-<span><span class="co">#&gt; [31] DelayedArray_0.29.0         BiocParallel_1.37.0        </span></span>
-<span><span class="co">#&gt; [33] parallel_4.4.0              spdl_0.0.5                 </span></span>
-<span><span class="co">#&gt; [35] prettyunits_1.2.0           R6_2.5.1                   </span></span>
-<span><span class="co">#&gt; [37] bslib_0.6.1                 stringi_1.8.3              </span></span>
-<span><span class="co">#&gt; [39] rtracklayer_1.63.0          jquerylib_0.1.4            </span></span>
-<span><span class="co">#&gt; [41] Rcpp_1.0.12                 SummarizedExperiment_1.33.2</span></span>
-<span><span class="co">#&gt; [43] knitr_1.45                  BiocBaseUtils_1.5.0        </span></span>
-<span><span class="co">#&gt; [45] Matrix_1.6-5                tidyselect_1.2.0           </span></span>
-<span><span class="co">#&gt; [47] abind_1.4-5                 yaml_2.3.8                 </span></span>
-<span><span class="co">#&gt; [49] codetools_0.2-19            curl_5.2.0                 </span></span>
-<span><span class="co">#&gt; [51] rjsoncons_1.1.0.9300        lattice_0.22-5             </span></span>
-<span><span class="co">#&gt; [53] tibble_3.2.1                withr_2.5.2                </span></span>
-<span><span class="co">#&gt; [55] KEGGREST_1.43.0             evaluate_0.23              </span></span>
-<span><span class="co">#&gt; [57] desc_1.4.3                  BiocFileCache_2.11.1       </span></span>
-<span><span class="co">#&gt; [59] xml2_1.3.6                  Biostrings_2.71.1          </span></span>
-<span><span class="co">#&gt; [61] pillar_1.9.0                BiocManager_1.30.22.3      </span></span>
-<span><span class="co">#&gt; [63] filelock_1.0.3              MatrixGenerics_1.15.0      </span></span>
-<span><span class="co">#&gt; [65] whisker_0.4.1               generics_0.1.3             </span></span>
-<span><span class="co">#&gt; [67] RCurl_1.98-1.14             BiocVersion_3.19.1         </span></span>
-<span><span class="co">#&gt; [69] hms_1.1.3                   glue_1.7.0                 </span></span>
-<span><span class="co">#&gt; [71] lazyeval_0.2.2              tools_4.4.0                </span></span>
-<span><span class="co">#&gt; [73] AnnotationHub_3.11.1        BiocIO_1.13.0              </span></span>
-<span><span class="co">#&gt; [75] GenomicAlignments_1.39.1    fs_1.6.3                   </span></span>
-<span><span class="co">#&gt; [77] XML_3.99-0.16               grid_4.4.0                 </span></span>
-<span><span class="co">#&gt; [79] tidyr_1.3.0                 GenomeInfoDbData_1.2.11    </span></span>
-<span><span class="co">#&gt; [81] RcppSpdlog_0.0.15           duckdb_0.9.2-1             </span></span>
-<span><span class="co">#&gt; [83] restfulr_0.0.15             cli_3.6.2                  </span></span>
-<span><span class="co">#&gt; [85] rappdirs_0.3.3              textshaping_0.3.7          </span></span>
-<span><span class="co">#&gt; [87] fansi_1.0.6                 S4Arrays_1.3.1             </span></span>
-<span><span class="co">#&gt; [89] sass_0.4.8                  digest_0.6.34              </span></span>
-<span><span class="co">#&gt; [91] SparseArray_1.3.2           rjson_0.2.21               </span></span>
-<span><span class="co">#&gt; [93] memoise_2.0.1               htmltools_0.5.7            </span></span>
-<span><span class="co">#&gt; [95] pkgdown_2.0.7               lifecycle_1.0.4            </span></span>
-<span><span class="co">#&gt; [97] httr_1.4.7                  mime_0.12                  </span></span>
-<span><span class="co">#&gt; [99] bit64_4.0.5</span></span></code></pre></div>
+<span><span class="co">#&gt;   [1] DBI_1.2.2                   bitops_1.0-7               </span></span>
+<span><span class="co">#&gt;   [3] httr2_1.0.0                 biomaRt_2.59.1             </span></span>
+<span><span class="co">#&gt;   [5] rlang_1.1.3                 magrittr_2.0.3             </span></span>
+<span><span class="co">#&gt;   [7] matrixStats_1.2.0           compiler_4.4.0             </span></span>
+<span><span class="co">#&gt;   [9] RSQLite_2.3.5               png_0.1-8                  </span></span>
+<span><span class="co">#&gt;  [11] systemfonts_1.0.6           vctrs_0.6.5                </span></span>
+<span><span class="co">#&gt;  [13] stringr_1.5.1               ProtGenerics_1.35.4        </span></span>
+<span><span class="co">#&gt;  [15] pkgconfig_2.0.3             crayon_1.5.2               </span></span>
+<span><span class="co">#&gt;  [17] fastmap_1.1.1               dbplyr_2.4.0               </span></span>
+<span><span class="co">#&gt;  [19] XVector_0.43.1              utf8_1.2.4                 </span></span>
+<span><span class="co">#&gt;  [21] Rsamtools_2.19.4            rmarkdown_2.26             </span></span>
+<span><span class="co">#&gt;  [23] ragg_1.3.0                  purrr_1.0.2                </span></span>
+<span><span class="co">#&gt;  [25] bit_4.0.5                   xfun_0.43                  </span></span>
+<span><span class="co">#&gt;  [27] zlibbioc_1.49.3             cachem_1.0.8               </span></span>
+<span><span class="co">#&gt;  [29] jsonlite_1.8.8              progress_1.2.3             </span></span>
+<span><span class="co">#&gt;  [31] blob_1.2.4                  DelayedArray_0.29.9        </span></span>
+<span><span class="co">#&gt;  [33] BiocParallel_1.37.1         parallel_4.4.0             </span></span>
+<span><span class="co">#&gt;  [35] spdl_0.0.5                  prettyunits_1.2.0          </span></span>
+<span><span class="co">#&gt;  [37] R6_2.5.1                    bslib_0.6.2                </span></span>
+<span><span class="co">#&gt;  [39] stringi_1.8.3               rtracklayer_1.63.1         </span></span>
+<span><span class="co">#&gt;  [41] jquerylib_0.1.4             Rcpp_1.0.12                </span></span>
+<span><span class="co">#&gt;  [43] SummarizedExperiment_1.33.3 knitr_1.45                 </span></span>
+<span><span class="co">#&gt;  [45] BiocBaseUtils_1.5.1         Matrix_1.6-5               </span></span>
+<span><span class="co">#&gt;  [47] tidyselect_1.2.1            abind_1.4-5                </span></span>
+<span><span class="co">#&gt;  [49] yaml_2.3.8                  codetools_0.2-19           </span></span>
+<span><span class="co">#&gt;  [51] curl_5.2.1                  rjsoncons_1.2.0.9704       </span></span>
+<span><span class="co">#&gt;  [53] lattice_0.22-5              tibble_3.2.1               </span></span>
+<span><span class="co">#&gt;  [55] withr_3.0.0                 KEGGREST_1.43.0            </span></span>
+<span><span class="co">#&gt;  [57] evaluate_0.23               desc_1.4.3                 </span></span>
+<span><span class="co">#&gt;  [59] BiocFileCache_2.11.1        xml2_1.3.6                 </span></span>
+<span><span class="co">#&gt;  [61] Biostrings_2.71.4           pillar_1.9.0               </span></span>
+<span><span class="co">#&gt;  [63] BiocManager_1.30.22         filelock_1.0.3             </span></span>
+<span><span class="co">#&gt;  [65] MatrixGenerics_1.15.0       whisker_0.4.1              </span></span>
+<span><span class="co">#&gt;  [67] generics_0.1.3              RCurl_1.98-1.14            </span></span>
+<span><span class="co">#&gt;  [69] BiocVersion_3.19.1          hms_1.1.3                  </span></span>
+<span><span class="co">#&gt;  [71] glue_1.7.0                  lazyeval_0.2.2             </span></span>
+<span><span class="co">#&gt;  [73] tools_4.4.0                 AnnotationHub_3.11.1       </span></span>
+<span><span class="co">#&gt;  [75] BiocIO_1.13.0               GenomicAlignments_1.39.4   </span></span>
+<span><span class="co">#&gt;  [77] fs_1.6.3                    XML_3.99-0.16.1            </span></span>
+<span><span class="co">#&gt;  [79] grid_4.4.0                  tidyr_1.3.1                </span></span>
+<span><span class="co">#&gt;  [81] GenomeInfoDbData_1.2.11     RcppSpdlog_0.0.16          </span></span>
+<span><span class="co">#&gt;  [83] duckdb_0.10.0               restfulr_0.0.15            </span></span>
+<span><span class="co">#&gt;  [85] cli_3.6.2                   rappdirs_0.3.3             </span></span>
+<span><span class="co">#&gt;  [87] textshaping_0.3.7           fansi_1.0.6                </span></span>
+<span><span class="co">#&gt;  [89] S4Arrays_1.3.6              sass_0.4.9                 </span></span>
+<span><span class="co">#&gt;  [91] digest_0.6.35               SparseArray_1.3.4          </span></span>
+<span><span class="co">#&gt;  [93] rjson_0.2.21                memoise_2.0.1              </span></span>
+<span><span class="co">#&gt;  [95] htmltools_0.5.8.9000        pkgdown_2.0.7              </span></span>
+<span><span class="co">#&gt;  [97] lifecycle_1.0.4             httr_1.4.7                 </span></span>
+<span><span class="co">#&gt;  [99] mime_0.12                   bit64_4.0.5</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

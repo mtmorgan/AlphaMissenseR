@@ -16,7 +16,7 @@ scores at each protein amino acid position."><!-- mathjax --><script src="https:
     
     <a class="navbar-brand me-2" href="../index.html">AlphaMissenseR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.17</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.18</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -103,7 +103,7 @@ pathogenicity.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p><code>tbl</code> is <code>collect()</code>ed before computation, so all rows must fit
+    <p><code>tbl</code> is <code><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect()</a></code>ed before computation, so all rows must fit
 into memory.</p>
 <p>For <code>am_aa_pos()</code>, <code>tbl</code> must contain a column <code>protein_variant</code>
 with entries in the form <code>"Q465H"</code>, as in the AlphaMissense data.</p>
@@ -118,7 +118,7 @@ then <code>am_aa_pos()</code> is called.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">P35557</span> <span class="op">&lt;-</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="AlphaMissense.html">am_data</a></span><span class="op">(</span><span class="st">"hg38"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/ensembldb/man/global-filters.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">uniprot_id</span> <span class="op"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html" class="external-link">%in%</a></span> <span class="st">"P35557"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">uniprot_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="st">"P35557"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">am_aa_pos</span><span class="op">(</span><span class="va">P35557</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3,085 × 13</span></span>
@@ -139,11 +139,11 @@ then <code>am_aa_pos()</code> is called.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   aa_ref &lt;chr&gt;, aa_alt &lt;chr&gt;</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">am_aa_pos</span><span class="op">(</span><span class="va">P35557</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/AnnotationDb-class.html" class="external-link">select</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>        <span class="va">uniprot_id</span>, <span class="va">POS</span>, <span class="va">REF</span>, <span class="va">ALT</span>, <span class="va">protein_variant</span>,</span></span>
-<span class="r-in"><span>        <span class="fu">starts_with</span><span class="op">(</span><span class="st">"aa_"</span><span class="op">)</span>, <span class="va">am_pathogenicity</span>, <span class="va">am_class</span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"aa_"</span><span class="op">)</span>, <span class="va">am_pathogenicity</span>, <span class="va">am_class</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>    <span class="fu">arrange</span><span class="op">(</span><span class="va">aa_pos</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">aa_pos</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3,085 × 10</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    uniprot_id      POS REF   ALT   protein_variant aa_pos aa_ref aa_alt</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
