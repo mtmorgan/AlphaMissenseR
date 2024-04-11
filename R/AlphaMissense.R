@@ -8,8 +8,9 @@
 #'
 #' @details `ALPHAMISSENSE_RECORD` can be set **before the package is
 #'     loaded** with the environment variable of the same name, e.g.,
-#'     `Sys.setenv(ALPHAMISSENSE_RECORD = "8208688")`. The default is
-#'     the most recent version (version 2) on 25 September, 2023.
+#'     `Sys.setenv(ALPHAMISSENSE_RECORD = "10813168")`. The default is
+#'     the most recent version (version 3) as checked on 11 April,
+#'     2024.
 #'
 #' @examples
 #' ALPHAMISSENSE_RECORD
