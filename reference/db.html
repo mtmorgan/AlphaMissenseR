@@ -38,7 +38,7 @@ database connection."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/
     
     <a class="navbar-brand me-2" href="../index.html">AlphaMissenseR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.19</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.21</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -224,7 +224,7 @@ at the end of a session.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> alphamissense_connection (read_only: TRUE; managed: TRUE)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> record: '10813168'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> connected: TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tables: aa_substitutions, hg38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> tables: aa_substitutions, gene_hg38, hg38</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">db_rw</span> <span class="op">&lt;-</span> <span class="fu">db_connect</span><span class="op">(</span>read_only <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -246,9 +246,9 @@ at the end of a session.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2 more variables: am_pathogenicity &lt;dbl&gt;, am_class &lt;chr&gt;</span></span>
 <span class="r-in"><span><span class="fu">db_tables</span><span class="op">(</span><span class="op">)</span>           <span class="co"># connections initially share the same tables</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "aa_substitutions" "hg38"            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "aa_substitutions" "gene_hg38"        "hg38"            </span>
 <span class="r-in"><span><span class="fu">db_tables</span><span class="op">(</span><span class="va">db_rw</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "aa_substitutions" "hg38"            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "aa_substitutions" "gene_hg38"        "hg38"            </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## ranges of interest -- the first 200000 bases on chromsomes 1-4.</span></span></span>
 <span class="r-in"><span><span class="va">ranges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span></span>
@@ -267,9 +267,9 @@ at the end of a session.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> chr4      1 <span style="text-decoration: underline;">200</span>000</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">db_tables</span><span class="op">(</span><span class="va">db_rw</span><span class="op">)</span>      <span class="co"># temporary table available to the db_rw connection...</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "aa_substitutions" "hg38"             "ranges"          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "aa_substitutions" "gene_hg38"        "hg38"             "ranges"          </span>
 <span class="r-in"><span><span class="fu">db_tables</span><span class="op">(</span><span class="op">)</span>           <span class="co"># ...but not to the read-only connection</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "aa_substitutions" "hg38"            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "aa_substitutions" "gene_hg38"        "hg38"            </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">rng</span> <span class="op">&lt;-</span> <span class="fu">db_range_join</span><span class="op">(</span><span class="va">db_rw</span>, <span class="st">"hg38"</span>, <span class="st">"ranges"</span>, <span class="st">"ranges_overlaps"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">rng</span></span></span>
@@ -277,16 +277,16 @@ at the end of a session.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database: DuckDB v0.10.0 [ma38727@Darwin 23.4.0:R 4.4.0//Users/ma38727/Library/Caches/org.R-project.R/R/BiocFileCache/a3a01776fe5e_a3a01776fe5e]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    CHROM   POS REF   ALT   genome uniprot_id transcript_id     protein_variant</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> chr4  <span style="text-decoration: underline;">59</span>430 G     C     hg38   Q8IYB9     ENST00000610261.6 E2Q            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> chr4  <span style="text-decoration: underline;">59</span>430 G     A     hg38   Q8IYB9     ENST00000610261.6 E2K            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> chr4  <span style="text-decoration: underline;">59</span>431 A     C     hg38   Q8IYB9     ENST00000610261.6 E2A            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> chr4  <span style="text-decoration: underline;">59</span>431 A     G     hg38   Q8IYB9     ENST00000610261.6 E2G            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> chr4  <span style="text-decoration: underline;">59</span>431 A     T     hg38   Q8IYB9     ENST00000610261.6 E2V            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> chr4  <span style="text-decoration: underline;">59</span>432 A     C     hg38   Q8IYB9     ENST00000610261.6 E2D            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> chr4  <span style="text-decoration: underline;">59</span>432 A     T     hg38   Q8IYB9     ENST00000610261.6 E2D            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> chr4  <span style="text-decoration: underline;">59</span>433 C     A     hg38   Q8IYB9     ENST00000610261.6 L3I            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> chr4  <span style="text-decoration: underline;">59</span>433 C     T     hg38   Q8IYB9     ENST00000610261.6 L3F            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> chr4  <span style="text-decoration: underline;">59</span>433 C     G     hg38   Q8IYB9     ENST00000610261.6 L3V            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> chr2  <span style="text-decoration: underline;">41</span>612 C     T     hg38   Q1W6H9     ENST00000327669.5 R321Q          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> chr2  <span style="text-decoration: underline;">41</span>612 C     A     hg38   Q1W6H9     ENST00000327669.5 R321L          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> chr2  <span style="text-decoration: underline;">41</span>612 C     G     hg38   Q1W6H9     ENST00000327669.5 R321P          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> chr2  <span style="text-decoration: underline;">41</span>613 G     C     hg38   Q1W6H9     ENST00000327669.5 R321G          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> chr2  <span style="text-decoration: underline;">41</span>615 G     C     hg38   Q1W6H9     ENST00000327669.5 S320C          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> chr2  <span style="text-decoration: underline;">41</span>615 G     A     hg38   Q1W6H9     ENST00000327669.5 S320F          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> chr2  <span style="text-decoration: underline;">41</span>615 G     T     hg38   Q1W6H9     ENST00000327669.5 S320Y          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> chr2  <span style="text-decoration: underline;">41</span>616 A     C     hg38   Q1W6H9     ENST00000327669.5 S320A          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> chr2  <span style="text-decoration: underline;">41</span>616 A     G     hg38   Q1W6H9     ENST00000327669.5 S320P          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> chr2  <span style="text-decoration: underline;">41</span>616 A     T     hg38   Q1W6H9     ENST00000327669.5 S320T          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4 more variables: am_pathogenicity &lt;dbl&gt;, am_class &lt;chr&gt;, start &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   end &lt;dbl&gt;</span></span>
