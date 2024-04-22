@@ -46,16 +46,20 @@
 #'
 #' @export
 integrate_clinvar <-
-    function(protein, cv_table = clinvar_data, am_table)
+    function(protein, am_table, cv_table = clinvar_data)
     {
         # Validity checks
         stopifnot(isCharacter(protein))
+
+        ### Need to add check on cv_table and am_table for required columns in
+        ### user-defined scenario
 
         protein <- as.character(protein)
 
         # Load in default, inhouse ClinVar data
         data(clinvar_data)
 
+        # Default tables
         c_cv <- clinvar_data |>
             filter(uniprot_id == protein)
 
@@ -68,26 +72,33 @@ integrate_clinvar <-
         }
 
         # Grab AM proteins that match CV
-        c_AM <- db_connect() |>
+        c_am <- db_connect() |>
             tbl("aa_substitutions") |>
             filter(uniprot_id == protein) |>
             dplyr::as_tibble()
 
         # Check if protein found in AM
-        if (nrow(c_AM) < 1) {
+        if (nrow(c_am) < 1) {
             stop(
                 "No AlphaMissense information found for the protein accession.",
                 "Check that the UniProt ID is correct."
             )
         }
 
+        # Select relevant columns from both data
+        c_am <- c_am |>
+            select(uniprot_id, protein_variant, am_pathogenicity, am_class)
+
+        c_cv <- c_cv |>
+            select(uniprot_id, protein_variant, transcript_id, cv_class)
+
         # Join databases by protein_variant
         res <-
-            as.numeric(gsub(".*?([0-9]+).*", "\\1", c_AM$protein_variant))
+            as.numeric(gsub(".*?([0-9]+).*", "\\1", c_am$protein_variant))
 
-        c_AM <- c_AM |> mutate(aa_pos = res)
+        c_am <- c_am |> mutate(aa_pos = res)
 
-        c_combo <- left_join(c_AM, c_cv,
+        c_combo <- left_join(c_am, c_cv,
                              by = c('uniprot_id', 'protein_variant')) |>
             relocate('transcript_id', .after = 'uniprot_id')
 
@@ -103,14 +114,14 @@ integrate_clinvar <-
              stop("Multiple transcripts detected")
          }
 
-        # change to tidyverse way to mutate the new column
+        # Mutate the new column with protein transcript
         c_combo <- c_combo |>
             mutate(transcript_id = rep(unique_transcript_id))
 
 
         ##### PLOTTING #####
 
-        # Grab the thresholds for pathogenicity/benign to plot (dashed lines)
+        # Grab the thresholds for AM pathogenicity to plot
         am_cutoff <- c_combo |>
             filter(am_class == "ambiguous") |>
             select(am_pathogenicity) |>

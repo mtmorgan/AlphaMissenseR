@@ -4,23 +4,10 @@
 \alias{integrate_clinvar}
 \title{Integrate ClinVar Pathogenicity Scores with AlphaMissense Annotations}
 \usage{
-integrate_clinvar(protein, cv_table = clinvar_data, am_table)
+integrate_clinvar(protein, am_table, cv_table = clinvar_data)
 }
 \arguments{
 \item{protein}{a valid UniProt accession identifier.}
-
-\item{cv_table}{a tibble or dataframe containing ClinVar information. By
-default, ClinVar information is derived from the supplemental table of
-the AlphaMissense
-\href{https://www.science.org/doi/10.1126/science.adg7492}{[2023]} paper.
-Alternatively, a user-defined tibble or dataframe.
-Columns must include:
-\itemize{
-\item \code{uniprot_id}: UniProt accession identifier(s), matching AlphaMissense table.
-\item \code{protein_variant}: protein variant identifier string, matching AlphaMissense
-format.
-\item \code{cv_class}: binary values 0 (benign) and 1 (pathogenic) in ClinVar.
-}}
 
 \item{am_table}{a tibble derived from \code{am_data("aa_substitution")}.
 Alternatively, a user-defined tibble or dataframe.
@@ -33,6 +20,19 @@ to the left and right of the position, respectively.
 \item \code{am_class}: AlphaMissense classification of either "benign",
 "ambiguous", or "pathogenic".
 \item \code{am_pathogenicity}: AlphaMissense predicted score.
+}}
+
+\item{cv_table}{a tibble or dataframe containing ClinVar information. By
+default, ClinVar information is derived from the supplemental table of
+the AlphaMissense
+\href{https://www.science.org/doi/10.1126/science.adg7492}{[2023]} paper.
+Alternatively, a user-defined tibble or dataframe.
+Columns must include:
+\itemize{
+\item \code{uniprot_id}: UniProt accession identifier(s), matching AlphaMissense table.
+\item \code{protein_variant}: protein variant identifier string, matching AlphaMissense
+format.
+\item \code{cv_class}: binary values 0 (benign) and 1 (pathogenic) in ClinVar.
 }}
 }
 \value{
