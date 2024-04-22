@@ -70,8 +70,9 @@ database.
 \details{
 \code{ALPHAMISSENSE_RECORD} can be set \strong{before the package is
 loaded} with the environment variable of the same name, e.g.,
-\code{Sys.setenv(ALPHAMISSENSE_RECORD = "8208688")}. The default is
-the most recent version (version 2) on 25 September, 2023.
+\code{Sys.setenv(ALPHAMISSENSE_RECORD = "10813168")}. The default is
+the most recent version (version 3) as checked on 11 April,
+2024.
 
 \code{am_data()} uses BiocFileCache to download and store the
 file and the corresponding DuckDB database.

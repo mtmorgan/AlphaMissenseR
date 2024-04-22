@@ -1,33 +1,45 @@
 #' @rdname integrate_clinvar
 #'
-#' @title Integrate ClinVar pathogenicity scores with AlphaMissense
+#' @title Integrate ClinVar Pathogenicity Scores with AlphaMissense Annotations
 #'
-#' @description `integrate_clinvar()` integrates ClinVar scores
+#' @description `integrate_clinvar()` integrates ClinVar pathogenicity scores
 #'      with AlphaMissense predicted scores derived from
-#'      `am_data("aa_substitutions")` and creates a ggplot object for
+#'      `am_data("aa_substitutions")` and returns a ggplot object for
 #'      visualization.
-#'
 #'
 #' @param protein a valid UniProt accession identifier.
 #'
 #' @param am_table a tibble derived from `am_data("aa_substitution")`.
 #'      Alternatively, a user-defined tibble or dataframe with columns
-#'      `uniprot_id`, `protein_variant`, `am_class`, `am_pathogenicity`.
+#'      `uniprot_id`, `protein_variant`, `am_class`, and `am_pathogenicity`.
+#'      The columns are as follow:
 #'
-#' @param clinvar_table a tibble or dataframe containing ClinVar information for
-#'      the given protein. The table must have columns `accession` containing
-#'      UniProt identifiers, `protein_variant`, `am_class`, `am_pathogenicity`.
+#'      - `uniprot_id`: UniProt accession identifier(s).
+#'      - `protein_variant`: variant identifier string, with the protein.
+#'      position in the middle and the reference and mutant amino acid residues
+#'      to the left and right of the position, respectively.
+#'      - `am_class`: AlphaMissense classification of either "benign",
+#'      "ambiguous", or "pathogenic".
+#'      - `am_pathogenicity`: AlphaMissense predicted score.
 #'
+#' @param cv_table a tibble or dataframe containing ClinVar information. By
+#'      default, ClinVar information is derived from the supplemental table of
+#'      the [2023](https://www.science.org/doi/10.1126/science.adg7492)
+#'      AlphaMissense paper. Alternatively, a user-defined tibble or dataframe
+#'      with columns `accession` containing UniProt identifiers,
+#'      `variant_id` matching protein variants in AlphaMissense, and `label`
+#'      of binary values 0 and 1 for benign or pathogenic, respectively.
 #'
-#' @return `to_GPos()` returns a `GPos` object, which can be used in
-#'     the same was a `GRanges` object for range-based filtering and
-#'     annotation
+#' @return `integrate_clinvar()` returns a `ggplot` object which overlays
+#'      ClinVar pathogenicity annotations onto AlphaMissense predicted scores
+#'      for comparison and visualization.
 #'
 #' @examples
 #' integrate_clinvar(protein = "P37023")
 #'
 #' @importFrom BiocBaseUtils isCharacter
 #' @importFrom ggplot2 ggplot
+#' @import dplyr
 #'
 #' @export
 integrate_clinvar <-
