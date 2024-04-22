@@ -1,9 +1,37 @@
+#' @rdname integrate_clinvar
+#'
+#' @title Integrate ClinVar pathogenicity scores with AlphaMissense
+#'
+#' @description `integrate_clinvar()` integrates ClinVar scores
+#'      with AlphaMissense predicted scores derived from
+#'      `am_data("aa_substitutions")` and creates a ggplot object for
+#'      visualization.
+#'
+#'
+#' @param protein a valid UniProt accession identifier.
+#'
+#' @param am_table a tibble derived from `am_data("aa_substitution")`.
+#'      Alternatively, a user-defined tibble or dataframe with columns
+#'      `uniprot_id`, `protein_variant`, `am_class`, `am_pathogenicity`.
+#'
+#' @param clinvar_table a tibble or dataframe containing ClinVar information for
+#'      the given protein. The table must have columns `accession` containing
+#'      UniProt identifiers, `protein_variant`, `am_class`, `am_pathogenicity`.
+#'
+#'
+#' @return `to_GPos()` returns a `GPos` object, which can be used in
+#'     the same was a `GRanges` object for range-based filtering and
+#'     annotation
+#'
+#' @examples
+#' integrate_clinvar(protein = "P37023")
+#'
 #' @importFrom BiocBaseUtils isCharacter
 #' @importFrom ggplot2 ggplot
 #'
 #' @export
-plot_clinvar <-
-    function(protein, clinvar)
+integrate_clinvar <-
+    function(protein, clinvar_data)
     {
         # validity checks
         stopifnot(isCharacter(protein))
