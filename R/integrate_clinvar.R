@@ -28,9 +28,10 @@
 #'      Alternatively, a user-defined tibble or dataframe.
 #'      Columns must include:
 #'
-#'- `accession`: UniProt accession identifier(s), matching AlphaMissense table.
-#'- `variant_id`: protein variant identifier string, matching AlphaMissense.
-#' - `label`: binary values 0 (benign) and 1 (pathogenic) in ClinVar.
+#'- `uniprot_id`: UniProt accession identifier(s), matching AlphaMissense table.
+#'- `protein_variant`: protein variant identifier string, matching AlphaMissense
+#'  format.
+#' - `cv_class`: binary values 0 (benign) and 1 (pathogenic) in ClinVar.
 #'
 #' @return `integrate_clinvar()` returns a `ggplot` object which overlays
 #'      ClinVar pathogenicity annotations onto AlphaMissense predicted scores
@@ -45,25 +46,26 @@
 #'
 #' @export
 integrate_clinvar <-
-    function(protein, clinvar_data = ClinVar_data)
+    function(protein, cv_table = clinvar_data, am_table)
     {
-        # validity checks
+        # Validity checks
         stopifnot(isCharacter(protein))
 
         protein <- as.character(protein)
 
-        # Load in default ClinVar data
-        clinvar <- data(ClinVar_data)
+        # Load in default, inhouse ClinVar data
+        data(clinvar_data)
 
-        c_cv <- clinvar |>
-            filter(accession == protein)
+        c_cv <- clinvar_data |>
+            filter(uniprot_id == protein)
 
         # Check if protein found in ClinVar
-        if (nrow(c_cv) < 1)
+        if (nrow(c_cv) < 1){
             stop(
                 "No ClinVar information found for the protein accession. ",
                 "Check that the UniProt ID is correct."
             )
+        }
 
         # Grab AM proteins that match CV
         c_AM <- db_connect() |>
@@ -79,35 +81,31 @@ integrate_clinvar <-
             )
         }
 
-        # Join databases by protein variant
+        # Join databases by protein_variant
         res <-
             as.numeric(gsub(".*?([0-9]+).*", "\\1", c_AM$protein_variant))
+
         c_AM <- c_AM |> mutate(aa_pos = res)
 
-        c_combo <- left_join(c_AM, c_cv, by = "protein_variant") |>
-            select(-c('accession', 'AlphaMissense')) |>
-            rename(cv_variant_id = variant_id, cv_label = label) |>
+        c_combo <- left_join(c_AM, c_cv,
+                             by = c('uniprot_id', 'protein_variant')) |>
             relocate('transcript_id', .after = 'uniprot_id')
 
         # Check if protein has multiple transcripts
-        if (length(unique(c_combo$transcript_id[!is.na(c_combo$transcript_id)])) > 1)
-            stop(c("Multiple transcripts detected."))
+        unique_transcript_id <-
+            c_combo |>
+            filter(!is.na(transcript_id)) |>
+            select(transcript_id) |>
+            distinct() |>
+            pull()
 
-        # change to tidyverse way
-        # make a new variable
-        # unique_transcript_id <-
-        #     c_combo |>
-        #     filter(!is.na(transcript_id)) |>
-        #     distinct()
-        # if (length(unique_transcript_id) > 1L)
-        #     stop("Multiple transcripts detected")
+         if (length(unique_transcript_id) > 1L){
+             stop("Multiple transcripts detected")
+         }
 
         # change to tidyverse way to mutate the new column
-        c_combo$transcript_id <-
-            rep(unique(c_combo$transcript_id[!is.na(c_combo$transcript_id)]))
-
-        # c_combo <- c_combo |>
-        #     mutate(transcript_id = rep(unique_transcript_id))
+        c_combo <- c_combo |>
+            mutate(transcript_id = rep(unique_transcript_id))
 
 
         ##### PLOTTING #####
@@ -124,25 +122,20 @@ integrate_clinvar <-
 
         # Add color code matching AM and CV labels
         c_combo <- c_combo |>
-            mutate(
-                code_color = case_when(
-                    !is.na(cv_label) & cv_label == "0" ~ "CV_benign",
-                    !is.na(cv_label) &
-                        cv_label == "1" ~ "CV_pathogenic",
-                    is.na(cv_label) &
-                        am_class == "pathogenic" ~ "AM_pathogenic",
-                    is.na(cv_label) &
-                        am_class == "benign" ~ "AM_benign",
-                    is.na(cv_label) &
-                        am_class == "ambiguous" ~ "AM_ambiguous"
+            mutate(code_color = case_when(
+                !is.na(cv_class) & cv_class == "0" ~ "CV_benign",
+                !is.na(cv_class) & cv_class == "1" ~ "CV_pathogenic",
+                is.na(cv_class) & am_class == "pathogenic" ~ "AM_pathogenic",
+                is.na(cv_class) & am_class == "benign" ~ "AM_benign",
+                is.na(cv_class) & am_class == "ambiguous" ~ "AM_ambiguous"
                 )
             )
 
 
         # Plot sequence window
-        plot <- ggplot(c_combo |> arrange(code_color),
-                       aes(aa_pos, am_pathogenicity)) +
-            geom_point(
+        plot <- ggplot(c_combo |>
+                           arrange(code_color), aes(aa_pos, am_pathogenicity)) +
+                geom_point(
                 aes(
                     shape = code_color,
                     color = code_color,
@@ -178,6 +171,6 @@ integrate_clinvar <-
             legend.position = "none"
         )
 
-        plot
+    plot
 
-    }
+}
