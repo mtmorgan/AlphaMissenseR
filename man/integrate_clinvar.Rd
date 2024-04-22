@@ -10,26 +10,29 @@ integrate_clinvar(protein, clinvar_data)
 \item{protein}{a valid UniProt accession identifier.}
 
 \item{am_table}{a tibble derived from \code{am_data("aa_substitution")}.
-Alternatively, a user-defined tibble or dataframe with columns
-\code{uniprot_id}, \code{protein_variant}, \code{am_class}, and \code{am_pathogenicity}.
-The columns are as follow:
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{ - `uniprot_id`: UniProt accession identifier(s).
- - `protein_variant`: variant identifier string, with the protein.
- position in the middle and the reference and mutant amino acid residues
- to the left and right of the position, respectively.
- - `am_class`: AlphaMissense classification of either "benign",
- "ambiguous", or "pathogenic".
- - `am_pathogenicity`: AlphaMissense predicted score.
-}\if{html}{\out{</div>}}}
+Alternatively, a user-defined tibble or dataframe.
+Columns must include:
+\itemize{
+\item \code{uniprot_id}: UniProt accession identifier(s).
+\item \code{protein_variant}: variant identifier string, with the protein.
+position in the middle and the reference and mutant amino acid residues
+to the left and right of the position, respectively.
+\item \code{am_class}: AlphaMissense classification of either "benign",
+"ambiguous", or "pathogenic".
+\item \code{am_pathogenicity}: AlphaMissense predicted score.
+}}
 
 \item{cv_table}{a tibble or dataframe containing ClinVar information. By
 default, ClinVar information is derived from the supplemental table of
-the \href{https://www.science.org/doi/10.1126/science.adg7492}{2023}
-AlphaMissense paper. Alternatively, a user-defined tibble or dataframe
-with columns \code{accession} containing UniProt identifiers,
-\code{variant_id} matching protein variants in AlphaMissense, and \code{label}
-of binary values 0 and 1 for benign or pathogenic, respectively.}
+the AlphaMissense
+\href{https://www.science.org/doi/10.1126/science.adg7492}{[2023]} paper.
+Alternatively, a user-defined tibble or dataframe.
+Columns must include:
+\itemize{
+\item \code{accession}: UniProt accession identifier(s), matching AlphaMissense table.
+\item \code{variant_id}: protein variant identifier string, matching AlphaMissense.
+\item \code{label}: binary values 0 (benign) and 1 (pathogenic) in ClinVar.
+}}
 }
 \value{
 \code{integrate_clinvar()} returns a \code{ggplot} object which overlays

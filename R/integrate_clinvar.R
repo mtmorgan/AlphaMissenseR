@@ -10,25 +10,27 @@
 #' @param protein a valid UniProt accession identifier.
 #'
 #' @param am_table a tibble derived from `am_data("aa_substitution")`.
-#'      Alternatively, a user-defined tibble or dataframe with columns
-#'      `uniprot_id`, `protein_variant`, `am_class`, and `am_pathogenicity`.
-#'      The columns are as follow:
+#'      Alternatively, a user-defined tibble or dataframe.
+#'      Columns must include:
 #'
-#'      - `uniprot_id`: UniProt accession identifier(s).
-#'      - `protein_variant`: variant identifier string, with the protein.
-#'      position in the middle and the reference and mutant amino acid residues
-#'      to the left and right of the position, respectively.
-#'      - `am_class`: AlphaMissense classification of either "benign",
-#'      "ambiguous", or "pathogenic".
-#'      - `am_pathogenicity`: AlphaMissense predicted score.
+#'- `uniprot_id`: UniProt accession identifier(s).
+#'- `protein_variant`: variant identifier string, with the protein.
+#'  position in the middle and the reference and mutant amino acid residues
+#'  to the left and right of the position, respectively.
+#' - `am_class`: AlphaMissense classification of either "benign",
+#'  "ambiguous", or "pathogenic".
+#' - `am_pathogenicity`: AlphaMissense predicted score.
 #'
 #' @param cv_table a tibble or dataframe containing ClinVar information. By
 #'      default, ClinVar information is derived from the supplemental table of
-#'      the [2023](https://www.science.org/doi/10.1126/science.adg7492)
-#'      AlphaMissense paper. Alternatively, a user-defined tibble or dataframe
-#'      with columns `accession` containing UniProt identifiers,
-#'      `variant_id` matching protein variants in AlphaMissense, and `label`
-#'      of binary values 0 and 1 for benign or pathogenic, respectively.
+#'      the AlphaMissense
+#'      [\[2023\]](https://www.science.org/doi/10.1126/science.adg7492) paper.
+#'      Alternatively, a user-defined tibble or dataframe.
+#'      Columns must include:
+#'
+#'- `accession`: UniProt accession identifier(s), matching AlphaMissense table.
+#'- `variant_id`: protein variant identifier string, matching AlphaMissense.
+#' - `label`: binary values 0 (benign) and 1 (pathogenic) in ClinVar.
 #'
 #' @return `integrate_clinvar()` returns a `ggplot` object which overlays
 #'      ClinVar pathogenicity annotations onto AlphaMissense predicted scores
