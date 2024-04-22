@@ -45,12 +45,15 @@
 #'
 #' @export
 integrate_clinvar <-
-    function(protein, clinvar_data)
+    function(protein, clinvar_data = ClinVar_data)
     {
         # validity checks
         stopifnot(isCharacter(protein))
 
         protein <- as.character(protein)
+
+        # Load in default ClinVar data
+        clinvar <- data(ClinVar_data)
 
         c_cv <- clinvar |>
             filter(accession == protein)

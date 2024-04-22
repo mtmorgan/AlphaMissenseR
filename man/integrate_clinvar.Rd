@@ -4,7 +4,7 @@
 \alias{integrate_clinvar}
 \title{Integrate ClinVar Pathogenicity Scores with AlphaMissense Annotations}
 \usage{
-integrate_clinvar(protein, clinvar_data)
+integrate_clinvar(protein, clinvar_data = ClinVar_data)
 }
 \arguments{
 \item{protein}{a valid UniProt accession identifier.}
