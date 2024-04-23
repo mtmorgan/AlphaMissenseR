@@ -1,15 +1,15 @@
-#' @rdname integrate_clinvar
+#' @rdname plot_clinvar
 #'
-#' @title Integrate ClinVar Pathogenicity Scores with AlphaMissense Annotations
+#' @title Integrate ClinVar Classifications with AlphaMissense Pathogenicity Scores
 #'
-#' @description `integrate_clinvar()` integrates ClinVar pathogenicity scores
+#' @description `plot_clinvar()` integrates ClinVar classifications
 #'      with AlphaMissense predicted scores derived from
 #'      `am_data("aa_substitutions")` and returns a ggplot object for
 #'      visualization.
 #'
-#' @param protein a valid UniProt accession identifier.
+#' @param pID a valid UniProt accession identifier. # check Martin's code
 #'
-#' @param am_table a tibble derived from `am_data("aa_substitution")`.
+#' @param am_table a data.frame #link to description - derived from `am_data("aa_substitution")`.
 #'      Alternatively, a user-defined tibble or dataframe.
 #'      Columns must include:
 #'
@@ -38,10 +38,14 @@
 #'      for comparison and visualization.
 #'
 #' @examples
-#' integrate_clinvar(protein = "P37023")
+#' data(clinvar_data)
+#'
+#' # get AM table with that pID first
+#'
+#' plot_clinvar(protein = "P37023", cv_table = clinvar_data, am_table = X)
 #'
 #' @importFrom BiocBaseUtils isCharacter
-#' @importFrom ggplot2 ggplot
+#' @import ggplot2
 #' @import dplyr
 #'
 #' @export
@@ -53,8 +57,7 @@ integrate_clinvar <-
 
         ### Need to add check on cv_table and am_table for required columns in
         ### user-defined scenario
-
-        protein <- as.character(protein)
+        ### Check if user loaded
 
         # Load in default, inhouse ClinVar data
         data(clinvar_data)
@@ -144,8 +147,8 @@ integrate_clinvar <-
 
 
         # Plot sequence window
-        plot <- ggplot(c_combo |>
-                           arrange(code_color), aes(aa_pos, am_pathogenicity)) +
+        plot <- ggplot(c_combo |> arrange(code_color),
+                       aes(aa_pos, am_pathogenicity)) +
                 geom_point(
                 aes(
                     shape = code_color,
