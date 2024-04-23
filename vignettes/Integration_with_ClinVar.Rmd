@@ -1,5 +1,5 @@
 ---
-title: "scatterplot_with_ClinVar"
+title: "Integration_with_ClinVar"
 author: "Tram Nguyen"
 date: "2024-04-22"
 output: html_document
@@ -33,6 +33,6 @@ integrate_clinvar(protein = "Q9BQB6")
 
 # Test a protein that is known to NOT be in ClinVar
 ```{r}
-integrate_clinvar(protein = "P0DP23") # Gives error as expected
+integrate_clinvar(protein = "P0DP23") # Gives error message as expected
 ```
 
