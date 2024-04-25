@@ -33,7 +33,7 @@
 #'  format.
 #' - `cv_class`: binary values 0 (benign) and 1 (pathogenic) in ClinVar.
 #'
-#' @return `integrate_clinvar()` returns a `ggplot` object which overlays
+#' @return `plot_clinvar()` returns a `ggplot` object which overlays
 #'      ClinVar pathogenicity annotations onto AlphaMissense predicted scores
 #'      for comparison and visualization.
 #'
@@ -42,6 +42,12 @@
 #'
 #' # get AM table with that pID first
 #'
+#' c_am <- db_connect() |>
+tbl("aa_substitutions") |>
+    filter(uniprot_id == protein) |>
+    dplyr::as_tibble()
+
+#'
 #' plot_clinvar(protein = "P37023", cv_table = clinvar_data, am_table = X)
 #'
 #' @importFrom BiocBaseUtils isCharacter
@@ -49,18 +55,28 @@
 #' @import dplyr
 #'
 #' @export
-integrate_clinvar <-
-    function(protein, am_table, cv_table = clinvar_data)
+plot_clinvar <-
+    function(protein, am_table, cv_table)
     {
         # Validity checks
         stopifnot(isCharacter(protein))
 
+        # If no cv_table provided, take default
+        if (missing(cv_table)){
+            message("parameter 'cv_table' not provided, using default ",
+                    "ClinVar dataset in AlphaMissenseR package")
+
+        data_env <- new.env(parent = emptyenv())
+        data("clinvar_data", envir = data_env, package = "AlphaMissenseR")
+        clinvar_data <- data_env[["clinvar_data"]]
+
+        }
         ### Need to add check on cv_table and am_table for required columns in
         ### user-defined scenario
         ### Check if user loaded
 
         # Load in default, inhouse ClinVar data
-        data(clinvar_data)
+        # data(clinvar_data)
 
         # Default tables
         c_cv <- clinvar_data |>
@@ -75,10 +91,21 @@ integrate_clinvar <-
         }
 
         # Grab AM proteins that match CV
-        c_am <- db_connect() |>
-            tbl("aa_substitutions") |>
-            filter(uniprot_id == protein) |>
-            dplyr::as_tibble()
+
+        # if am_table available, if missing
+
+        if (missing(am__table)){
+            message("parameter 'cv_table' not provided, using default ",
+                    "ClinVar dataset in AlphaMissenseR package")
+
+            c_am <- db_connect() |>
+                tbl("aa_substitutions") |>
+                filter(uniprot_id == protein) |>
+                dplyr::as_tibble()
+
+        }
+
+
 
         # Check if protein found in AM
         if (nrow(c_am) < 1) {

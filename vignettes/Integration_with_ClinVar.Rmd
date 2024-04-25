@@ -24,7 +24,7 @@ protein_variant field. Match these UniProt with our accession number and plot.
 # Plotting functionality test
 
 ```{r}
-integrate_clinvar(protein = "P37023") 
+plot_clinvar(protein = "P37023") 
 ```
 # Try another protein
 ```{r}
