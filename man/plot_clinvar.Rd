@@ -2,13 +2,15 @@
 % Please edit documentation in R/plot_clinvar.R
 \name{plot_clinvar}
 \alias{plot_clinvar}
-\title{Integrate ClinVar Classifications with AlphaMissense Pathogenicity Scores}
+\title{Integrate ClinVar Labels with AlphaMissense Pathogenicity Scores}
 \usage{
-plot_clinvar(protein, am_table, cv_table = clinvar_data)
+plot_clinvar(uniprotId, am_table, cv_table)
 }
 \arguments{
-\item{am_table}{a data.frame #link to description - derived from \code{am_data("aa_substitution")}.
-Alternatively, a user-defined tibble or dataframe.
+\item{uniprotId}{a valid UniProt accession identifier}
+
+\item{am_table}{a table derived from \code{am_data("aa_substitution")}.
+Alternatively, a user-defined tibble or data.frame.
 Columns must include:
 \itemize{
 \item \code{uniprot_id}: UniProt accession identifier(s).
@@ -20,25 +22,21 @@ to the left and right of the position, respectively.
 \item \code{am_pathogenicity}: AlphaMissense predicted score.
 }}
 
-\item{cv_table}{a tibble or dataframe containing ClinVar information. By
-default, ClinVar information is derived from the supplemental table of
-the AlphaMissense
+\item{cv_table}{a table containing ClinVar information derived from the
+supplemental table of the AlphaMissense
 \href{https://www.science.org/doi/10.1126/science.adg7492}{[2023]} paper.
-Alternatively, a user-defined tibble or dataframe.
+Alternatively, a user-defined tibble or data.frame.
 Columns must include:
 \itemize{
-\item \code{uniprot_id}: UniProt accession identifier(s), matching AlphaMissense table.
-\item \code{protein_variant}: protein variant identifier string, matching AlphaMissense
-format.
-\item \code{cv_class}: binary values 0 (benign) and 1 (pathogenic) in ClinVar.
+\item \code{uniprot_id}: UniProt accession identifier(s), matching \code{am_table}.
+\item \code{protein_variant}: variant identifier string, matching \code{am_table} format.
+\item \code{cv_class}: binary ClinVar classification of 0 (benign) or 1 (pathogenic).
 }}
-
-\item{pID}{a valid UniProt accession identifier. # check Martin's code}
 }
 \value{
-\code{integrate_clinvar()} returns a \code{ggplot} object which overlays
-ClinVar pathogenicity annotations onto AlphaMissense predicted scores
-for comparison and visualization.
+\code{plot_clinvar()} returns a \code{ggplot} object which overlays
+ClinVar classifications onto AlphaMissense predicted scores for
+comparison and visualization.
 }
 \description{
 \code{plot_clinvar()} integrates ClinVar classifications
@@ -48,9 +46,12 @@ visualization.
 }
 \examples{
 data(clinvar_data)
-
-# get AM table with that pID first
-
-plot_clinvar(protein = "P37023", cv_table = clinvar_data, am_table = X)
+am_table <- db_connect() |>
+            tbl("aa_substitutions") |>
+            filter(uniprot_id == "P37023") |>
+            dplyr::as_tibble()
+plot_clinvar(uniprot_id = "P37023",
+                am_table = am_table,
+                cv_table = clinvar_data)
 
 }

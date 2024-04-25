@@ -11,7 +11,7 @@ dataframe with 82872 rows and 5 variables:
 \item{uniprot_id}{UniProt accession identifier.}
 \item{transcript_id}{Ensembl transcript identifier.}
 \item{protein_variant}{Protein variant identifier.}
-\item{cv_class}{Binary ClinVar classification.}
+\item{cv_class}{Binary ClinVar class. 0 for benign or 1 for pathogenic.}
 }
 }
 \usage{
