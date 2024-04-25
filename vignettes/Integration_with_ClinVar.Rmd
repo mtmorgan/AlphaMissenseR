@@ -1,7 +1,7 @@
 ---
 title: "Integration_with_ClinVar"
 author: "Tram Nguyen"
-date: "2024-04-22"
+date: "2024-04-25"
 output: html_document
 ---
 
@@ -24,15 +24,15 @@ protein_variant field. Match these UniProt with our accession number and plot.
 # Plotting functionality test
 
 ```{r}
-plot_clinvar(protein = "P37023") 
+plot_clinvar(uniprotId = "P37023") 
 ```
 # Try another protein
 ```{r}
-integrate_clinvar(protein = "Q9BQB6")
+plot_clinvar(uniprotId = "Q9BQB6")
 ```
 
 # Test a protein that is known to NOT be in ClinVar
 ```{r}
-integrate_clinvar(protein = "P0DP23") # Gives error message as expected
+plot_clinvar(uniprotId = "P0DP23") # Gives error message as expected
 ```
 
