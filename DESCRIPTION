@@ -37,7 +37,7 @@ Depends:
 Imports:
     rjsoncons (>= 1.0.1), DBI, duckdb (>= 0.9.1), rlang,
     curl, BiocFileCache, spdl, memoise, BiocBaseUtils,
-    utils, stats, methods, whisker
+    utils, stats, methods, whisker, ggplot2
 Suggests:
     BiocManager,
     BiocGenerics,
@@ -48,7 +48,6 @@ Suggests:
     httr,
     tidyr,
     r3dmol, bio3d, shiny,
-    ggplot2,
     colorspace,
     knitr,
     rmarkdown,
