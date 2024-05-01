@@ -51,11 +51,11 @@
 #' am_table <- db_connect() |>
 #'             tbl("aa_substitutions") |>
 #'             filter(uniprot_id == "P37023") |>
-#'             dplyr::as_tibble()
+#'             dplyr::collect()
 #'
 #' plot_clinvar(uniprotId = "P37023",
-#'                 am_table = am_table,
-#'                 cv_table = clinvar_data)
+#'              am_table = am_table,
+#'              cv_table = clinvar_data)
 #'
 #' @importFrom BiocBaseUtils isCharacter
 #' @import ggplot2
@@ -65,15 +65,11 @@
 plot_clinvar <-
     function(uniprotId, am_table, cv_table)
 {
-    if (isCharacter(uniprotId) == FALSE){
-        stop(
-            "uniprotId must be a string"
-            )
-    }
+    stopifnot(isCharacter(uniprotId))
 
-
+    # am_table
     # If am_table not provided, load default
-    if (missing(am_table)){
+    if (missing(am_table)) {
         message("'am_table' not provided, using default ",
                 "'am_data(\"aa_substitution\")' table accessed through ",
                 "the AlphaMissenseR package.")
@@ -89,33 +85,34 @@ plot_clinvar <-
             filter(uniprot_id == uniprotId)
     }
 
+    # cv_table
     # If cv_table not provided, load default
-    if (missing(cv_table)){
+    if (missing(cv_table)) {
         message("'cv_table' not provided, using default ",
                 "ClinVar dataset in AlphaMissenseR package")
 
-    data_env <- new.env(parent = emptyenv())
-    data("clinvar_data", envir = data_env, package = "AlphaMissenseR")
-    clinvar_data <- data_env[["clinvar_data"]]
-
-    cv_table <-  clinvar_data |>
-        filter(uniprot_id == uniprotId)
+        data_env <- new.env(parent = emptyenv())
+        data("clinvar_data", envir = data_env, package = "AlphaMissenseR")
+        clinvar_data <- data_env[["clinvar_data"]]
+    
+        cv_table <-  clinvar_data |>
+            filter(uniprot_id == uniprotId)
 
     } else {
     # Take user-defined cv_table and filter for the uniprotId
-    cv_table <- cv_table |>
-        filter(uniprot_id == uniprotId)
+        cv_table <- cv_table |>
+            filter(uniprot_id == uniprotId)
     }
 
     # Check that protein exists in ClinVar and AlphaMissense data
-    if (nrow(cv_table) < 1){
+    if (!nrow(cv_table)) {
         stop(
             "No ClinVar information found for the protein accession. ",
             "Check that the UniProt ID is correct."
         )
     }
 
-    if (nrow(am_table) < 1) {
+    if (!nrow(am_table)) {
         stop(
             "No AlphaMissense information found for the protein accession.",
             " Check that the UniProt ID is correct."
@@ -123,39 +120,39 @@ plot_clinvar <-
     }
 
     # Validity check for am_table and cv_table
-    required_columns <- c("uniprot_id", "protein_variant", "am_class",
-                          "am_pathogenicity")
+    am_required_columns <- c("uniprot_id", "protein_variant", 
+                             "am_class", "am_pathogenicity")
     stopifnot(
-        inherits(am_table, c("tbl", "data.frame")),
-        all(required_columns %in% colnames(am_table))
+        inherits(tbl, "tbl") || inherits(tbl, "data.frame"),
+        all(am_required_columns %in% colnames(am_table))
     )
-
-    required_columns <- c("uniprot_id", "protein_variant", "cv_class")
+    
+    cv_required_columns <- c("uniprot_id", "protein_variant", "cv_class")
     stopifnot(
-        inherits(cv_table, c("tbl", "data.frame")),
-        all(required_columns %in% colnames(cv_table))
+        inherits(tbl, "tbl") || inherits(tbl, "data.frame"),
+        all(cv_required_columns %in% colnames(cv_table))
     )
 
     # Join databases by protein_variant
     am_table <- am_table |>
-        select(uniprot_id, protein_variant, am_pathogenicity, am_class)
+        mutate(
+            aa_pos = as.numeric(
+                gsub(".*?([0-9]+).*", "\\1", .data$protein_variant)
+            )
+        )
 
-    cv_table <- cv_table |>
-        select(uniprot_id, protein_variant, cv_class)
-
-    am_table <- am_table |>
-        mutate(aa_pos = as.numeric(gsub(".*?([0-9]+).*", "\\1",
-                                    protein_variant)))
-
-    c_combo <- left_join(am_table, cv_table,
-                        by = c('uniprot_id', 'protein_variant'))
-
+    c_combo <- left_join(
+        am_table, 
+        cv_table,
+        by = c('uniprot_id', 'protein_variant')
+    )
+    
     ##### PLOTTING #####
 
     # Grab the thresholds for AM pathogenicity to plot
     am_cutoff <- c_combo |>
         filter(am_class == "ambiguous") |>
-        select(am_pathogenicity) |>
+        select(.data$am_pathogenicity) |>
         summarise(
             path_cutoff = max(am_pathogenicity),
             benign_cutoff = min(am_pathogenicity)
@@ -170,12 +167,12 @@ plot_clinvar <-
                 is.na(cv_class) & am_class == "benign" ~ "AM benign",
                 is.na(cv_class) & am_class == "ambiguous" ~ "AM ambiguous"
                 )
-            )
-
+            ) |>
+        arrange(.data$code_color)
 
     # Plot sequence window
-    plot <- ggplot(c_combo |> arrange(code_color),
-                       aes(aa_pos, am_pathogenicity)) +
+    plot <- c_combo |> 
+        ggplot(aes(aa_pos, am_pathogenicity)) +
                 geom_point(
                 aes(
                     shape = code_color,
@@ -185,33 +182,42 @@ plot_clinvar <-
                     stroke = code_color
                 )
             ) +
-            scale_shape_manual(values = c(19, 19, 19, 21, 21)) +
-            scale_discrete_manual(aesthetics = "stroke",
-                                  values = c(0, 0, 0, 1.5, 1.5)) +
-            scale_size_manual(values = c(2, 2, 2, 4, 4)) +
+            scale_shape_manual(
+                values = c(19, 19, 19, 21, 21)
+            ) +
+            scale_discrete_manual(
+                aesthetics = "stroke",
+                values = c(0, 0, 0, 1.5, 1.5)
+            ) +
+            scale_size_manual(
+                values = c(2, 2, 2, 4, 4)
+            ) +
             scale_color_manual(
                 values = c("gray", "#89d5f5", "#f56c6c", "black", "black")
             ) +
             scale_fill_manual(
                 values = c("gray", "#89d5f5", "#f56c6c", "#007cb0", "#c70606")
             ) +
-            geom_hline(yintercept = am_cutoff$path_cutoff, linetype = 2,
-                       color = "#c70606") +
-            geom_hline(yintercept = am_cutoff$benign_cutoff,
-                       linetype = 2, color = "#007cb0") +
+            geom_hline(
+                yintercept = am_cutoff$path_cutoff, linetype = 2,
+                color = "#c70606"
+            ) +
+            geom_hline(
+                yintercept = am_cutoff$benign_cutoff,
+                linetype = 2, color = "#007cb0"
+            ) +
             labs(title = paste0("UniProt ID: ", uniprotId)) +
             xlab("amino acid position") +
             ylab("AlphaMissense score") +
             theme_classic()
 
-        plot <- plot + theme(
+    plot + 
+        theme(
             axis.text.x = element_text(size = 16),
             axis.text.y = element_text(size = 16),
             axis.title.y = element_text(size = 16),
             axis.title.x = element_text(size = 16),
             legend.title = element_blank(),
-            legend.text = element_text(size = 11))
-
-    plot
-
+            legend.text = element_text(size = 11)
+        )
 }
