@@ -41,9 +41,8 @@
 #' classifications onto AlphaMissense predicted scores. Blue, gray, and red
 #' colors represent pathogenicity classifications for "likely benign",
 #' "ambiguous", or "likely pathogenic", respectively. Large, bolded points
-#' represent ClinVar variants and are colored according to their clinical
-#' classification, while smaller points in the background are AlphaMissense
-#' predictions.
+#' are ClinVar variants colored according to their clinical classification,
+#' while smaller points in the background are AlphaMissense predictions.
 #'
 #' @examples
 #'
@@ -66,92 +65,105 @@
 plot_clinvar <-
     function(uniprotId, am_table, cv_table)
 {
-        # Validity checks
-        if (isCharacter(uniprotId) == FALSE){
-            stop(
-                "uniprotId must be a string"
-                )
-        }
-
-
-        # If am_table not provided, load default
-        if (missing(am_table)){
-            message("'am_table' not provided, using default ",
-                    "'am_data(\"aa_substitution\")' table accessed through ",
-                    "the AlphaMissenseR package.")
-
-            am_table <- db_connect() |>
-                tbl("aa_substitutions") |>
-                filter(uniprot_id == uniprotId) |>
-                dplyr::as_tibble()
-
-        } else {
-            # Take user-defined am_table and filter for the uniprotId
-            am_table <- am_table |>
-                filter(uniprot_id == uniprotId)
-        }
-
-        # If cv_table not provided, load default
-        if (missing(cv_table)){
-            message("'cv_table' not provided, using default ",
-                    "ClinVar dataset in AlphaMissenseR package")
-
-        data_env <- new.env(parent = emptyenv())
-        data("clinvar_data", envir = data_env, package = "AlphaMissenseR")
-        clinvar_data <- data_env[["clinvar_data"]]
-
-        c_cv <-  clinvar_data |>
-            filter(uniprot_id == uniprotId)
-
-        } else {
-        # Take user-defined cv_table and filter for the uniprotId
-        c_cv <- cv_table |>
-            filter(uniprot_id == uniprotId)
-        }
-
-        # Check that protein exists in ClinVar and AlphaMissense data
-        if (nrow(c_cv) < 1){
-            stop(
-                "No ClinVar information found for the protein accession. ",
-                "Check that the UniProt ID is correct."
+    if (isCharacter(uniprotId) == FALSE){
+        stop(
+            "uniprotId must be a string"
             )
-        }
+    }
 
-        if (nrow(am_table) < 1) {
-            stop(
-                "No AlphaMissense information found for the protein accession.",
-                " Check that the UniProt ID is correct."
-            )
-        }
 
-        # Select relevant columns and join databases by protein_variant
+    # If am_table not provided, load default
+    if (missing(am_table)){
+        message("'am_table' not provided, using default ",
+                "'am_data(\"aa_substitution\")' table accessed through ",
+                "the AlphaMissenseR package.")
+
+        am_table <- db_connect() |>
+            tbl("aa_substitutions") |>
+            filter(uniprot_id == uniprotId) |>
+            dplyr::as_tibble()
+
+    } else {
+        # Take user-defined am_table and filter for the uniprotId
         am_table <- am_table |>
-            select(uniprot_id, protein_variant, am_pathogenicity, am_class)
+            filter(uniprot_id == uniprotId)
+    }
 
-        c_cv <- c_cv |>
-            select(uniprot_id, protein_variant, cv_class)
+    # If cv_table not provided, load default
+    if (missing(cv_table)){
+        message("'cv_table' not provided, using default ",
+                "ClinVar dataset in AlphaMissenseR package")
 
-        am_table <- am_table %>%
-            mutate(aa_pos = as.numeric(gsub(".*?([0-9]+).*", "\\1",
-                                                     protein_variant)))
+    data_env <- new.env(parent = emptyenv())
+    data("clinvar_data", envir = data_env, package = "AlphaMissenseR")
+    clinvar_data <- data_env[["clinvar_data"]]
 
-        c_combo <- left_join(am_table, c_cv,
-                             by = c('uniprot_id', 'protein_variant'))
+    cv_table <-  clinvar_data |>
+        filter(uniprot_id == uniprotId)
 
-        ##### PLOTTING #####
+    } else {
+    # Take user-defined cv_table and filter for the uniprotId
+    cv_table <- cv_table |>
+        filter(uniprot_id == uniprotId)
+    }
 
-        # Grab the thresholds for AM pathogenicity to plot
-        am_cutoff <- c_combo |>
-            filter(am_class == "ambiguous") |>
-            select(am_pathogenicity) |>
-            summarise(
-                path_cutoff = max(am_pathogenicity),
-                benign_cutoff = min(am_pathogenicity)
-            )
+    # Check that protein exists in ClinVar and AlphaMissense data
+    if (nrow(cv_table) < 1){
+        stop(
+            "No ClinVar information found for the protein accession. ",
+            "Check that the UniProt ID is correct."
+        )
+    }
 
-        # Add color code matching AM and CV labels
-        c_combo <- c_combo |>
-            mutate(code_color = case_when(
+    if (nrow(am_table) < 1) {
+        stop(
+            "No AlphaMissense information found for the protein accession.",
+            " Check that the UniProt ID is correct."
+        )
+    }
+
+    # Validity check for am_table and cv_table
+    required_columns <- c("uniprot_id", "protein_variant", "am_class",
+                          "am_pathogenicity")
+    stopifnot(
+        inherits(am_table, c("tbl", "data.frame")),
+        all(required_columns %in% colnames(am_table))
+    )
+
+    required_columns <- c("uniprot_id", "protein_variant", "cv_class")
+    stopifnot(
+        inherits(cv_table, c("tbl", "data.frame")),
+        all(required_columns %in% colnames(cv_table))
+    )
+
+    # Join databases by protein_variant
+    am_table <- am_table |>
+        select(uniprot_id, protein_variant, am_pathogenicity, am_class)
+
+    cv_table <- cv_table |>
+        select(uniprot_id, protein_variant, cv_class)
+
+    am_table <- am_table |>
+        mutate(aa_pos = as.numeric(gsub(".*?([0-9]+).*", "\\1",
+                                    protein_variant)))
+
+    c_combo <- left_join(am_table, cv_table,
+                        by = c('uniprot_id', 'protein_variant'))
+
+    ##### PLOTTING #####
+
+    # Grab the thresholds for AM pathogenicity to plot
+    am_cutoff <- c_combo |>
+        filter(am_class == "ambiguous") |>
+        select(am_pathogenicity) |>
+        summarise(
+            path_cutoff = max(am_pathogenicity),
+            benign_cutoff = min(am_pathogenicity)
+        )
+
+    # Add color code matching AM and CV labels
+    c_combo <- c_combo |>
+        mutate(code_color = case_when(
                 !is.na(cv_class) & cv_class == "0" ~ "CV benign",
                 !is.na(cv_class) & cv_class == "1" ~ "CV pathogenic",
                 is.na(cv_class) & am_class == "pathogenic" ~ "AM pathogenic",
@@ -161,8 +173,8 @@ plot_clinvar <-
             )
 
 
-        # Plot sequence window
-        plot <- ggplot(c_combo |> arrange(code_color),
+    # Plot sequence window
+    plot <- ggplot(c_combo |> arrange(code_color),
                        aes(aa_pos, am_pathogenicity)) +
                 geom_point(
                 aes(
@@ -192,7 +204,6 @@ plot_clinvar <-
             ylab("AlphaMissense score") +
             theme_classic()
 
-
         plot <- plot + theme(
             axis.text.x = element_text(size = 16),
             axis.text.y = element_text(size = 16),
@@ -200,7 +211,6 @@ plot_clinvar <-
             axis.title.x = element_text(size = 16),
             legend.title = element_blank(),
             legend.text = element_text(size = 11))
-
 
     plot
 
