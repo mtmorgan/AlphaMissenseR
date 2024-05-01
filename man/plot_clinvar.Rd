@@ -36,7 +36,12 @@ Columns must include:
 \value{
 \code{plot_clinvar()} returns a \code{ggplot} object which overlays
 ClinVar classifications onto AlphaMissense predicted scores for
-comparison and visualization.
+comparison and visualization. Blue, gray, and red colors represent
+pathogenicity classifications for "likely benign", "ambiguous", or
+"likely pathogenic", respectively. Large, bolded points represent
+ClinVar variants and are colored according to their true clinical
+classification, while smaller dots in the background are AlphaMissense
+predictions.
 }
 \description{
 \code{plot_clinvar()} integrates ClinVar classifications
@@ -50,7 +55,7 @@ am_table <- db_connect() |>
             tbl("aa_substitutions") |>
             filter(uniprot_id == "P37023") |>
             dplyr::as_tibble()
-plot_clinvar(uniprot_id = "P37023",
+plot_clinvar(uniprotId = "P37023",
                 am_table = am_table,
                 cv_table = clinvar_data)
 

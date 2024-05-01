@@ -33,7 +33,12 @@
 #'
 #' @return `plot_clinvar()` returns a `ggplot` object which overlays
 #'      ClinVar classifications onto AlphaMissense predicted scores for
-#'      comparison and visualization.
+#'      comparison and visualization. Blue, gray, and red colors represent
+#'      pathogenicity classifications for "likely benign", "ambiguous", or
+#'      "likely pathogenic", respectively. Large, bolded points represent
+#'      ClinVar variants and are colored according to their true clinical
+#'      classification, while smaller dots in the background are AlphaMissense
+#'      predictions.
 #'
 #' @examples
 #' data(clinvar_data)
@@ -41,7 +46,7 @@
 #'             tbl("aa_substitutions") |>
 #'             filter(uniprot_id == "P37023") |>
 #'             dplyr::as_tibble()
-#' plot_clinvar(uniprot_id = "P37023",
+#' plot_clinvar(uniprotId = "P37023",
 #'                 am_table = am_table,
 #'                 cv_table = clinvar_data)
 #'
@@ -63,7 +68,7 @@ plot_clinvar <-
 
         # If am_table not provided, load default
         if (missing(am_table)){
-            message("parameter 'am_table' not provided, using default ",
+            message("'am_table' not provided, using default ",
                     "'am_data(\"aa_substitution\")' table accessed through ",
                     "the AlphaMissenseR package.")
 
@@ -80,7 +85,7 @@ plot_clinvar <-
 
         # If cv_table not provided, load default
         if (missing(cv_table)){
-            message("parameter 'cv_table' not provided, using default ",
+            message("'cv_table' not provided, using default ",
                     "ClinVar dataset in AlphaMissenseR package")
 
         data_env <- new.env(parent = emptyenv())
@@ -125,23 +130,6 @@ plot_clinvar <-
         c_combo <- left_join(am_table, c_cv,
                              by = c('uniprot_id', 'protein_variant'))
 
-        # Check if protein has multiple transcripts
-        # unique_transcript_id <-
-        #     c_combo |>
-        #     filter(!is.na(transcript_id)) |>
-        #     select(transcript_id) |>
-        #     distinct() |>
-        #     pull()
-        #
-        #  if (length(unique_transcript_id) > 1L){
-        #      stop("Multiple transcripts detected")
-        #  }
-        #
-        # # Mutate the new column with protein transcript
-        # c_combo <- c_combo |>
-        #     mutate(transcript_id = rep(unique_transcript_id))
-
-
         ##### PLOTTING #####
 
         # Grab the thresholds for AM pathogenicity to plot
@@ -149,18 +137,18 @@ plot_clinvar <-
             filter(am_class == "ambiguous") |>
             select(am_pathogenicity) |>
             summarise(
-                path_cutoff = min(am_pathogenicity),
-                benign_cutoff = max(am_pathogenicity)
+                path_cutoff = max(am_pathogenicity),
+                benign_cutoff = min(am_pathogenicity)
             )
 
         # Add color code matching AM and CV labels
         c_combo <- c_combo |>
             mutate(code_color = case_when(
-                !is.na(cv_class) & cv_class == "0" ~ "CV_benign",
-                !is.na(cv_class) & cv_class == "1" ~ "CV_pathogenic",
-                is.na(cv_class) & am_class == "pathogenic" ~ "AM_pathogenic",
-                is.na(cv_class) & am_class == "benign" ~ "AM_benign",
-                is.na(cv_class) & am_class == "ambiguous" ~ "AM_ambiguous"
+                !is.na(cv_class) & cv_class == "0" ~ "CV benign",
+                !is.na(cv_class) & cv_class == "1" ~ "CV pathogenic",
+                is.na(cv_class) & am_class == "pathogenic" ~ "AM pathogenic",
+                is.na(cv_class) & am_class == "benign" ~ "AM benign",
+                is.na(cv_class) & am_class == "ambiguous" ~ "AM ambiguous"
                 )
             )
 
@@ -187,9 +175,10 @@ plot_clinvar <-
             scale_fill_manual(
                 values = c("gray", "#89d5f5", "#f56c6c", "#007cb0", "#c70606")
             ) +
-            geom_hline(yintercept = am_cutoff$path_cutoff, linetype = 2,) +
+            geom_hline(yintercept = am_cutoff$path_cutoff, linetype = 2,
+                       color = "#c70606") +
             geom_hline(yintercept = am_cutoff$benign_cutoff,
-                       linetype = 2) +
+                       linetype = 2, color = "#007cb0") +
             labs(title = paste0("UniProt ID: ", uniprotId)) +
             xlab("amino acid position") +
             ylab("AlphaMissense score") +
@@ -201,8 +190,9 @@ plot_clinvar <-
             axis.text.y = element_text(size = 16),
             axis.title.y = element_text(size = 16),
             axis.title.x = element_text(size = 16),
-            legend.position = "none"
-        )
+            legend.title = element_blank(),
+            legend.text = element_text(size = 11))
+
 
     plot
 
