@@ -7,45 +7,53 @@
 #'      `am_data("aa_substitutions")` and returns a ggplot object for
 #'      visualization.
 #'
-#' @param uniprotId a valid UniProt accession identifier
+#' @param uniprotId a string with a valid UniProt accession identifier.
 #'
 #' @param am_table a table derived from `am_data("aa_substitution")`.
 #'      Alternatively, a user-defined tibble or data.frame.
-#'      Columns must include:
-#'
-#'- `uniprot_id`: UniProt accession identifier(s).
-#'- `protein_variant`: variant identifier string, with the protein.
-#'  position in the middle and the reference and mutant amino acid residues
-#'  to the left and right of the position, respectively.
-#' - `am_class`: AlphaMissense classification of either "benign",
-#'  "ambiguous", or "pathogenic".
-#' - `am_pathogenicity`: AlphaMissense predicted score.
 #'
 #' @param cv_table a table containing ClinVar information derived from the
 #'      supplemental table of the AlphaMissense
 #'      [\[2023\]](https://www.science.org/doi/10.1126/science.adg7492) paper.
 #'      Alternatively, a user-defined tibble or data.frame.
-#'      Columns must include:
 #'
-#'- `uniprot_id`: UniProt accession identifier(s), matching `am_table`.
+#' @details
+#'
+#' For `am_table`, columns must include:
+#'
+#'- `uniprot_id`: UniProt accession identifier.
+#'- `protein_variant`: variant identifier string, with protein position in
+#'  the middle, and the reference and mutant amino acid residues
+#'  to the left and right of the position, respectively.
+#'- `am_class`: AlphaMissense classification of either "benign",
+#'  "ambiguous", or "pathogenic".
+#'- `am_pathogenicity`: AlphaMissense predicted score.
+#'
+#' For `cv_table`, columns must include:
+#'
+#'- `uniprot_id`: UniProt accession identifier, matching `am_table`.
 #'- `protein_variant`: variant identifier string, matching `am_table` format.
 #'- `cv_class`: binary ClinVar classification of 0 (benign) or 1 (pathogenic).
 #'
-#' @return `plot_clinvar()` returns a `ggplot` object which overlays
-#'      ClinVar classifications onto AlphaMissense predicted scores for
-#'      comparison and visualization. Blue, gray, and red colors represent
-#'      pathogenicity classifications for "likely benign", "ambiguous", or
-#'      "likely pathogenic", respectively. Large, bolded points represent
-#'      ClinVar variants and are colored according to their true clinical
-#'      classification, while smaller dots in the background are AlphaMissense
-#'      predictions.
+#' @return
+#'
+#' `plot_clinvar()` returns a `ggplot` object which overlays ClinVar
+#' classifications onto AlphaMissense predicted scores. Blue, gray, and red
+#' colors represent pathogenicity classifications for "likely benign",
+#' "ambiguous", or "likely pathogenic", respectively. Large, bolded points
+#' represent ClinVar variants and are colored according to their clinical
+#' classification, while smaller points in the background are AlphaMissense
+#' predictions.
 #'
 #' @examples
+#'
 #' data(clinvar_data)
+#'
 #' am_table <- db_connect() |>
 #'             tbl("aa_substitutions") |>
 #'             filter(uniprot_id == "P37023") |>
 #'             dplyr::as_tibble()
+#'
 #' plot_clinvar(uniprotId = "P37023",
 #'                 am_table = am_table,
 #'                 cv_table = clinvar_data)
@@ -57,7 +65,7 @@
 #' @export
 plot_clinvar <-
     function(uniprotId, am_table, cv_table)
-    {
+{
         # Validity checks
         if (isCharacter(uniprotId) == FALSE){
             stop(
