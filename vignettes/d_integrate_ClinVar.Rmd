@@ -54,7 +54,7 @@ classifications from the data.frame previously obtained. Alternatively, it is
 possible to provide a custom AlphaMissense or ClinVar table for the function. 
 See function details for more information. 
 
-```{r}
+```{r plot_P37023}
 plot_clinvar(uniprotId = "P37023") 
 ```
 
@@ -72,7 +72,7 @@ as pathogenic.
 
 Because the ClinVar dataset is not exhaustive (not all proteins have been 
 clinically-assess), there may be proteins where information is not available. 
-```{r}
+```{r plot_P0DP23}
 plot_clinvar(uniprotId = "P0DP23")
 ```
 In this case, the function will provide an error.
