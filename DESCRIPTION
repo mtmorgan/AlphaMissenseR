@@ -48,6 +48,7 @@ Suggests:
     httr,
     tidyr,
     r3dmol, bio3d, shiny,
+    ggplot2,
     colorspace,
     knitr,
     rmarkdown,
