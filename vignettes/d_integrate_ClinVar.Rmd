@@ -73,3 +73,9 @@ as pathogenic.
 Because the ClinVar dataset is not exhaustive (not all proteins have been 
 clinically-assessed), there may be proteins where information is not available. 
 In this case, the function will provide an error.
+
+# Session information {.unnumbered}
+
+```{r}
+sessionInfo()
+```
