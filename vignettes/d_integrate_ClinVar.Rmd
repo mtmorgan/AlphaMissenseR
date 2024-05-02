@@ -2,7 +2,7 @@
 title: "Integration with ClinVar"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Issues & Solutions}
+  %\VignetteIndexEntry{Integration with ClinVar}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
