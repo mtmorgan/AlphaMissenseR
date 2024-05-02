@@ -94,7 +94,7 @@ plot_clinvar <-
         data_env <- new.env(parent = emptyenv())
         data("clinvar_data", envir = data_env, package = "AlphaMissenseR")
         clinvar_data <- data_env[["clinvar_data"]]
-    
+
         cv_table <-  clinvar_data |>
             filter(uniprot_id == uniprotId)
 
@@ -120,16 +120,16 @@ plot_clinvar <-
     }
 
     # Validity check for am_table and cv_table
-    am_required_columns <- c("uniprot_id", "protein_variant", 
+    am_required_columns <- c("uniprot_id", "protein_variant",
                              "am_class", "am_pathogenicity")
     stopifnot(
-        inherits(tbl, "tbl") || inherits(tbl, "data.frame"),
+        inherits(am_table, "tbl") || inherits(am_table, "data.frame"),
         all(am_required_columns %in% colnames(am_table))
     )
-    
+
     cv_required_columns <- c("uniprot_id", "protein_variant", "cv_class")
     stopifnot(
-        inherits(tbl, "tbl") || inherits(tbl, "data.frame"),
+        inherits(cv_table, "tbl") || inherits(cv_table, "data.frame"),
         all(cv_required_columns %in% colnames(cv_table))
     )
 
@@ -142,11 +142,11 @@ plot_clinvar <-
         )
 
     c_combo <- left_join(
-        am_table, 
+        am_table,
         cv_table,
         by = c('uniprot_id', 'protein_variant')
     )
-    
+
     ##### PLOTTING #####
 
     # Grab the thresholds for AM pathogenicity to plot
@@ -171,7 +171,7 @@ plot_clinvar <-
         arrange(.data$code_color)
 
     # Plot sequence window
-    plot <- c_combo |> 
+    plot <- c_combo |>
         ggplot(aes(aa_pos, am_pathogenicity)) +
                 geom_point(
                 aes(
@@ -211,7 +211,7 @@ plot_clinvar <-
             ylab("AlphaMissense score") +
             theme_classic()
 
-    plot + 
+    plot +
         theme(
             axis.text.x = element_text(size = 16),
             axis.text.y = element_text(size = 16),
