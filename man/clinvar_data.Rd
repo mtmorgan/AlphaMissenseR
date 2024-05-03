@@ -14,9 +14,9 @@ dataframe with 82872 rows and 5 variables:
 \item{cv_class}{Binary ClinVar class. 0 for benign or 1 for pathogenic.}
 }
 }
-#'\usage{
-#'clinvar_data
-#'}
+\usage{
+clinvar_data
+}
 \description{
 Derived from the supplemental table of the AlphaMissense
 \href{https://www.science.org/doi/10.1126/science.adg7492}{[2023]} paper.
