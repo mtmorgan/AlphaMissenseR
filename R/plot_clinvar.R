@@ -122,7 +122,7 @@ plot_clinvar <-
 
     # Validity check for am_table and cv_table
     am_required_columns <- c("uniprot_id", "protein_variant",
-                             "am_class", "am_pathogenicity")
+                            "am_class", "am_pathogenicity")
     stopifnot(
         inherits(am_table, "tbl") || inherits(am_table, "data.frame"),
         all(am_required_columns %in% colnames(am_table))
