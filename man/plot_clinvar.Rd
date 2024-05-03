@@ -57,10 +57,10 @@ data(clinvar_data)
 am_table <- db_connect() |>
             tbl("aa_substitutions") |>
             filter(uniprot_id == "P37023") |>
-            dplyr::as_tibble()
+            dplyr::collect()
 
 plot_clinvar(uniprotId = "P37023",
-                am_table = am_table,
-                cv_table = clinvar_data)
+             am_table = am_table,
+             cv_table = clinvar_data)
 
 }

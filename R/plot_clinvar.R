@@ -60,6 +60,7 @@
 #' @importFrom BiocBaseUtils isCharacter
 #' @import ggplot2
 #' @import dplyr
+#' @importFrom utils data
 #'
 #' @export
 plot_clinvar <-
@@ -76,13 +77,13 @@ plot_clinvar <-
 
         am_table <- db_connect() |>
             tbl("aa_substitutions") |>
-            filter(uniprot_id == uniprotId) |>
+            filter(.data$uniprot_id == uniprotId) |>
             dplyr::as_tibble()
 
     } else {
         # Take user-defined am_table and filter for the uniprotId
         am_table <- am_table |>
-            filter(uniprot_id == uniprotId)
+            filter(.data$uniprot_id == uniprotId)
     }
 
     # cv_table
@@ -96,12 +97,12 @@ plot_clinvar <-
         clinvar_data <- data_env[["clinvar_data"]]
 
         cv_table <-  clinvar_data |>
-            filter(uniprot_id == uniprotId)
+            filter(.data$uniprot_id == uniprotId)
 
     } else {
     # Take user-defined cv_table and filter for the uniprotId
         cv_table <- cv_table |>
-            filter(uniprot_id == uniprotId)
+            filter(.data$uniprot_id == uniprotId)
     }
 
     # Check that protein exists in ClinVar and AlphaMissense data
@@ -151,35 +152,40 @@ plot_clinvar <-
 
     # Grab the thresholds for AM pathogenicity to plot
     am_cutoff <- c_combo |>
-        filter(am_class == "ambiguous") |>
+        filter(.data$am_class == "ambiguous") |>
         select(.data$am_pathogenicity) |>
         summarise(
-            path_cutoff = max(am_pathogenicity),
-            benign_cutoff = min(am_pathogenicity)
+            path_cutoff = max(.data$am_pathogenicity),
+            benign_cutoff = min(.data$am_pathogenicity)
         )
 
     # Add color code matching AM and CV labels
     c_combo <- c_combo |>
         mutate(code_color = case_when(
-                !is.na(cv_class) & cv_class == "0" ~ "CV benign",
-                !is.na(cv_class) & cv_class == "1" ~ "CV pathogenic",
-                is.na(cv_class) & am_class == "pathogenic" ~ "AM pathogenic",
-                is.na(cv_class) & am_class == "benign" ~ "AM benign",
-                is.na(cv_class) & am_class == "ambiguous" ~ "AM ambiguous"
+                !is.na(.data$cv_class) & .data$cv_class == "0" ~
+                    "CV benign",
+                !is.na(.data$cv_class) & .data$cv_class == "1" ~
+                    "CV pathogenic",
+                is.na(.data$cv_class) & .data$am_class == "pathogenic" ~
+                    "AM pathogenic",
+                is.na(.data$cv_class) & .data$am_class == "benign" ~
+                    "AM benign",
+                is.na(.data$cv_class) & .data$am_class == "ambiguous" ~
+                    "AM ambiguous"
                 )
             ) |>
         arrange(.data$code_color)
 
     # Plot sequence window
     plot <- c_combo |>
-        ggplot(aes(aa_pos, am_pathogenicity)) +
+        ggplot(aes(.data$aa_pos, .data$am_pathogenicity)) +
                 geom_point(
                 aes(
-                    shape = code_color,
-                    color = code_color,
-                    size = code_color,
-                    fill = code_color,
-                    stroke = code_color
+                    shape = .data$code_color,
+                    color = .data$code_color,
+                    size = .data$code_color,
+                    fill = .data$code_color,
+                    stroke = .data$code_color
                 )
             ) +
             scale_shape_manual(
