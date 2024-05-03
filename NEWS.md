@@ -1,5 +1,7 @@
 # AlphaMissenseR 1.0.0
 
+* (v. 0.99.21) Update Zenodo data source to record 10813168, with more
+  accessible 'CC-BY-4.0' license.
 * (v. 0.99.16) Housekeeping
   - Order vignettes introduction, visualization, issues.
   - Use rjsoncons (>= 1.0.1), so that jsonlite is not a hard dependency.

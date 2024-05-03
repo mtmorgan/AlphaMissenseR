@@ -1,5 +1,5 @@
 test_that("ALPHAMISSENSE_RECORD is defined", {
-    expect_identical(ALPHAMISSENSE_RECORD, "8360242")
+    expect_identical(ALPHAMISSENSE_RECORD, "10813168")
 })
 
 test_that("'am_record_json()' returns", {
@@ -11,7 +11,7 @@ test_that("'am_data_license()' reports appropriate license", {
     output <- capture.output({
         result <- am_data_license(ALPHAMISSENSE_RECORD)
     })
-    expect_identical(toupper(result), "CC-BY-NC-SA-4.0")
+    expect_identical(toupper(result), "CC-BY-4.0")
     expect_true(nzchar(output))
 })
 
