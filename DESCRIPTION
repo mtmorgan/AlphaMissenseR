@@ -1,6 +1,6 @@
 Package: AlphaMissenseR
 Title: Accessing AlphaMissense Data Resources in R
-Version: 0.99.21
+Version: 1.1.1
 Authors@R:
     c(person(
         "Martin", "Morgan", role = c("aut", "cre"),
@@ -28,7 +28,7 @@ Description:
     outlines how a variant of AlphaFold / DeepMind was used to predict
     missense variant pathogenicity. Supporting data on Zenodo
     <https://zenodo.org/record/10813168> include, for instance, 71M
-    variants across hg19 and hg38 genome builds. The 'AlphaMissense'
+    variants across hg19 and hg38 genome builds. The 'AlphaMissenseR'
     package allows ready access to the data, downloading individual
     files to DuckDB databases for exploration and integration into *R*
     and *Bioconductor* workflows.
