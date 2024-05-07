@@ -2,20 +2,22 @@
 % Please edit documentation in R/plot_clinvar.R
 \name{plot_clinvar}
 \alias{plot_clinvar}
-\title{Integrate ClinVar Labels with AlphaMissense Pathogenicity Scores}
+\title{Integrate ClinVar Labels with AlphaMissense Pathogenicity
+Scores}
 \usage{
 plot_clinvar(uniprotId, am_table, cv_table)
 }
 \arguments{
-\item{uniprotId}{a string with a valid UniProt accession identifier.}
+\item{uniprotId}{a string with a valid UniProt accession
+identifier.}
 
 \item{am_table}{a table derived from \code{am_data("aa_substitution")}.
 Alternatively, a user-defined tibble or data.frame.}
 
-\item{cv_table}{a table containing ClinVar information derived from the
-supplemental table of the AlphaMissense
-\href{https://www.science.org/doi/10.1126/science.adg7492}{[2023]} paper.
-Alternatively, a user-defined tibble or data.frame.}
+\item{cv_table}{a table containing ClinVar information derived from
+the supplemental table of the AlphaMissense
+\href{https://www.science.org/doi/10.1126/science.adg7492}{[2023]}
+paper.  Alternatively, a user-defined tibble or data.frame.}
 }
 \value{
 \code{plot_clinvar()} returns a \code{ggplot} object which overlays ClinVar
@@ -35,9 +37,9 @@ visualization.
 For \code{am_table}, columns must include:
 \itemize{
 \item \code{uniprot_id}: UniProt accession identifier.
-\item \code{protein_variant}: variant identifier string, with protein position in
-the middle, and the reference and mutant amino acid residues
-to the left and right of the position, respectively.
+\item \code{protein_variant}: variant identifier string, with protein
+position in the middle, and the reference and mutant amino acid
+residues to the left and right of the position, respectively.
 \item \code{am_class}: AlphaMissense classification of either "benign",
 "ambiguous", or "pathogenic".
 \item \code{am_pathogenicity}: AlphaMissense predicted score.
@@ -46,8 +48,10 @@ to the left and right of the position, respectively.
 For \code{cv_table}, columns must include:
 \itemize{
 \item \code{uniprot_id}: UniProt accession identifier, matching \code{am_table}.
-\item \code{protein_variant}: variant identifier string, matching \code{am_table} format.
-\item \code{cv_class}: binary ClinVar classification of 0 (benign) or 1 (pathogenic).
+\item \code{protein_variant}: variant identifier string, matching \code{am_table}
+format.
+\item \code{cv_class}: binary ClinVar classification of 0 (benign) or 1
+(pathogenic).
 }
 }
 \examples{

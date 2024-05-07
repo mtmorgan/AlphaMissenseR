@@ -1,39 +1,43 @@
 #' @rdname plot_clinvar
 #'
-#' @title Integrate ClinVar Labels with AlphaMissense Pathogenicity Scores
+#' @title Integrate ClinVar Labels with AlphaMissense Pathogenicity
+#'     Scores
 #'
 #' @description `plot_clinvar()` integrates ClinVar classifications
-#'      with AlphaMissense predicted scores derived from
-#'      `am_data("aa_substitutions")` and returns a ggplot object for
-#'      visualization.
-#'
-#' @param uniprotId a string with a valid UniProt accession identifier.
-#'
-#' @param am_table a table derived from `am_data("aa_substitution")`.
-#'      Alternatively, a user-defined tibble or data.frame.
-#'
-#' @param cv_table a table containing ClinVar information derived from the
-#'      supplemental table of the AlphaMissense
-#'      [\[2023\]](https://www.science.org/doi/10.1126/science.adg7492) paper.
-#'      Alternatively, a user-defined tibble or data.frame.
+#'     with AlphaMissense predicted scores derived from
+#'     `am_data("aa_substitutions")` and returns a ggplot object for
+#'     visualization.
 #'
 #' @details
 #'
 #' For `am_table`, columns must include:
 #'
-#'- `uniprot_id`: UniProt accession identifier.
-#'- `protein_variant`: variant identifier string, with protein position in
-#'  the middle, and the reference and mutant amino acid residues
-#'  to the left and right of the position, respectively.
-#'- `am_class`: AlphaMissense classification of either "benign",
+#' - `uniprot_id`: UniProt accession identifier.
+#' - `protein_variant`: variant identifier string, with protein
+#'  position in the middle, and the reference and mutant amino acid
+#'  residues to the left and right of the position, respectively.
+#' - `am_class`: AlphaMissense classification of either "benign",
 #'  "ambiguous", or "pathogenic".
-#'- `am_pathogenicity`: AlphaMissense predicted score.
+#' - `am_pathogenicity`: AlphaMissense predicted score.
 #'
 #' For `cv_table`, columns must include:
 #'
 #'- `uniprot_id`: UniProt accession identifier, matching `am_table`.
-#'- `protein_variant`: variant identifier string, matching `am_table` format.
-#'- `cv_class`: binary ClinVar classification of 0 (benign) or 1 (pathogenic).
+#' - `protein_variant`: variant identifier string, matching `am_table`
+#' format.
+#' - `cv_class`: binary ClinVar classification of 0 (benign) or 1
+#' (pathogenic).
+#'
+#' @param uniprotId a string with a valid UniProt accession
+#'     identifier.
+#'
+#' @param am_table a table derived from `am_data("aa_substitution")`.
+#'     Alternatively, a user-defined tibble or data.frame.
+#'
+#' @param cv_table a table containing ClinVar information derived from
+#'     the supplemental table of the AlphaMissense
+#'     [\[2023\]](https://www.science.org/doi/10.1126/science.adg7492)
+#'     paper.  Alternatively, a user-defined tibble or data.frame.
 #'
 #' @return
 #'
@@ -78,7 +82,7 @@ plot_clinvar <-
         am_table <- db_connect() |>
             tbl("aa_substitutions") |>
             filter(.data$uniprot_id == uniprotId) |>
-            dplyr::as_tibble()
+            dplyr::collect()
 
     } else {
         # Take user-defined am_table and filter for the uniprotId
