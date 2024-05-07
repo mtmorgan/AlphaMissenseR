@@ -23,7 +23,7 @@ test_that("af_predictions() works", {
         tbl <- af_predictions(c("P35557", "xyz")),
         "1 of 2 uniprot accessions not found\n  'xyz'"
     )
-    expect_identical(dim(tbl), c(1L, 20L))
+    expect_identical(dim(tbl), c(1L, 21L))
 })
 
 test_that("af_colorfunc_by_position() works", {
