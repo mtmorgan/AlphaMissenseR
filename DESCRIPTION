@@ -36,7 +36,7 @@ License: Artistic-2.0
 URL: https://mtmorgan.github.io/AlphaMissenseR/
 BugReports: https://github.com/mtmorgan/AlphaMissenseR/issues
 Depends:
-    dplyr
+    R (>= 4.3), dplyr
 Imports:
     rjsoncons (>= 1.0.1), DBI, duckdb (>= 0.9.1), rlang,
     curl, BiocFileCache, spdl, memoise, BiocBaseUtils,
