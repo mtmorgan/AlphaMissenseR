@@ -1,43 +1,42 @@
 #' @rdname plot_clinvar
 #'
-#' @title Integrate ClinVar Labels with AlphaMissense Pathogenicity
-#'     Scores
+#' @title Integrate ClinVar Labels with AlphaMissense Pathogenicity Scores
 #'
-#' @description `plot_clinvar()` integrates ClinVar classifications
-#'     with AlphaMissense predicted scores derived from
-#'     `am_data("aa_substitutions")` and returns a ggplot object for
-#'     visualization.
+#' @description `plot_clinvar()` integrates ClinVar classifications with
+#'    AlphaMissense predicted scores derived from `am_data("aa_substitutions")`
+#'    and returns a ggplot object for visualization.
 #'
 #' @details
 #'
-#' For `am_table`, columns must include:
+#' For `alphamissense_table`, columns must include:
 #'
 #' - `uniprot_id`: UniProt accession identifier.
 #' - `protein_variant`: variant identifier string, with protein
-#'  position in the middle, and the reference and mutant amino acid
-#'  residues to the left and right of the position, respectively.
+#'    position in the middle, and the reference and mutant amino acid
+#'    residues to the left and right of the position, respectively.
 #' - `am_class`: AlphaMissense classification of either "benign",
-#'  "ambiguous", or "pathogenic".
+#'    "ambiguous", or "pathogenic".
 #' - `am_pathogenicity`: AlphaMissense predicted score.
 #'
-#' For `cv_table`, columns must include:
+#' For `clinvar_table`, columns must include:
 #'
-#'- `uniprot_id`: UniProt accession identifier, matching `am_table`.
-#' - `protein_variant`: variant identifier string, matching `am_table`
-#' format.
-#' - `cv_class`: binary ClinVar classification of 0 (benign) or 1
-#' (pathogenic).
+#' - `uniprot_id`: UniProt accession identifier, matching `alphamissense_table`.
+#' - `protein_variant`: variant identifier string, matching
+#'    `alphamissense_table` format.
+#' - `cv_class`: binary ClinVar classification of 0 (benign) or 1 (pathogenic).
 #'
 #' @param uniprotId a string with a valid UniProt accession
-#'     identifier.
+#'    identifier.
 #'
-#' @param am_table a table derived from `am_data("aa_substitution")`.
-#'     Alternatively, a user-defined tibble or data.frame.
+#' @param alphamissense_data a table containing AlphaMissense predictions for
+#'    protein variants. By default, the table is derived from
+#'    `am_data("aa_substitution")`. Alternatively, a user-defined
+#'    [tibble::tibble()] or [base::data.frame()] can be supplied.
 #'
-#' @param cv_table a table containing ClinVar information derived from
-#'     the supplemental table of the AlphaMissense
-#'     [\[2023\]](https://www.science.org/doi/10.1126/science.adg7492)
-#'     paper.  Alternatively, a user-defined tibble or data.frame.
+#' @param clinvar_data a table containing ClinVar information. By default, the
+#'    table is derived from the supplemental data of the AlphaMissense paper.
+#'    Alternatively, a user-defined [tibble::tibble()] or [base::data.frame()]
+#'    can be supplied.
 #'
 #' @return
 #'
@@ -52,14 +51,17 @@
 #'
 #' data(clinvar_data)
 #'
-#' am_table <- db_connect() |>
-#'             tbl("aa_substitutions") |>
-#'             filter(uniprot_id == "P37023") |>
-#'             dplyr::collect()
+#' alphamissense_table <- am_data("aa_substitutions") |>
+#'                         filter(uniprot_id == "P37023") |>
+#'                         dplyr::collect()
 #'
 #' plot_clinvar(uniprotId = "P37023",
-#'              am_table = am_table,
-#'              cv_table = clinvar_data)
+#'              alphamissense_table = alphamissense_table,
+#'              clinvar_table = clinvar_data)
+#'
+#' @references Cheng et al.,
+#' Accurate proteome-wide missense variant effect prediction with AlphaMissense.
+#' \emph{Science} 381, eadg7492. DOI:10.1126/science.adg7492.
 #'
 #' @importFrom BiocBaseUtils isCharacter
 #' @import ggplot2
@@ -68,78 +70,78 @@
 #'
 #' @export
 plot_clinvar <-
-    function(uniprotId, am_table, cv_table)
+    function(uniprotId, alphamissense_table, clinvar_table)
 {
     stopifnot(isCharacter(uniprotId))
 
-    # am_table
-    # If am_table not provided, load default
-    if (missing(am_table)) {
-        message("'am_table' not provided, using default ",
+    # alphamissense_table
+    # If alphamissense_table not provided, load default
+    if (missing(alphamissense_table)) {
+        message("'alphamissense_table' not provided, using default ",
                 "'am_data(\"aa_substitution\")' table accessed through ",
                 "the AlphaMissenseR package.")
 
-        am_table <- db_connect() |>
-            tbl("aa_substitutions") |>
+        alphamissense_table <- am_data("aa_substitutions") |>
             filter(.data$uniprot_id == uniprotId) |>
             dplyr::collect()
 
     } else {
-        # Take user-defined am_table and filter for the uniprotId
-        am_table <- am_table |>
+        # Take user-defined alphamissense_table and filter for the uniprotId
+        alphamissense_table <- alphamissense_table |>
             filter(.data$uniprot_id == uniprotId)
     }
 
-    # cv_table
-    # If cv_table not provided, load default
-    if (missing(cv_table)) {
-        message("'cv_table' not provided, using default ",
+    # clinvar_table
+    # If clinvar_table not provided, load default
+    if (missing(clinvar_table)) {
+        message("'clinvar_table' not provided, using default ",
                 "ClinVar dataset in AlphaMissenseR package")
 
         data_env <- new.env(parent = emptyenv())
         data("clinvar_data", envir = data_env, package = "AlphaMissenseR")
         clinvar_data <- data_env[["clinvar_data"]]
 
-        cv_table <-  clinvar_data |>
+        clinvar_table <-  clinvar_data |>
             filter(.data$uniprot_id == uniprotId)
 
     } else {
-    # Take user-defined cv_table and filter for the uniprotId
-        cv_table <- cv_table |>
+    # Take user-defined clinvar_table and filter for the uniprotId
+        clinvar_table <- clinvar_table |>
             filter(.data$uniprot_id == uniprotId)
     }
 
     # Check that protein exists in ClinVar and AlphaMissense data
-    if (!nrow(cv_table)) {
+    if (!nrow(clinvar_table)) {
         stop(
             "No ClinVar information found for the protein accession. ",
             "Check that the UniProt ID is correct."
         )
     }
 
-    if (!nrow(am_table)) {
+    if (!nrow(alphamissense_table)) {
         stop(
             "No AlphaMissense information found for the protein accession.",
             " Check that the UniProt ID is correct."
         )
     }
 
-    # Validity check for am_table and cv_table
+    # Validity check for alphamissense_table and clinvar_table
     am_required_columns <- c("uniprot_id", "protein_variant",
                             "am_class", "am_pathogenicity")
     stopifnot(
-        inherits(am_table, "tbl") || inherits(am_table, "data.frame"),
-        all(am_required_columns %in% colnames(am_table))
+        inherits(alphamissense_table, "tbl") ||
+            inherits(alphamissense_table, "data.frame"),
+        all(am_required_columns %in% colnames(alphamissense_table))
     )
 
     cv_required_columns <- c("uniprot_id", "protein_variant", "cv_class")
     stopifnot(
-        inherits(cv_table, "tbl") || inherits(cv_table, "data.frame"),
-        all(cv_required_columns %in% colnames(cv_table))
+        inherits(clinvar_table, "tbl") || inherits(clinvar_table, "data.frame"),
+        all(cv_required_columns %in% colnames(clinvar_table))
     )
 
     # Join databases by protein_variant
-    am_table <- am_table |>
+    alphamissense_table <- alphamissense_table |>
         mutate(
             aa_pos = as.numeric(
                 gsub(".*?([0-9]+).*", "\\1", .data$protein_variant)
@@ -147,8 +149,8 @@ plot_clinvar <-
         )
 
     c_combo <- left_join(
-        am_table,
-        cv_table,
+        alphamissense_table,
+        clinvar_table,
         by = c('uniprot_id', 'protein_variant')
     )
 

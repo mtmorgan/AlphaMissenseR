@@ -2,22 +2,23 @@
 % Please edit documentation in R/plot_clinvar.R
 \name{plot_clinvar}
 \alias{plot_clinvar}
-\title{Integrate ClinVar Labels with AlphaMissense Pathogenicity
-Scores}
+\title{Integrate ClinVar Labels with AlphaMissense Pathogenicity Scores}
 \usage{
-plot_clinvar(uniprotId, am_table, cv_table)
+plot_clinvar(uniprotId, alphamissense_table, clinvar_table)
 }
 \arguments{
 \item{uniprotId}{a string with a valid UniProt accession
 identifier.}
 
-\item{am_table}{a table derived from \code{am_data("aa_substitution")}.
-Alternatively, a user-defined tibble or data.frame.}
+\item{alphamissense_data}{a table containing AlphaMissense predictions for
+protein variants. By default, the table is derived from
+\code{am_data("aa_substitution")}. Alternatively, a user-defined
+\code{\link[tibble:tibble]{tibble::tibble()}} or \code{\link[base:data.frame]{base::data.frame()}} can be supplied.}
 
-\item{cv_table}{a table containing ClinVar information derived from
-the supplemental table of the AlphaMissense
-\href{https://www.science.org/doi/10.1126/science.adg7492}{[2023]}
-paper.  Alternatively, a user-defined tibble or data.frame.}
+\item{clinvar_data}{a table containing ClinVar information. By default, the
+table is derived from the supplemental data of the AlphaMissense paper.
+Alternatively, a user-defined \code{\link[tibble:tibble]{tibble::tibble()}} or \code{\link[base:data.frame]{base::data.frame()}}
+can be supplied.}
 }
 \value{
 \code{plot_clinvar()} returns a \code{ggplot} object which overlays ClinVar
@@ -28,13 +29,12 @@ are ClinVar variants colored according to their clinical classification,
 while smaller points in the background are AlphaMissense predictions.
 }
 \description{
-\code{plot_clinvar()} integrates ClinVar classifications
-with AlphaMissense predicted scores derived from
-\code{am_data("aa_substitutions")} and returns a ggplot object for
-visualization.
+\code{plot_clinvar()} integrates ClinVar classifications with
+AlphaMissense predicted scores derived from \code{am_data("aa_substitutions")}
+and returns a ggplot object for visualization.
 }
 \details{
-For \code{am_table}, columns must include:
+For \code{alphamissense_table}, columns must include:
 \itemize{
 \item \code{uniprot_id}: UniProt accession identifier.
 \item \code{protein_variant}: variant identifier string, with protein
@@ -45,26 +45,29 @@ residues to the left and right of the position, respectively.
 \item \code{am_pathogenicity}: AlphaMissense predicted score.
 }
 
-For \code{cv_table}, columns must include:
+For \code{clinvar_table}, columns must include:
 \itemize{
-\item \code{uniprot_id}: UniProt accession identifier, matching \code{am_table}.
-\item \code{protein_variant}: variant identifier string, matching \code{am_table}
-format.
-\item \code{cv_class}: binary ClinVar classification of 0 (benign) or 1
-(pathogenic).
+\item \code{uniprot_id}: UniProt accession identifier, matching \code{alphamissense_table}.
+\item \code{protein_variant}: variant identifier string, matching
+\code{alphamissense_table} format.
+\item \code{cv_class}: binary ClinVar classification of 0 (benign) or 1 (pathogenic).
 }
 }
 \examples{
 
 data(clinvar_data)
 
-am_table <- db_connect() |>
-            tbl("aa_substitutions") |>
-            filter(uniprot_id == "P37023") |>
-            dplyr::collect()
+alphamissense_table <- am_data("aa_substitutions") |>
+                        filter(uniprot_id == "P37023") |>
+                        dplyr::collect()
 
 plot_clinvar(uniprotId = "P37023",
-             am_table = am_table,
-             cv_table = clinvar_data)
+             alphamissense_table = alphamissense_table,
+             clinvar_table = clinvar_data)
 
+}
+\references{
+Cheng et al.,
+Accurate proteome-wide missense variant effect prediction with AlphaMissense.
+\emph{Science} 381, eadg7492. DOI:10.1126/science.adg7492.
 }
