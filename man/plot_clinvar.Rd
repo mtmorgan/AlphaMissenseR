@@ -56,12 +56,12 @@ For \code{clinvar_table}, columns must include:
 data(clinvar_data)
 
 alphamissense_table <- am_data("aa_substitutions") |>
-                            filter(uniprot_id == "P37023") |>
-                            dplyr::collect()
+                           filter(uniprot_id == "P37023") |>
+                           dplyr::collect()
 
 plot_clinvar(uniprotId = "P37023",
-             alphamissense_table = alphamissense_table,
-             clinvar_table = clinvar_data)
+   alphamissense_table = alphamissense_table,
+   clinvar_table = clinvar_data)
 
 }
 \references{

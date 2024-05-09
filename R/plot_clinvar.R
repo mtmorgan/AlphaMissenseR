@@ -48,12 +48,12 @@
 #' data(clinvar_data)
 #'
 #' alphamissense_table <- am_data("aa_substitutions") |>
-#'                             filter(uniprot_id == "P37023") |>
-#'                             dplyr::collect()
+#'                            filter(uniprot_id == "P37023") |>
+#'                            dplyr::collect()
 #'
 #' plot_clinvar(uniprotId = "P37023",
-#'              alphamissense_table = alphamissense_table,
-#'              clinvar_table = clinvar_data)
+#'    alphamissense_table = alphamissense_table,
+#'    clinvar_table = clinvar_data)
 #'
 #' @references Cheng et al.,
 #' Accurate proteome-wide missense variant effect prediction with AlphaMissense.
@@ -73,9 +73,8 @@ plot_clinvar <-
     # Load and check AM and CV tables
     alphamissense_table <- .check_am_table(am_table = alphamissense_table,
                                             uID = uniprotId)
-
     clinvar_table <- .check_cv_table(cv_table = clinvar_table,
-                                     uID = uniprotId)
+                                    uID = uniprotId)
 
     # Validity check for alphamissense_table and clinvar_table
     if (!nrow(clinvar_table)) {
