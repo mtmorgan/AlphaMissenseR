@@ -25,35 +25,31 @@
 #'    `alphamissense_table` format.
 #' - `cv_class`: binary ClinVar classification of 0 (benign) or 1 (pathogenic).
 #'
-#' @param uniprotId a string with a valid UniProt accession
-#'    identifier.
+#' @param uniprotId a string with a valid UniProt accession identifier.
 #'
-#' @param alphamissense_data a table containing AlphaMissense predictions for
+#' @param alphamissense_table a table containing AlphaMissense predictions for
 #'    protein variants. By default, the table is derived from
 #'    `am_data("aa_substitution")`. Alternatively, a user-defined
 #'    [tibble::tibble()] or [base::data.frame()] can be supplied.
 #'
-#' @param clinvar_data a table containing ClinVar information. By default, the
+#' @param clinvar_table a table containing ClinVar information. By default, the
 #'    table is derived from the supplemental data of the AlphaMissense paper.
 #'    Alternatively, a user-defined [tibble::tibble()] or [base::data.frame()]
 #'    can be supplied.
 #'
-#' @return
-#'
-#' `plot_clinvar()` returns a `ggplot` object which overlays ClinVar
-#' classifications onto AlphaMissense predicted scores. Blue, gray, and red
-#' colors represent pathogenicity classifications for "likely benign",
-#' "ambiguous", or "likely pathogenic", respectively. Large, bolded points
-#' are ClinVar variants colored according to their clinical classification,
-#' while smaller points in the background are AlphaMissense predictions.
+#' @return `plot_clinvar()` returns a `ggplot` object which overlays ClinVar
+#'    classifications onto AlphaMissense predicted scores. Blue, gray, and red
+#'    colors represent pathogenicity classifications for "likely benign",
+#'    "ambiguous", or "likely pathogenic", respectively. Large, bolded points
+#'    are ClinVar variants colored according to their clinical classification,
+#'    while smaller points in the background are AlphaMissense predictions.
 #'
 #' @examples
-#'
 #' data(clinvar_data)
 #'
 #' alphamissense_table <- am_data("aa_substitutions") |>
-#'                         filter(uniprot_id == "P37023") |>
-#'                         dplyr::collect()
+#'                             filter(uniprot_id == "P37023") |>
+#'                             dplyr::collect()
 #'
 #' plot_clinvar(uniprotId = "P37023",
 #'              alphamissense_table = alphamissense_table,
