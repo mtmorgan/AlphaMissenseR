@@ -7,15 +7,14 @@
 plot_clinvar(uniprotId, alphamissense_table, clinvar_table)
 }
 \arguments{
-\item{uniprotId}{a string with a valid UniProt accession
-identifier.}
+\item{uniprotId}{a string with a valid UniProt accession identifier.}
 
-\item{alphamissense_data}{a table containing AlphaMissense predictions for
+\item{alphamissense_table}{a table containing AlphaMissense predictions for
 protein variants. By default, the table is derived from
 \code{am_data("aa_substitution")}. Alternatively, a user-defined
 \code{\link[tibble:tibble]{tibble::tibble()}} or \code{\link[base:data.frame]{base::data.frame()}} can be supplied.}
 
-\item{clinvar_data}{a table containing ClinVar information. By default, the
+\item{clinvar_table}{a table containing ClinVar information. By default, the
 table is derived from the supplemental data of the AlphaMissense paper.
 Alternatively, a user-defined \code{\link[tibble:tibble]{tibble::tibble()}} or \code{\link[base:data.frame]{base::data.frame()}}
 can be supplied.}
@@ -54,12 +53,11 @@ For \code{clinvar_table}, columns must include:
 }
 }
 \examples{
-
 data(clinvar_data)
 
 alphamissense_table <- am_data("aa_substitutions") |>
-                        filter(uniprot_id == "P37023") |>
-                        dplyr::collect()
+                            filter(uniprot_id == "P37023") |>
+                            dplyr::collect()
 
 plot_clinvar(uniprotId = "P37023",
              alphamissense_table = alphamissense_table,

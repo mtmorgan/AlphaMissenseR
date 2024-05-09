@@ -45,7 +45,7 @@
 
 
 .process_data_for_plot_clinvar <-
-    function(am_table = alphamissense_table, cv_table = clinvar_table)
+    function(am_table, cv_table)
 {
     # grab amino acid positions
     am_table <- am_table |>
