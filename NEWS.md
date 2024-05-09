@@ -1,3 +1,9 @@
+# AlphaMissenseR 1.2.0
+
+* (v. 1.1.2) `af_predictions()` returns a tibble with 21 columns,
+  instead of 20. Merges
+  <https://github.com/mtmorgan/AlphaMissenseR/pull/3>.
+
 # AlphaMissenseR 1.0.0
 
 * (v. 0.99.21) Update Zenodo data source to record 10813168, with more
