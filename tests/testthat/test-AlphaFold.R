@@ -1,5 +1,7 @@
 test_that("AlphaFold endpoints exist", {
-    skip_if_offline()
+    ## skip_if_offline() also checks for environment variable 'NOT_CRAN'
+    skip_if_not_installed("curl")
+    skip_if_not(!is.null(curl::nslookup("captive.apple.com")))
 
     ## af_predictions()
     url <- whisker.render(ALPHAFOLD_PREDICTION, c(qualifier = "P35557"))
@@ -12,7 +14,9 @@ test_that("AlphaFold endpoints exist", {
 })
 
 test_that("af_predictions() works", {
-    skip_if_offline()
+    ## skip_if_offline() also checks for environment variable 'NOT_CRAN'
+    skip_if_not_installed("curl")
+    skip_if_not(!is.null(curl::nslookup("captive.apple.com")))
 
     expect_error(
         af_predictions(character()),
@@ -23,7 +27,7 @@ test_that("af_predictions() works", {
         tbl <- af_predictions(c("P35557", "xyz")),
         "1 of 2 uniprot accessions not found\n  'xyz'"
     )
-    expect_identical(dim(tbl), c(1L, 20L))
+    expect_identical(dim(tbl), c(1L, 21L))
 })
 
 test_that("af_colorfunc_by_position() works", {
@@ -63,8 +67,11 @@ test_that("af_colorfunc_by_position() works", {
 })
 
 test_that("af_prediction_view() returns an appropriate object", {
-    skip_if_offline()
-    ## assumes Suggests: r3dmol, bio3d are installed
+    skip_if_not_installed("curl")
+    skip_if_not(!is.null(curl::nslookup("captive.apple.com")))
+
+    skip_if_not_installed("r3dmol") # Suggests: packages
+    skip_if_not_installed("bio3d")
 
     P35557 <-
         am_data("hg38") |>
