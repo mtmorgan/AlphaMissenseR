@@ -12,12 +12,12 @@ plot_clinvar(uniprotId, alphamissense_table, clinvar_table)
 \item{alphamissense_table}{a table containing AlphaMissense predictions for
 protein variants. By default, the table is derived from
 \code{am_data("aa_substitution")}. Alternatively, a user-defined
-\code{\link[tibble:tibble]{tibble::tibble()}} or \code{\link[base:data.frame]{base::data.frame()}} can be supplied.}
+\code{\link{tibble}} or \code{\link{data.frame}} can be supplied.}
 
 \item{clinvar_table}{a table containing ClinVar information. By default, the
 table is derived from the supplemental data of the AlphaMissense paper.
-Alternatively, a user-defined \code{\link[tibble:tibble]{tibble::tibble()}} or \code{\link[base:data.frame]{base::data.frame()}}
-can be supplied.}
+Alternatively, a user-defined \code{\link{tibble}} or
+\code{\link{data.frame}} can be supplied.}
 }
 \value{
 \code{plot_clinvar()} returns a \code{ggplot} object which overlays ClinVar

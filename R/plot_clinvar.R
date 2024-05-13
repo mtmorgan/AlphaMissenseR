@@ -166,12 +166,12 @@
 #' @param alphamissense_table a table containing AlphaMissense predictions for
 #'    protein variants. By default, the table is derived from
 #'    `am_data("aa_substitution")`. Alternatively, a user-defined
-#'    [tibble::tibble()] or [base::data.frame()] can be supplied.
+#'    \code{\link{tibble}} or \code{\link{data.frame}} can be supplied.
 #'
 #' @param clinvar_table a table containing ClinVar information. By default, the
 #'    table is derived from the supplemental data of the AlphaMissense paper.
-#'    Alternatively, a user-defined [tibble::tibble()] or [base::data.frame()]
-#'    can be supplied.
+#'    Alternatively, a user-defined \code{\link{tibble}} or
+#'    \code{\link{data.frame}} can be supplied.
 #'
 #' @return `plot_clinvar()` returns a `ggplot` object which overlays ClinVar
 #'    classifications onto AlphaMissense predicted scores. Blue, gray, and red
