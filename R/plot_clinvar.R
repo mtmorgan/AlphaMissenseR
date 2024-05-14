@@ -280,8 +280,8 @@ filter_am_table <-
         ## Check if table is empty after filtering
         ## This will work for a tibble or a data.frame
         if (!nrow(alphamissense_table)) {
-            stop("No AlphaMissense information found for the protein accession.",
-                 " Check that the UniProt ID is correct.")
+            stop("No AlphaMissense information found for the protein ",
+            "accession. Check that the UniProt ID is correct.")
         }
 
         alphamissense_table
