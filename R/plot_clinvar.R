@@ -1,195 +1,144 @@
-#' Filter the AlphaMissense table with uniprotID
-filter_am_table <-
-    function(am_table, uID)
-{
-    ## Check if am_table is missing
-    if (missing(am_table)) {
-        message(
-            "'alphamissense_table' not provided, using default ",
-            "'am_data(\"aa_substitution\")' table accessed through ",
-            "the AlphaMissenseR package."
-        )
-        am_table <- am_data("aa_substitutions")
-    }
-
-    ## Take alphamissense_table and filter for the uniprotId
-    alphamissense_table <- am_table |>
-            filter(.data$uniprot_id == uID) |>
-            dplyr::as_tibble()
-
-    ## Check if table is empty after filtering
-    ## This will work for a tibble or a data.frame
-    if (!nrow(alphamissense_table)) {
-        stop("No AlphaMissense information found for the protein accession.",
-             " Check that the UniProt ID is correct.")
-    }
-
-    alphamissense_table
-}
-
-#' Filter the clinvar table with uniprot ID
-filter_cv_table <-
-    function(cv_table, uID)
-{
-    if (missing(cv_table)) {
-        message("'clinvar_table' not provided, using default ",
-                "ClinVar dataset in AlphaMissenseR package")
-
-        data_env <- new.env(parent = emptyenv())
-        data("clinvar_data", envir = data_env, package = "AlphaMissenseR")
-        cv_table <- data_env[["clinvar_data"]]
-    }
-
-    ## Take clinvar_table and filter for the uniprotId
-    clinvar_table <- cv_table |>
-        filter(.data$uniprot_id == uID)
-
-    ## Check if the table is empty after filtering
-    if (!nrow(clinvar_table)) {
-        stop("No ClinVar information found for the protein accession. ",
-             "Check that the UniProt ID is correct.")
-    }
-
-    clinvar_table
-}
-
+#' @noRd
+#'
 #' Prepare data for the function plot_clinvar
 prepare_data_for_plot_clinvar <-
     function(am_table, cv_table)
-{
-    ## grab amino acid positions
-    am_table <- am_table |>
-        mutate(
-            aa_pos = as.numeric(
-                gsub(".*?([0-9]+).*", "\\1", .data$protein_variant)
+    {
+        ## grab amino acid positions
+        am_table <- am_table |>
+            mutate(
+                aa_pos = as.numeric(
+                    gsub(".*?([0-9]+).*", "\\1", .data$protein_variant)
+                )
             )
+
+        ## join datasets
+        combined_data <- left_join(
+            am_table,
+            cv_table,
+            by = c('uniprot_id', 'protein_variant')
         )
 
-    ## join datasets
-    combined_data <- left_join(
-        am_table,
-        cv_table,
-        by = c('uniprot_id', 'protein_variant')
-    )
+        ## add color code matching AM and CV labels
+        combined_data <-
+            combined_data |>
+            mutate(
+                code_color = case_when(
+                    !is.na(.data$cv_class) & .data$cv_class == "0" ~
+                        "CV benign",
+                    !is.na(.data$cv_class) & .data$cv_class == "1" ~
+                        "CV pathogenic",
+                    is.na(.data$cv_class) & .data$am_class == "pathogenic" ~
+                        "AM pathogenic",
+                    is.na(.data$cv_class) & .data$am_class == "benign" ~
+                        "AM benign",
+                    is.na(.data$cv_class) & .data$am_class == "ambiguous" ~
+                        "AM ambiguous"
+                )) |>
+            mutate_at(vars(code_color), factor) |>
+            arrange(.data$code_color)
 
-    ## add color code matching AM and CV labels
-    combined_data <-
+        ## Grab the thresholds for AM pathogenicity to plot
         combined_data |>
-        mutate(
-            code_color = case_when(
-                !is.na(.data$cv_class) & .data$cv_class == "0" ~
-                    "CV benign",
-                !is.na(.data$cv_class) & .data$cv_class == "1" ~
-                    "CV pathogenic",
-                is.na(.data$cv_class) & .data$am_class == "pathogenic" ~
-                    "AM pathogenic",
-                is.na(.data$cv_class) & .data$am_class == "benign" ~
-                    "AM benign",
-                is.na(.data$cv_class) & .data$am_class == "ambiguous" ~
-                    "AM ambiguous"
-            )) |>
-        mutate_at(vars(code_color), factor) |>
-        arrange(.data$code_color)
+            group_by(.data$am_class) |>
+            mutate(max = max(.data$am_pathogenicity, na.rm=TRUE),
+                   min = min(.data$am_pathogenicity, na.rm=TRUE)) |>
+            ungroup()
+    }
 
-    ## Grab the thresholds for AM pathogenicity to plot
-    combined_data |>
-        group_by(.data$am_class) |>
-        mutate(max = max(.data$am_pathogenicity, na.rm=TRUE),
-               min = min(.data$am_pathogenicity, na.rm=TRUE)) |>
-        ungroup()
-}
-
+#' @noRd
+#'
 #' Create a ClinVar plotting function using ggplot
 create_clinvar_plot <-
     function(combined_table, uId)
-{
-    ## Create named vectors for all scale layers
-    colScale <- scale_colour_manual(
-        name = "code_color",
-        values = c("AM ambiguous" = "gray",
-                   "AM benign" = "#89d5f5",
-                   "AM pathogenic" = "#f56c6c",
-                   "CV benign" = "black",
-                   "CV pathogenic" = "black"))
+    {
+        ## Create named vectors for all scale layers
+        colScale <- scale_colour_manual(
+            name = "code_color",
+            values = c("AM ambiguous" = "gray",
+                       "AM benign" = "#89d5f5",
+                       "AM pathogenic" = "#f56c6c",
+                       "CV benign" = "black",
+                       "CV pathogenic" = "black"))
 
-    fillScale <- scale_fill_manual(
-        name = "code_color",
-        values = c("AM ambiguous" = "gray",
-                   "AM benign" = "#89d5f5",
-                   "AM pathogenic" = "#f56c6c",
-                   "CV benign" = "#007cb0",
-                   "CV pathogenic" = "#c70606"))
+        fillScale <- scale_fill_manual(
+            name = "code_color",
+            values = c("AM ambiguous" = "gray",
+                       "AM benign" = "#89d5f5",
+                       "AM pathogenic" = "#f56c6c",
+                       "CV benign" = "#007cb0",
+                       "CV pathogenic" = "#c70606"))
 
-    shapeScale <- scale_shape_manual(
-        name = "code_color",
-        values = c("AM ambiguous" = 19,
-                   "AM benign" = 19,
-                   "AM pathogenic" = 19,
-                   "CV benign" = 21,
-                   "CV pathogenic" = 21))
+        shapeScale <- scale_shape_manual(
+            name = "code_color",
+            values = c("AM ambiguous" = 19,
+                       "AM benign" = 19,
+                       "AM pathogenic" = 19,
+                       "CV benign" = 21,
+                       "CV pathogenic" = 21))
 
-    sizeScale <- scale_size_manual(
-        name = "code_color",
-        values = c("AM ambiguous" = 2,
-                   "AM benign" = 2,
-                   "AM pathogenic" = 2,
-                   "CV benign" = 4,
-                   "CV pathogenic" = 4))
+        sizeScale <- scale_size_manual(
+            name = "code_color",
+            values = c("AM ambiguous" = 2,
+                       "AM benign" = 2,
+                       "AM pathogenic" = 2,
+                       "CV benign" = 4,
+                       "CV pathogenic" = 4))
 
-    strokeScale <- scale_discrete_manual(
-        name = "code_color",
-        aesthetics = "stroke",
-        values = c("AM ambiguous" = 0,
-                   "AM benign" = 0,
-                   "AM pathogenic" = 0,
-                   "CV benign" = 1.5,
-                   "CV pathogenic" = 1.5))
+        strokeScale <- scale_discrete_manual(
+            name = "code_color",
+            aesthetics = "stroke",
+            values = c("AM ambiguous" = 0,
+                       "AM benign" = 0,
+                       "AM pathogenic" = 0,
+                       "CV benign" = 1.5,
+                       "CV pathogenic" = 1.5))
 
-    cv_plot <- combined_table |>
-        ggplot(aes(.data$aa_pos, .data$am_pathogenicity)) +
-        geom_point(
-            aes(shape = .data$code_color,
-                color = .data$code_color,
-                size = .data$code_color,
-                fill = .data$code_color,
-                stroke = .data$code_color)
-        ) +
-        strokeScale +
-        shapeScale +
-        sizeScale +
-        colScale +
-        fillScale +
-        geom_hline(
-            yintercept = combined_table |>
-                filter(am_class == "pathogenic") |>
-                pull(min) |>
-                unique(),
-            linetype = 2,
-            color = "#c70606"
-        ) +
-        geom_hline(
-            yintercept = combined_table |>
-                filter(am_class == "benign") |>
-                pull(max) |>
-                unique(),
-            linetype = 2,
-            color = "#007cb0"
-        ) +
-        labs(title = paste0("UniProt ID: ", uId)) +
-        xlab("amino acid position") +
-        ylab("AlphaMissense score") +
-        theme_classic() +
-        theme(
-            axis.text.x = element_text(size = 16),
-            axis.text.y = element_text(size = 16),
-            axis.title.y = element_text(size = 16),
-            axis.title.x = element_text(size = 16),
-            legend.title = element_blank(),
-            legend.text = element_text(size = 11)
-        )
+        cv_plot <- combined_table |>
+            ggplot(aes(.data$aa_pos, .data$am_pathogenicity)) +
+            geom_point(
+                aes(shape = .data$code_color,
+                    color = .data$code_color,
+                    size = .data$code_color,
+                    fill = .data$code_color,
+                    stroke = .data$code_color)
+            ) +
+            strokeScale +
+            shapeScale +
+            sizeScale +
+            colScale +
+            fillScale +
+            geom_hline(
+                yintercept = combined_table |>
+                    filter(am_class == "pathogenic") |>
+                    pull(min) |>
+                    unique(),
+                linetype = 2,
+                color = "#c70606"
+            ) +
+            geom_hline(
+                yintercept = combined_table |>
+                    filter(am_class == "benign") |>
+                    pull(max) |>
+                    unique(),
+                linetype = 2,
+                color = "#007cb0"
+            ) +
+            labs(title = paste0("UniProt ID: ", uId)) +
+            xlab("amino acid position") +
+            ylab("AlphaMissense score") +
+            theme_classic() +
+            theme(
+                axis.text.x = element_text(size = 16),
+                axis.text.y = element_text(size = 16),
+                axis.title.y = element_text(size = 16),
+                axis.title.x = element_text(size = 16),
+                legend.title = element_blank(),
+                legend.text = element_text(size = 11)
+            )
 
-    cv_plot
-}
+        cv_plot
+    }
 
 #' @rdname plot_clinvar
 #'
@@ -306,3 +255,62 @@ plot_clinvar <-
     ## Plot sequence window
     create_clinvar_plot(combined_table = combined_table, uId = uniprotId)
 }
+
+#' @noRd
+#'
+#' Filter the AlphaMissense table with uniprotID
+filter_am_table <-
+    function(am_table, uID)
+    {
+        ## Check if am_table is missing
+        if (missing(am_table)) {
+            message(
+                "'alphamissense_table' not provided, using default ",
+                "'am_data(\"aa_substitution\")' table accessed through ",
+                "the AlphaMissenseR package."
+            )
+            am_table <- am_data("aa_substitutions")
+        }
+
+        ## Take alphamissense_table and filter for the uniprotId
+        alphamissense_table <- am_table |>
+            filter(.data$uniprot_id == uID) |>
+            dplyr::as_tibble()
+
+        ## Check if table is empty after filtering
+        ## This will work for a tibble or a data.frame
+        if (!nrow(alphamissense_table)) {
+            stop("No AlphaMissense information found for the protein accession.",
+                 " Check that the UniProt ID is correct.")
+        }
+
+        alphamissense_table
+    }
+
+#' @noRd
+#'
+#' Filter the clinvar table with uniprot ID
+filter_cv_table <-
+    function(cv_table, uID)
+    {
+        if (missing(cv_table)) {
+            message("'clinvar_table' not provided, using default ",
+                    "ClinVar dataset in AlphaMissenseR package")
+
+            data_env <- new.env(parent = emptyenv())
+            data("clinvar_data", envir = data_env, package = "AlphaMissenseR")
+            cv_table <- data_env[["clinvar_data"]]
+        }
+
+        ## Take clinvar_table and filter for the uniprotId
+        clinvar_table <- cv_table |>
+            filter(.data$uniprot_id == uID)
+
+        ## Check if the table is empty after filtering
+        if (!nrow(clinvar_table)) {
+            stop("No ClinVar information found for the protein accession. ",
+                 "Check that the UniProt ID is correct.")
+        }
+
+        clinvar_table
+    }
