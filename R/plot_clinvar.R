@@ -257,9 +257,7 @@ create_clinvar_plot <-
 #' @examples
 #' data(clinvar_data)
 #'
-#' alphamissense_table <- am_data("aa_substitutions") |>
-#'                            filter(uniprot_id == "P37023") |>
-#'                            dplyr::collect()
+#' alphamissense_table <- am_data("aa_substitutions")
 #'
 #' plot_clinvar(uniprotId = "P37023",
 #'    alphamissense_table = alphamissense_table,
