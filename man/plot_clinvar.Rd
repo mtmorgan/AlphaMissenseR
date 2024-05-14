@@ -2,35 +2,42 @@
 % Please edit documentation in R/plot_clinvar.R
 \name{plot_clinvar}
 \alias{plot_clinvar}
-\title{Integrate ClinVar Labels with AlphaMissense Pathogenicity Scores}
+\title{Integrate ClinVar Labels with AlphaMissense Pathogenicity
+Scores}
 \usage{
 plot_clinvar(uniprotId, alphamissense_table, clinvar_table)
 }
 \arguments{
-\item{uniprotId}{a string with a valid UniProt accession identifier.}
+\item{uniprotId}{a string with a valid UniProt accession
+identifier.}
 
-\item{alphamissense_table}{a table containing AlphaMissense predictions for
-protein variants. By default, the table is derived from
-\code{am_data("aa_substitution")}. Alternatively, a user-defined
-\code{\link{tibble}} or \code{\link{data.frame}} can be supplied.}
+\item{alphamissense_table}{a table containing AlphaMissense
+predictions for protein variants. By default, the table is
+derived from \code{am_data("aa_substitution")}. Alternatively, a
+user-defined \code{\link{tibble}} or \code{\link{data.frame}}
+can be supplied.}
 
-\item{clinvar_table}{a table containing ClinVar information. By default, the
-table is derived from the supplemental data of the AlphaMissense paper.
-Alternatively, a user-defined \code{\link{tibble}} or
-\code{\link{data.frame}} can be supplied.}
+\item{clinvar_table}{a table containing ClinVar information. By
+default, the table is derived from the supplemental data of the
+AlphaMissense paper.  Alternatively, a user-defined
+\code{\link{tibble}} or \code{\link{data.frame}} can be
+supplied.}
 }
 \value{
-\code{plot_clinvar()} returns a \code{ggplot} object which overlays ClinVar
-classifications onto AlphaMissense predicted scores. Blue, gray, and red
-colors represent pathogenicity classifications for "likely benign",
-"ambiguous", or "likely pathogenic", respectively. Large, bolded points
-are ClinVar variants colored according to their clinical classification,
-while smaller points in the background are AlphaMissense predictions.
+\code{plot_clinvar()} returns a \code{ggplot} object which overlays
+ClinVar classifications onto AlphaMissense predicted
+scores. Blue, gray, and red colors represent pathogenicity
+classifications for "likely benign", "ambiguous", or
+"likely pathogenic", respectively. Large, bolded points are
+ClinVar variants colored according to their clinical
+classification, while smaller points in the background are
+AlphaMissense predictions.
 }
 \description{
-\code{plot_clinvar()} integrates ClinVar classifications with
-AlphaMissense predicted scores derived from \code{am_data("aa_substitutions")}
-and returns a ggplot object for visualization.
+\code{plot_clinvar()} integrates ClinVar classifications
+with AlphaMissense predicted scores derived from
+\code{am_data("aa_substitutions")} and returns a ggplot object for
+visualization.
 }
 \details{
 For \code{alphamissense_table}, columns must include:
@@ -55,9 +62,7 @@ For \code{clinvar_table}, columns must include:
 \examples{
 data(clinvar_data)
 
-alphamissense_table <- am_data("aa_substitutions") |>
-                           filter(uniprot_id == "P37023") |>
-                           dplyr::collect()
+alphamissense_table <- am_data("aa_substitutions")
 
 plot_clinvar(uniprotId = "P37023",
    alphamissense_table = alphamissense_table,

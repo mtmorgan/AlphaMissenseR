@@ -1,5 +1,3 @@
-#' @noRd
-#'
 #' Filter the AlphaMissense table with uniprotID
 filter_am_table <-
     function(am_table, uID)
@@ -29,9 +27,6 @@ filter_am_table <-
     alphamissense_table
 }
 
-
-#' @noRd
-#'
 #' Filter the clinvar table with uniprot ID
 filter_cv_table <-
     function(cv_table, uID)
@@ -58,8 +53,6 @@ filter_cv_table <-
     clinvar_table
 }
 
-#' @noRd
-#'
 #' Prepare data for the function plot_clinvar
 prepare_data_for_plot_clinvar <-
     function(am_table, cv_table)
@@ -106,8 +99,6 @@ prepare_data_for_plot_clinvar <-
         ungroup()
 }
 
-#' @noRd
-#'
 #' Create a ClinVar plotting function using ggplot
 create_clinvar_plot <-
     function(combined_table, uId)
@@ -199,7 +190,6 @@ create_clinvar_plot <-
 
     cv_plot
 }
-
 
 #' @rdname plot_clinvar
 #'
