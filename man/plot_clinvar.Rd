@@ -2,8 +2,7 @@
 % Please edit documentation in R/plot_clinvar.R
 \name{plot_clinvar}
 \alias{plot_clinvar}
-\title{Integrate ClinVar Labels with AlphaMissense Pathogenicity
-Scores}
+\title{Integrate ClinVar Labels with AlphaMissense Pathogenicity Scores}
 \usage{
 plot_clinvar(uniprotId, alphamissense_table, clinvar_table)
 }

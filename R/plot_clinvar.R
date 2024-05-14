@@ -1,3 +1,63 @@
+#' Filter the AlphaMissense table with uniprotID
+#'
+#' @noRd
+filter_am_table <-
+    function(am_table, uID)
+{
+    ## Check if am_table is missing
+    if (missing(am_table)) {
+        message(
+            "'alphamissense_table' not provided, using default ",
+            "'am_data(\"aa_substitution\")' table accessed through ",
+            "the AlphaMissenseR package."
+        )
+        am_table <- am_data("aa_substitutions")
+    }
+
+    ## Take alphamissense_table and filter for the uniprotId
+    alphamissense_table <- am_table |>
+        filter(.data$uniprot_id == uID) |>
+        dplyr::as_tibble()
+
+    ## Check if table is empty after filtering
+    ## This will work for a tibble or a data.frame
+    if (!nrow(alphamissense_table)) {
+        stop("No AlphaMissense information found for the protein ",
+            "accession. Check that the UniProt ID is correct.")
+    }
+
+    alphamissense_table
+}
+
+
+#' Filter the clinvar table with uniprot ID
+#'
+#' @noRd
+filter_cv_table <-
+    function(cv_table, uID)
+{
+    if (missing(cv_table)) {
+        message("'clinvar_table' not provided, using default ",
+                "ClinVar dataset in AlphaMissenseR package")
+
+        data_env <- new.env(parent = emptyenv())
+        data("clinvar_data", envir = data_env, package = "AlphaMissenseR")
+        cv_table <- data_env[["clinvar_data"]]
+    }
+
+    ## Take clinvar_table and filter for the uniprotId
+    clinvar_table <- cv_table |>
+        filter(.data$uniprot_id == uID)
+
+    ## Check if the table is empty after filtering
+    if (!nrow(clinvar_table)) {
+        stop("No ClinVar information found for the protein accession. ",
+            "Check that the UniProt ID is correct.")
+    }
+
+    clinvar_table
+}
+
 #' Prepare data for the function plot_clinvar
 #'
 #' @noRd
@@ -58,43 +118,43 @@ create_clinvar_plot <-
     colScale <- scale_colour_manual(
         name = "code_color",
         values = c("AM ambiguous" = "gray",
-                   "AM benign" = "#89d5f5",
-                   "AM pathogenic" = "#f56c6c",
-                   "CV benign" = "black",
-                   "CV pathogenic" = "black"))
+                    "AM benign" = "#89d5f5",
+                    "AM pathogenic" = "#f56c6c",
+                    "CV benign" = "black",
+                    "CV pathogenic" = "black"))
 
     fillScale <- scale_fill_manual(
         name = "code_color",
         values = c("AM ambiguous" = "gray",
-                   "AM benign" = "#89d5f5",
-                   "AM pathogenic" = "#f56c6c",
-                   "CV benign" = "#007cb0",
-                   "CV pathogenic" = "#c70606"))
+                    "AM benign" = "#89d5f5",
+                    "AM pathogenic" = "#f56c6c",
+                    "CV benign" = "#007cb0",
+                    "CV pathogenic" = "#c70606"))
 
     shapeScale <- scale_shape_manual(
         name = "code_color",
         values = c("AM ambiguous" = 19,
-                   "AM benign" = 19,
-                   "AM pathogenic" = 19,
-                   "CV benign" = 21,
-                   "CV pathogenic" = 21))
+                    "AM benign" = 19,
+                    "AM pathogenic" = 19,
+                    "CV benign" = 21,
+                    "CV pathogenic" = 21))
 
     sizeScale <- scale_size_manual(
         name = "code_color",
         values = c("AM ambiguous" = 2,
-                   "AM benign" = 2,
-                   "AM pathogenic" = 2,
-                   "CV benign" = 4,
-                   "CV pathogenic" = 4))
+                    "AM benign" = 2,
+                    "AM pathogenic" = 2,
+                    "CV benign" = 4,
+                    "CV pathogenic" = 4))
 
     strokeScale <- scale_discrete_manual(
         name = "code_color",
         aesthetics = "stroke",
         values = c("AM ambiguous" = 0,
-                   "AM benign" = 0,
-                   "AM pathogenic" = 0,
-                   "CV benign" = 1.5,
-                   "CV pathogenic" = 1.5))
+                    "AM benign" = 0,
+                    "AM pathogenic" = 0,
+                    "CV benign" = 1.5,
+                    "CV pathogenic" = 1.5))
 
     cv_plot <- combined_table |>
         ggplot(aes(.data$aa_pos, .data$am_pathogenicity)) +
@@ -145,13 +205,12 @@ create_clinvar_plot <-
 
 #' @rdname plot_clinvar
 #'
-#' @title Integrate ClinVar Labels with AlphaMissense Pathogenicity
-#'     Scores
+#' @title Integrate ClinVar Labels with AlphaMissense Pathogenicity Scores
 #'
 #' @description `plot_clinvar()` integrates ClinVar classifications
-#'     with AlphaMissense predicted scores derived from
-#'     `am_data("aa_substitutions")` and returns a ggplot object for
-#'     visualization.
+#'    with AlphaMissense predicted scores derived from
+#'    `am_data("aa_substitutions")` and returns a ggplot object for
+#'    visualization.
 #'
 #' @details
 #'
@@ -173,28 +232,28 @@ create_clinvar_plot <-
 #' - `cv_class`: binary ClinVar classification of 0 (benign) or 1 (pathogenic).
 #'
 #' @param uniprotId a string with a valid UniProt accession
-#'     identifier.
+#'    identifier.
 #'
 #' @param alphamissense_table a table containing AlphaMissense
-#'     predictions for protein variants. By default, the table is
-#'     derived from `am_data("aa_substitution")`. Alternatively, a
-#'     user-defined \code{\link{tibble}} or \code{\link{data.frame}}
-#'     can be supplied.
+#'    predictions for protein variants. By default, the table is
+#'    derived from `am_data("aa_substitution")`. Alternatively, a
+#'    user-defined \code{\link{tibble}} or \code{\link{data.frame}}
+#'    can be supplied.
 #'
 #' @param clinvar_table a table containing ClinVar information. By
-#'     default, the table is derived from the supplemental data of the
-#'     AlphaMissense paper.  Alternatively, a user-defined
-#'     \code{\link{tibble}} or \code{\link{data.frame}} can be
-#'     supplied.
+#'    default, the table is derived from the supplemental data of the
+#'    AlphaMissense paper.  Alternatively, a user-defined
+#'    \code{\link{tibble}} or \code{\link{data.frame}} can be
+#'    supplied.
 #'
 #' @return `plot_clinvar()` returns a `ggplot` object which overlays
-#'     ClinVar classifications onto AlphaMissense predicted
-#'     scores. Blue, gray, and red colors represent pathogenicity
-#'     classifications for "likely benign", "ambiguous", or
-#'     "likely pathogenic", respectively. Large, bolded points are
-#'     ClinVar variants colored according to their clinical
-#'     classification, while smaller points in the background are
-#'     AlphaMissense predictions.
+#'    ClinVar classifications onto AlphaMissense predicted
+#'    scores. Blue, gray, and red colors represent pathogenicity
+#'    classifications for "likely benign", "ambiguous", or
+#'    "likely pathogenic", respectively. Large, bolded points are
+#'    ClinVar variants colored according to their clinical
+#'    classification, while smaller points in the background are
+#'    AlphaMissense predictions.
 #'
 #' @examples
 #' data(clinvar_data)
@@ -234,7 +293,7 @@ plot_clinvar <-
 
     ## Validate AM tables
     am_required_columns <- c("uniprot_id", "protein_variant",
-                             "am_class", "am_pathogenicity")
+                            "am_class", "am_pathogenicity")
     stopifnot(
         inherits(alphamissense_table, "tbl") ||
             inherits(alphamissense_table, "data.frame"),
@@ -257,65 +316,4 @@ plot_clinvar <-
 
     ## Plot sequence window
     create_clinvar_plot(combined_table = combined_table, uId = uniprotId)
-}
-
-
-#' Filter the AlphaMissense table with uniprotID
-#'
-#' @noRd
-filter_am_table <-
-    function(am_table, uID)
-{
-    ## Check if am_table is missing
-    if (missing(am_table)) {
-        message(
-            "'alphamissense_table' not provided, using default ",
-            "'am_data(\"aa_substitution\")' table accessed through ",
-            "the AlphaMissenseR package."
-        )
-        am_table <- am_data("aa_substitutions")
-    }
-
-    ## Take alphamissense_table and filter for the uniprotId
-    alphamissense_table <- am_table |>
-        filter(.data$uniprot_id == uID) |>
-        dplyr::as_tibble()
-
-    ## Check if table is empty after filtering
-    ## This will work for a tibble or a data.frame
-    if (!nrow(alphamissense_table)) {
-        stop("No AlphaMissense information found for the protein ",
-             "accession. Check that the UniProt ID is correct.")
-    }
-
-    alphamissense_table
-}
-
-
-#' Filter the clinvar table with uniprot ID
-#'
-#' @noRd
-filter_cv_table <-
-    function(cv_table, uID)
-{
-    if (missing(cv_table)) {
-        message("'clinvar_table' not provided, using default ",
-                "ClinVar dataset in AlphaMissenseR package")
-
-        data_env <- new.env(parent = emptyenv())
-        data("clinvar_data", envir = data_env, package = "AlphaMissenseR")
-        cv_table <- data_env[["clinvar_data"]]
-    }
-
-    ## Take clinvar_table and filter for the uniprotId
-    clinvar_table <- cv_table |>
-        filter(.data$uniprot_id == uID)
-
-    ## Check if the table is empty after filtering
-    if (!nrow(clinvar_table)) {
-        stop("No ClinVar information found for the protein accession. ",
-             "Check that the UniProt ID is correct.")
-    }
-
-    clinvar_table
 }
