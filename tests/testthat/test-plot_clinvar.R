@@ -20,10 +20,13 @@ test_that("filter_am_table() works", {
     expect_equal(res |> nrow(), 5L)
 
     ## Test case when bad am_table is given i.e uniprotID with no hits
-    expect_error(filter_am_table(uID = "C", am_table = am_data),
-                 paste0("No AlphaMissense information found for the protein ",
-                 "accession. Check that the UniProt ID is correct.")
-                 )
+    expect_error(
+        filter_am_table(uID = "C", am_table = am_data),
+        paste0(
+            "No AlphaMissense information found for the protein ",
+            "accession. Check that the UniProt ID is correct."
+        )
+    )
 })
 
 test_that("filter_cv_table() works", {

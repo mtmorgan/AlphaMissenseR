@@ -11,14 +11,14 @@ prepare_data_for_plot_clinvar <-
                 gsub(".*?([0-9]+).*", "\\1", .data$protein_variant)
             )
         )
-    
+
     ## join datasets
     combined_data <- left_join(
         am_table,
         cv_table,
         by = c('uniprot_id', 'protein_variant')
     )
-    
+
     ## add color code matching AM and CV labels
     combined_data <-
         combined_data |>
@@ -62,7 +62,7 @@ create_clinvar_plot <-
                    "AM pathogenic" = "#f56c6c",
                    "CV benign" = "black",
                    "CV pathogenic" = "black"))
-    
+
     fillScale <- scale_fill_manual(
         name = "code_color",
         values = c("AM ambiguous" = "gray",
@@ -70,7 +70,7 @@ create_clinvar_plot <-
                    "AM pathogenic" = "#f56c6c",
                    "CV benign" = "#007cb0",
                    "CV pathogenic" = "#c70606"))
-    
+
     shapeScale <- scale_shape_manual(
         name = "code_color",
         values = c("AM ambiguous" = 19,
@@ -78,7 +78,7 @@ create_clinvar_plot <-
                    "AM pathogenic" = 19,
                    "CV benign" = 21,
                    "CV pathogenic" = 21))
-    
+
     sizeScale <- scale_size_manual(
         name = "code_color",
         values = c("AM ambiguous" = 2,
@@ -86,7 +86,7 @@ create_clinvar_plot <-
                    "AM pathogenic" = 2,
                    "CV benign" = 4,
                    "CV pathogenic" = 4))
-    
+
     strokeScale <- scale_discrete_manual(
         name = "code_color",
         aesthetics = "stroke",
@@ -95,7 +95,7 @@ create_clinvar_plot <-
                    "AM pathogenic" = 0,
                    "CV benign" = 1.5,
                    "CV pathogenic" = 1.5))
-    
+
     cv_plot <- combined_table |>
         ggplot(aes(.data$aa_pos, .data$am_pathogenicity)) +
         geom_point(
@@ -138,7 +138,7 @@ create_clinvar_plot <-
             legend.title = element_blank(),
             legend.text = element_text(size = 11)
         )
-    
+
     cv_plot
 }
 
@@ -220,7 +220,7 @@ plot_clinvar <-
 {
     ## Validate arguments
     stopifnot(isCharacter(uniprotId))
-    
+
     ## Filter AM and CV tables with uniProtID
     alphamissense_table <- filter_am_table(
         am_table = alphamissense_table,
@@ -275,19 +275,19 @@ filter_am_table <-
         )
         am_table <- am_data("aa_substitutions")
     }
-    
+
     ## Take alphamissense_table and filter for the uniprotId
     alphamissense_table <- am_table |>
         filter(.data$uniprot_id == uID) |>
         dplyr::as_tibble()
-    
+
     ## Check if table is empty after filtering
     ## This will work for a tibble or a data.frame
     if (!nrow(alphamissense_table)) {
         stop("No AlphaMissense information found for the protein ",
              "accession. Check that the UniProt ID is correct.")
     }
-    
+
     alphamissense_table
 }
 
@@ -301,16 +301,16 @@ filter_cv_table <-
     if (missing(cv_table)) {
         message("'clinvar_table' not provided, using default ",
                 "ClinVar dataset in AlphaMissenseR package")
-        
+
         data_env <- new.env(parent = emptyenv())
         data("clinvar_data", envir = data_env, package = "AlphaMissenseR")
         cv_table <- data_env[["clinvar_data"]]
     }
-    
+
     ## Take clinvar_table and filter for the uniprotId
     clinvar_table <- cv_table |>
         filter(.data$uniprot_id == uID)
-    
+
     ## Check if the table is empty after filtering
     if (!nrow(clinvar_table)) {
         stop("No ClinVar information found for the protein accession. ",
