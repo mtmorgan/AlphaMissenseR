@@ -102,7 +102,7 @@ prepare_data_for_plot_clinvar <-
     combined_data |>
         group_by(.data$am_class) |>
         mutate(max = max(.data$am_pathogenicity, na.rm=TRUE),
-               min = min(.data$am_pathogenicity, na.rm=TRUE)) |>
+                min = min(.data$am_pathogenicity, na.rm=TRUE)) |>
         ungroup()
 }
 
