@@ -32,7 +32,3 @@ clinvar_data <- clinvar |>
     relocate('transcript_id', .after = 'uniprot_id')
 
 usethis::use_data(clinvar_data, overwrite = TRUE)
-
-
-
-
