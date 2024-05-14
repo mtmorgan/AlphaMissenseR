@@ -1,4 +1,4 @@
-.check_am_table <-
+.load_am_table <-
     function(am_table, uID)
     {
         if (missing(am_table)) {
@@ -19,7 +19,7 @@
     }
 
 
-.check_cv_table <-
+.load_cv_table <-
     function(cv_table, uID)
     {
         if (missing(cv_table)) {
@@ -75,6 +75,7 @@
                     "AM ambiguous"
             )
             ) |>
+            mutate_at(vars(code_color), factor) |>
             arrange(.data$code_color)
 
         return(c_combo)
@@ -83,6 +84,58 @@
 .make_cv_plot <-
     function(combo_table, cutoff, uId)
     {
+        #Create named vectors for all scale layers
+        colScale <- scale_colour_manual(
+            name = "code_color",
+            values = c(
+                "AM ambiguous" = "gray",
+                "AM benign" = "#89d5f5",
+                "AM pathogenic" = "#f56c6c",
+                "CV benign" = "black",
+                "CV pathogenic" = "black")
+        )
+
+        fillScale <- scale_fill_manual(
+            name = "code_color",
+            values = c(
+            "AM ambiguous" = "gray",
+            "AM benign" = "#89d5f5",
+            "AM pathogenic" = "#f56c6c",
+            "CV benign" = "#007cb0",
+            "CV pathogenic" = "#c70606")
+        )
+
+        shapeScale <- scale_shape_manual(
+            name = "code_color",
+            values = c(
+            "AM ambiguous" = 19,
+            "AM benign" = 19,
+            "AM pathogenic" = 19,
+            "CV benign" = 21,
+            "CV pathogenic" = 21)
+        )
+
+        sizeScale <- scale_size_manual(
+            name = "code_color",
+            values = c(
+                "AM ambiguous" = 2,
+                "AM benign" = 2,
+                "AM pathogenic" = 2,
+                "CV benign" = 4,
+                "CV pathogenic" = 4)
+        )
+
+        strokeScale <- scale_discrete_manual(
+            name = "code_color",
+            aesthetics = "stroke",
+            values = c(
+                "AM ambiguous" = 0,
+                "AM benign" = 0,
+                "AM pathogenic" = 0,
+                "CV benign" = 1.5,
+                "CV pathogenic" = 1.5)
+            )
+
         cv_plot <- combo_table |>
             ggplot(aes(.data$aa_pos, .data$am_pathogenicity)) +
             geom_point(
@@ -94,36 +147,27 @@
                     stroke = .data$code_color
                 )
             ) +
-            scale_shape_manual(
-                values = c(19, 19, 19, 21, 21)
-            ) +
-            scale_discrete_manual(
-                aesthetics = "stroke",
-                values = c(0, 0, 0, 1.5, 1.5)
-            ) +
-            scale_size_manual(
-                values = c(2, 2, 2, 4, 4)
-            ) +
-            scale_color_manual(
-                values = c("gray", "#89d5f5", "#f56c6c", "black", "black")
-            ) +
-            scale_fill_manual(
-                values = c("gray", "#89d5f5", "#f56c6c", "#007cb0", "#c70606")
-            ) +
+            strokeScale +
+            shapeScale +
+            sizeScale +
+            colScale +
+            fillScale +
             geom_hline(
-                yintercept = cutoff$path_cutoff, linetype = 2,
+                yintercept = cutoff |>
+                    filter(am_class == "pathogenic") |>
+                    pull(min), linetype = 2,
                 color = "#c70606"
             ) +
             geom_hline(
-                yintercept = cutoff$benign_cutoff,
+                yintercept = cutoff |>
+                    filter(am_class == "benign") |>
+                    pull(max),
                 linetype = 2, color = "#007cb0"
             ) +
             labs(title = paste0("UniProt ID: ", uId)) +
             xlab("amino acid position") +
             ylab("AlphaMissense score") +
-            theme_classic()
-
-        cv_plot +
+            theme_classic() +
             theme(
                 axis.text.x = element_text(size = 16),
                 axis.text.y = element_text(size = 16),
@@ -132,6 +176,8 @@
                 legend.title = element_blank(),
                 legend.text = element_text(size = 11)
             )
+
+        cv_plot
     }
 
 #' @rdname plot_clinvar
@@ -207,9 +253,9 @@ plot_clinvar <-
     stopifnot(isCharacter(uniprotId))
 
     # Load and check AM and CV tables
-    alphamissense_table <- .check_am_table(am_table = alphamissense_table,
+    alphamissense_table <- .load_am_table(am_table = alphamissense_table,
                                             uID = uniprotId)
-    clinvar_table <- .check_cv_table(cv_table = clinvar_table,
+    clinvar_table <- .load_cv_table(cv_table = clinvar_table,
                                     uID = uniprotId)
 
     # Validity check for alphamissense_table and clinvar_table
@@ -247,12 +293,10 @@ plot_clinvar <-
 
     # Grab the thresholds for AM pathogenicity to plot
     am_cutoff <- c_combo |>
-        filter(.data$am_class == "ambiguous") |>
-        select(.data$am_pathogenicity) |>
-        summarise(
-            path_cutoff = max(.data$am_pathogenicity),
-            benign_cutoff = min(.data$am_pathogenicity)
-        )
+        select(am_pathogenicity, am_class) |>
+        group_by(.data$am_class) |>
+        mutate(max = max(.data$am_pathogenicity, na.rm=TRUE),
+                min = min(.data$am_pathogenicity, na.rm=TRUE))
 
     # Plot sequence window
     .make_cv_plot(combo_table = c_combo, cutoff = am_cutoff, uId = uniprotId)
