@@ -17,7 +17,7 @@ filter_am_table <-
     ## Take alphamissense_table and filter for the uniprotId
     alphamissense_table <- am_table |>
             filter(.data$uniprot_id == uID) |>
-            dplyr::collect()
+            dplyr::as_tibble()
 
     ## Check if table is empty after filtering
     ## This will work for a tibble or a data.frame
@@ -42,7 +42,7 @@ filter_cv_table <-
 
         data_env <- new.env(parent = emptyenv())
         data("clinvar_data", envir = data_env, package = "AlphaMissenseR")
-        clinvar_data <- data_env[["clinvar_data"]]
+        cv_table <- data_env[["clinvar_data"]]
     }
 
     ## Take clinvar_table and filter for the uniprotId
@@ -102,7 +102,8 @@ prepare_data_for_plot_clinvar <-
     combined_data |>
         group_by(.data$am_class) |>
         mutate(max = max(.data$am_pathogenicity, na.rm=TRUE),
-               min = min(.data$am_pathogenicity, na.rm=TRUE))
+               min = min(.data$am_pathogenicity, na.rm=TRUE)) |>
+        ungroup()
 }
 
 #' @noRd
@@ -170,14 +171,18 @@ create_clinvar_plot <-
         geom_hline(
             yintercept = combined_table |>
                 filter(am_class == "pathogenic") |>
-                pull(min), linetype = 2,
+                pull(min) |>
+                unique(),
+            linetype = 2,
             color = "#c70606"
         ) +
         geom_hline(
             yintercept = combined_table |>
                 filter(am_class == "benign") |>
-                pull(max),
-            linetype = 2, color = "#007cb0"
+                pull(max) |>
+                unique(),
+            linetype = 2,
+            color = "#007cb0"
         ) +
         labs(title = paste0("UniProt ID: ", uId)) +
         xlab("amino acid position") +
