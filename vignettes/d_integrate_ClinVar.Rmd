@@ -58,7 +58,7 @@ pass a custom AlphaMissense or ClinVar table to the function.  See
 function details for more information.
 
 ```{r plot_P37023}
-plot_clinvar(uniprotId = "P37023")
+clinvar_plot(uniprotId = "P37023")
 ```
 
 We returned a `ggplot` object which overlays ClinVar classifications
