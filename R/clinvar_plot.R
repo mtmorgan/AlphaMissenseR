@@ -2,32 +2,34 @@
 #'
 #' @noRd
 #' @importFrom dplyr filter as_tibble
-filter_am_table <-
+clinvar_filter_am_table <-
     function(am_table, uID)
 {
     ## Check if am_table is missing
     if (missing(am_table)) {
-        message(
+        spdl::info(paste0(
             "'alphamissense_table' not provided, using default ",
             "'am_data(\"aa_substitution\")' table accessed through ",
-            "the AlphaMissenseR package."
-        )
+            "the AlphaMissenseR package"
+        ))
         am_table <- am_data("aa_substitutions")
     }
 
     ## Take alphamissense_table and filter for the uniprotId
-    alphamissense_table <- am_table |>
+    alphamissense_table <-
+        am_table |>
         filter(.data$uniprot_id == uID) |>
         as_tibble()
 
     ## Check if table is empty after filtering
     ## This will work for a tibble or a data.frame
     if (!nrow(alphamissense_table)) {
-        stop("No AlphaMissense information found for the protein ",
-            "accession. Check that the UniProt ID is correct.")
-    }
-
+        stop(
+            "no AlphaMissense information found for the protein ",
+            "accession '", uID, "'; check that the UniProt ID is correct"
+        )
     alphamissense_table
+    }
 }
 
 
@@ -35,12 +37,14 @@ filter_am_table <-
 #'
 #' @noRd
 #' @importFrom dplyr filter
-filter_cv_table <-
+clinvar_filter_cv_table <-
     function(cv_table, uID)
 {
     if (missing(cv_table)) {
-        message("'clinvar_table' not provided, using default ",
-                "ClinVar dataset in AlphaMissenseR package")
+        spdl::info(paste0(
+            "'clinvar_table' not provided, using default ",
+            "ClinVar dataset in AlphaMissenseR package"
+        ))
 
         data_env <- new.env(parent = emptyenv())
         data("clinvar_data", envir = data_env, package = "AlphaMissenseR")
@@ -53,19 +57,20 @@ filter_cv_table <-
 
     ## Check if the table is empty after filtering
     if (!nrow(clinvar_table)) {
-        stop("No ClinVar information found for the protein accession. ",
-            "Check that the UniProt ID is correct.")
+        stop(
+            "no ClinVar information found for the protein ",
+            "accession '", uID, "'; check that the UniProt ID is correct"
+        )
     }
-
     clinvar_table
 }
 
 #' Prepare data for the function plot_clinvar
 #'
 #' @noRd
-#' @importFrom dplyr left_join mutate case_when mutate_at group_by arrange
-#'     ungroup
-prepare_data_for_plot_clinvar <-
+#' @importFrom dplyr left_join mutate case_when mutate_at group_by
+#'     ungroup arrange
+clinvar_prepare_data_for_plot <-
     function(am_table, cv_table)
 {
     ## grab amino acid positions
@@ -117,7 +122,10 @@ prepare_data_for_plot_clinvar <-
 #' Create a ClinVar plotting function using ggplot
 #'
 #' @noRd
-create_clinvar_plot <-
+#' @importFrom ggplot2 ggplot geom_point scale_colour_manual
+#'     scale_fill_manual scale_shape_manual scale_size_manual
+#'     scale_discrete_manual geom_hline labs xlab ylab theme_classic theme
+clinvar_create_plot <-
     function(combined_table, uId)
 {
     ## Create named vectors for all scale layers
@@ -208,7 +216,6 @@ create_clinvar_plot <-
     cv_plot
 }
 
-
 #' @rdname ClinVar
 #'
 #' @title Integrate ClinVar Labels with AlphaMissense Pathogenicity Scores
@@ -285,12 +292,12 @@ clinvar_plot <-
     stopifnot(isCharacter(uniprotId))
 
     ## Filter AM and CV tables with uniProtID
-    alphamissense_table <- filter_am_table(
+    alphamissense_table <- clinvar_filter_am_table(
         am_table = alphamissense_table,
         uID = uniprotId
     )
 
-    clinvar_table <- filter_cv_table(
+    clinvar_table <- clinvar_filter_cv_table(
         cv_table = clinvar_table,
         uID = uniprotId
     )
@@ -320,28 +327,22 @@ clinvar_plot <-
     )
 
     ## Process tables for plotting
-    combined_table <- prepare_data_for_plot_clinvar(
+    combined_table <- clinvar_prepare_data_for_plot(
         am_table = alphamissense_table,
         cv_table = clinvar_table
     )
 
     ## Plot sequence window
-    create_clinvar_plot(combined_table = combined_table, uId = uniprotId)
+    clinvar_create_plot(combined_table = combined_table, uId = uniprotId)
 }
 
 #' @rdname ClinVar
 #'
-#' @description
-#' Default ClinVar Data
-#'
-#'
-#' - need to add description for rd
-#'
-#' Derived from the supplemental table of the AlphaMissense
-#' - describe in more detail
-#' - script used to derive / process this data by doing this
-#'      [\[2023\]](https://www.science.org/doi/10.1126/science.adg7492) paper.
-#'      system.file(package = "AlphaMissenseR", "scripts", "clinvar_make_dataset.R")
+#' @description `clinvar_data()` loads in the default ClinVar information from
+#' the supplemental table of the AlphaMissense
+#' [\[2023\]](https://www.science.org/doi/10.1126/science.adg7492) paper. The
+#' script used to derive this table can be found in
+#' `system.file(package = "AlphaMissenseR", "scripts", "clinvar_make_dataset.R")`
 #'
 #' @format dataframe with 82872 rows and 5 variables:
 #' \describe{
