@@ -2,9 +2,22 @@
 % Please edit documentation in R/plot_clinvar.R
 \name{plot_clinvar}
 \alias{plot_clinvar}
+\alias{clinvar_data}
 \title{Integrate ClinVar Labels with AlphaMissense Pathogenicity Scores}
+\format{
+dataframe with 82872 rows and 5 variables:
+\describe{
+\item{cv_variant_id}{ClinVar variant identifer.}
+\item{uniprot_id}{UniProt accession identifier.}
+\item{transcript_id}{Ensembl transcript identifier.}
+\item{protein_variant}{Protein variant identifier.}
+\item{cv_class}{Binary ClinVar class. 0 for benign or 1 for pathogenic.}
+}
+}
 \usage{
 plot_clinvar(uniprotId, alphamissense_table, clinvar_table)
+
+clinvar_data(record = ALPHAMISSENSE_RECORD, bfc = BiocFileCache())
 }
 \arguments{
 \item{uniprotId}{a string with a valid UniProt accession
@@ -37,6 +50,19 @@ AlphaMissense predictions.
 with AlphaMissense predicted scores derived from
 \code{am_data("aa_substitutions")} and returns a ggplot object for
 visualization.
+
+Default ClinVar Data
+\itemize{
+\item need to add description for rd
+}
+
+Derived from the supplemental table of the AlphaMissense
+\itemize{
+\item describe in more detail
+\item script used to derive / process this data by doing this
+\href{https://www.science.org/doi/10.1126/science.adg7492}{[2023]} paper.
+system.file(package = "AlphaMissenseR", "scripts", "clinvar_make_dataset.R")
+}
 }
 \details{
 For \code{alphamissense_table}, columns must include:
