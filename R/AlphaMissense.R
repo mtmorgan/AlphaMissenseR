@@ -150,7 +150,7 @@ am_available <-
 }
 
 am_data_import_csv <-
-    function(record, bfc, db_tbl_name, rname, fpath)
+    function(record, bfc, db_tbl_name, rname = NULL, fpath, delim = "\\t")
 {
     ## must be 'read_only = FALSE' so new database can be created. use
     ## 'managed = FALSE' so connection is independent of other
@@ -159,10 +159,13 @@ am_data_import_csv <-
     renew <- FALSE
     if (!db_tbl_name %in% db_tables(db_rw)) {
         spdl::info("downloading or finding local file")
-        file_path <- bfcrpath(bfc, rnames  = rname, fpath = fpath)
+        file_path <- fpath
+        if (!is.null(rname))
+            file_path <- bfcrpath(bfc, rnames  = rname, fpath = fpath)
         spdl::info("creating database table '{}'", db_tbl_name)
         sql <- sql_template(
-            "import_csv", db_tbl_name = db_tbl_name, file_path = file_path
+            "import_csv",
+            db_tbl_name = db_tbl_name, file_path = file_path, delim = delim
         )
         dbExecute(db_rw, sql)
 
@@ -278,9 +281,10 @@ am_data <-
 
     db_rname <- paste0("AlphaMissense_", record)
     db_tbl_name <- key$key
-    if (!NROW(bfcquery(bfc, db_rname)))
-        ## create the BiocFileCache record
+    if (!NROW(bfcquery(bfc, db_rname))) {
+        spdl::info("creating AlphaMissense database for record '{}'", record)
         bfcnew(bfc, db_rname)
+    }
     tbl <- am_data_import_csv(record, bfc, db_tbl_name, key$filename, key$link)
 
     switch(
