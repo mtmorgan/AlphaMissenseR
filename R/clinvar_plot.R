@@ -1,6 +1,7 @@
 #' Filter the AlphaMissense table with uniprotID
 #'
 #' @noRd
+#' @importFrom dplyr filter as_tibble
 filter_am_table <-
     function(am_table, uID)
 {
@@ -17,7 +18,7 @@ filter_am_table <-
     ## Take alphamissense_table and filter for the uniprotId
     alphamissense_table <- am_table |>
         filter(.data$uniprot_id == uID) |>
-        dplyr::as_tibble()
+        as_tibble()
 
     ## Check if table is empty after filtering
     ## This will work for a tibble or a data.frame
@@ -33,6 +34,7 @@ filter_am_table <-
 #' Filter the clinvar table with uniprot ID
 #'
 #' @noRd
+#' @importFrom dplyr filter
 filter_cv_table <-
     function(cv_table, uID)
 {
@@ -61,6 +63,8 @@ filter_cv_table <-
 #' Prepare data for the function plot_clinvar
 #'
 #' @noRd
+#' @importFrom dplyr left_join mutate case_when mutate_at group_by arrange
+#'     ungroup
 prepare_data_for_plot_clinvar <-
     function(am_table, cv_table)
 {
@@ -93,16 +97,18 @@ prepare_data_for_plot_clinvar <-
                 is.na(.data$cv_class) & .data$am_class == "benign" ~
                     "AM benign",
                 is.na(.data$cv_class) & .data$am_class == "ambiguous" ~
-                    "AM ambiguous"
-            )) |>
+                    "AM ambiguous")
+        ) |>
         mutate_at(vars(.data$code_color), factor) |>
         arrange(.data$code_color)
 
     ## Grab the thresholds for AM pathogenicity to plot
     combined_data |>
         group_by(.data$am_class) |>
-        mutate(max = max(.data$am_pathogenicity, na.rm=TRUE),
-                min = min(.data$am_pathogenicity, na.rm=TRUE)) |>
+        mutate(
+            max = max(.data$am_pathogenicity, na.rm=TRUE),
+            min = min(.data$am_pathogenicity, na.rm=TRUE)
+        ) |>
         ungroup()
 }
 
@@ -203,7 +209,7 @@ create_clinvar_plot <-
 }
 
 
-#' @rdname plot_clinvar
+#' @rdname ClinVar
 #'
 #' @title Integrate ClinVar Labels with AlphaMissense Pathogenicity Scores
 #'
@@ -260,7 +266,7 @@ create_clinvar_plot <-
 #'
 #' alphamissense_table <- am_data("aa_substitutions")
 #'
-#' plot_clinvar(uniprotId = "P37023",
+#' clinvar_plot(uniprotId = "P37023",
 #'    alphamissense_table = alphamissense_table,
 #'    clinvar_table = clinvar_data)
 #'
@@ -269,12 +275,10 @@ create_clinvar_plot <-
 #' \emph{Science} 381, eadg7492. DOI:10.1126/science.adg7492.
 #'
 #' @importFrom BiocBaseUtils isCharacter
-#' @import ggplot2
-#' @import dplyr
 #' @importFrom utils data
 #'
 #' @export
-plot_clinvar <-
+clinvar_plot <-
     function(uniprotId, alphamissense_table, clinvar_table)
 {
     ## Validate arguments
@@ -290,6 +294,13 @@ plot_clinvar <-
         cv_table = clinvar_table,
         uID = uniprotId
     )
+
+    # New validate section
+    # stopifnot(
+    #     is.data.frame(alphamisense_table),
+    #     all(c("...", "..."), %in% colnames(alphamisense_table)),
+    #     ...
+    # )
 
     ## Validate AM tables
     am_required_columns <- c("uniprot_id", "protein_variant",
@@ -316,4 +327,43 @@ plot_clinvar <-
 
     ## Plot sequence window
     create_clinvar_plot(combined_table = combined_table, uId = uniprotId)
+}
+
+#' @rdname ClinVar
+#'
+#' @description
+#' Default ClinVar Data
+#'
+#'
+#' - need to add description for rd
+#'
+#' Derived from the supplemental table of the AlphaMissense
+#' - describe in more detail
+#' - script used to derive / process this data by doing this
+#'      [\[2023\]](https://www.science.org/doi/10.1126/science.adg7492) paper.
+#'      system.file(package = "AlphaMissenseR", "scripts", "clinvar_make_dataset.R")
+#'
+#' @format dataframe with 82872 rows and 5 variables:
+#' \describe{
+#'     \item{cv_variant_id}{ClinVar variant identifer.}
+#'     \item{uniprot_id}{UniProt accession identifier.}
+#'     \item{transcript_id}{Ensembl transcript identifier.}
+#'     \item{protein_variant}{Protein variant identifier.}
+#'     \item{cv_class}{Binary ClinVar class. 0 for benign or 1 for pathogenic.}
+#' }
+#'
+#' @export
+clinvar_data <-
+    function(record = ALPHAMISSENSE_RECORD, bfc = BiocFileCache())
+{
+    db_rname <- paste0("AlphaMissense_", record)
+    db_tbl_name <- "clinvar"
+    if (!NROW(bfcquery(bfc, db_rname))) {
+        spdl::info("creating AlphaMissense database for record '{}'", record)
+        bfcnew(bfc, db_rname)
+    }
+    fpath <- system.file(
+        package = "AlphaMissenseR", "extdata", "science.adg7492_data_s5.csv.gz"
+    )
+    am_data_import_csv(record, bfc, db_tbl_name, fpath = fpath, delim = ",")
 }
