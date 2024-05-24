@@ -204,6 +204,70 @@ gpos <-
     to_GPos()
 gpos
 ```
+this can be visualized with [shiny.gosling][] or [gosling][]
+```{r gosvis}
+require(shiny.gosling)
+require(shiny)
+
+as_GRanges <- as(gpos, "GRanges")
+as_GRanges
+
+categories = c("Likely_benign", "Likely_pathogenic", "ambiguous")
+
+colormapping = c( "#029F73", "gray", "#CB3B8C")
+
+ui <- fluidPage(
+    use_gosling(clear_files = FALSE),
+    goslingOutput("gosling_plot")
+)
+
+track_1 <- add_single_track(
+    width = 800,
+    height = 180,
+    data = track_data_gr(
+        as_GRanges, chromosomeField = "seqnames",
+        genomicFields = c("start", "end")
+    ),
+    mark = "bar",
+    x = visual_channel_x(
+        field = "start", type = "genomic", axis = "bottom"
+    ),
+    xe = visual_channel_x(field = "end", type = "genomic"),
+    y = visual_channel_y(
+        field = "am_pathogenicity", type = "quantitative", axis = "right"
+    ),
+    color = visual_channel_color(
+        field = "am_pathogenicity",
+        type = "quantitative",
+        legend = TRUE
+    ),
+    size = list(value = 5)
+)
+
+composed_view <- compose_view(
+    layout = "linear",
+    tracks = track_1
+)
+
+arranged_view <- arrange_views(
+    title = "Basic Marks: bar",
+    subtitle = "Tutorial Examples",
+    views = composed_view
+)
+
+server <- function(input, output, session) {
+    output$gosling_plot <- renderGosling({
+        gosling(
+            component_id = "component_1",
+            arranged_view
+        )
+    })
+}
+
+shiny::shinyApp(ui, server)
+```
+
+
 
 Vignettes in the [GenomicRanges][] package illustrate use of these
 objects.
