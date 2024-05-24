@@ -5,7 +5,7 @@
 \alias{clinvar_data}
 \title{Integrate ClinVar Labels with AlphaMissense Pathogenicity Scores}
 \format{
-dataframe with 82872 rows and 5 variables:
+a tbl with 82872 rows and 5 variables:
 \describe{
 \item{cv_variant_id}{ClinVar variant identifer.}
 \item{uniprot_id}{UniProt accession identifier.}
@@ -36,7 +36,7 @@ AlphaMissense paper.  Alternatively, a user-defined
 supplied.}
 }
 \value{
-\code{plot_clinvar()} returns a \code{ggplot} object which overlays
+\code{clinvar_plot()} returns a \code{ggplot} object which overlays
 ClinVar classifications onto AlphaMissense predicted
 scores. Blue, gray, and red colors represent pathogenicity
 classifications for "likely benign", "ambiguous", or
@@ -46,15 +46,16 @@ classification, while smaller points in the background are
 AlphaMissense predictions.
 }
 \description{
-\code{plot_clinvar()} integrates ClinVar classifications
+\code{clinvar_plot()} integrates ClinVar classifications
 with AlphaMissense predicted scores derived from
 \code{am_data("aa_substitutions")} and returns a ggplot object for
 visualization.
 
-\code{clinvar_data()} loads in the default ClinVar information from
+\code{clinvar_data()} loads in the raw ClinVar information from
 the supplemental table of the AlphaMissense
-\href{https://www.science.org/doi/10.1126/science.adg7492}{[2023]} paper. The
-script used to derive this table can be found in
+\href{https://www.science.org/doi/10.1126/science.adg7492}{[2023]} paper. A
+processed version of this data is used in the \code{clinvar_plot()} function.
+The script used to derive this processed table can be found in
 \code{system.file(package = "AlphaMissenseR", "scripts", "clinvar_make_dataset.R")}
 }
 \details{

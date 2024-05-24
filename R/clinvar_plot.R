@@ -1,7 +1,9 @@
 #' Filter the AlphaMissense table with uniprotID
 #'
 #' @noRd
+#'
 #' @importFrom dplyr filter as_tibble
+#'
 clinvar_filter_am_table <-
     function(am_table, uID)
 {
@@ -28,15 +30,18 @@ clinvar_filter_am_table <-
             "no AlphaMissense information found for the protein ",
             "accession '", uID, "'; check that the UniProt ID is correct"
         )
-    alphamissense_table
     }
+
+    alphamissense_table
 }
 
 
 #' Filter the clinvar table with uniprot ID
 #'
 #' @noRd
+#'
 #' @importFrom dplyr filter
+#'
 clinvar_filter_cv_table <-
     function(cv_table, uID)
 {
@@ -46,13 +51,14 @@ clinvar_filter_cv_table <-
             "ClinVar dataset in AlphaMissenseR package"
         ))
 
-        data_env <- new.env(parent = emptyenv())
-        data("clinvar_data", envir = data_env, package = "AlphaMissenseR")
-        cv_table <- data_env[["clinvar_data"]]
+    data_env <- new.env(parent = emptyenv())
+    data("clinvar_data", envir = data_env, package = "AlphaMissenseR")
+    cv_table <- data_env[["clinvar_data"]]
     }
 
     ## Take clinvar_table and filter for the uniprotId
-    clinvar_table <- cv_table |>
+    clinvar_table <-
+        cv_table |>
         filter(.data$uniprot_id == uID)
 
     ## Check if the table is empty after filtering
@@ -62,31 +68,35 @@ clinvar_filter_cv_table <-
             "accession '", uID, "'; check that the UniProt ID is correct"
         )
     }
+
     clinvar_table
 }
 
-#' Prepare data for the function plot_clinvar
+#' Prepare data for the function clinvar_plot
 #'
 #' @noRd
+#'
 #' @importFrom dplyr left_join mutate case_when mutate_at group_by
 #'     ungroup arrange
+#'
 clinvar_prepare_data_for_plot <-
     function(am_table, cv_table)
 {
     ## grab amino acid positions
-    am_table <- am_table |>
+    am_table <-
+        am_table |>
         mutate(
-            aa_pos = as.numeric(
+            aa_pos = as.integer(
                 gsub(".*?([0-9]+).*", "\\1", .data$protein_variant)
-            )
-        )
+            ))
 
     ## join datasets
-    combined_data <- left_join(
-        am_table,
-        cv_table,
-        by = c('uniprot_id', 'protein_variant')
-    )
+    combined_data <-
+        left_join(
+            am_table,
+            cv_table,
+            by = c('uniprot_id', 'protein_variant')
+        )
 
     ## add color code matching AM and CV labels
     combined_data <-
@@ -108,7 +118,8 @@ clinvar_prepare_data_for_plot <-
         arrange(.data$code_color)
 
     ## Grab the thresholds for AM pathogenicity to plot
-    combined_data |>
+    combined_data <-
+        combined_data |>
         group_by(.data$am_class) |>
         mutate(
             max = max(.data$am_pathogenicity, na.rm=TRUE),
@@ -117,75 +128,92 @@ clinvar_prepare_data_for_plot <-
         ungroup()
 }
 
-
-
 #' Create a ClinVar plotting function using ggplot
 #'
 #' @noRd
-#' @importFrom ggplot2 ggplot geom_point scale_colour_manual
-#'     scale_fill_manual scale_shape_manual scale_size_manual
+#'
+#' @importFrom ggplot2 ggplot geom_point aes scale_colour_manual element_text
+#'     scale_fill_manual scale_shape_manual scale_size_manual element_blank
 #'     scale_discrete_manual geom_hline labs xlab ylab theme_classic theme
+#'
 clinvar_create_plot <-
     function(combined_table, uId)
 {
     ## Create named vectors for all scale layers
-    colScale <- scale_colour_manual(
+    colScale <-
+        scale_colour_manual(
         name = "code_color",
-        values = c("AM ambiguous" = "gray",
-                    "AM benign" = "#89d5f5",
-                    "AM pathogenic" = "#f56c6c",
-                    "CV benign" = "black",
-                    "CV pathogenic" = "black"))
+        values = c(
+            "AM ambiguous" = "gray",
+            "AM benign" = "#89d5f5",
+            "AM pathogenic" = "#f56c6c",
+            "CV benign" = "black",
+            "CV pathogenic" = "black"
+            ))
 
-    fillScale <- scale_fill_manual(
+    fillScale <-
+        scale_fill_manual(
         name = "code_color",
-        values = c("AM ambiguous" = "gray",
-                    "AM benign" = "#89d5f5",
-                    "AM pathogenic" = "#f56c6c",
-                    "CV benign" = "#007cb0",
-                    "CV pathogenic" = "#c70606"))
+        values = c(
+            "AM ambiguous" = "gray",
+            "AM benign" = "#89d5f5",
+            "AM pathogenic" = "#f56c6c",
+            "CV benign" = "#007cb0",
+            "CV pathogenic" = "#c70606"
+            ))
 
-    shapeScale <- scale_shape_manual(
+    shapeScale <-
+        scale_shape_manual(
         name = "code_color",
-        values = c("AM ambiguous" = 19,
-                    "AM benign" = 19,
-                    "AM pathogenic" = 19,
-                    "CV benign" = 21,
-                    "CV pathogenic" = 21))
+        values = c(
+            "AM ambiguous" = 19,
+            "AM benign" = 19,
+            "AM pathogenic" = 19,
+            "CV benign" = 21,
+            "CV pathogenic" = 21
+            ))
 
-    sizeScale <- scale_size_manual(
+    sizeScale <-
+        scale_size_manual(
         name = "code_color",
-        values = c("AM ambiguous" = 2,
-                    "AM benign" = 2,
-                    "AM pathogenic" = 2,
-                    "CV benign" = 4,
-                    "CV pathogenic" = 4))
+        values = c(
+            "AM ambiguous" = 2,
+            "AM benign" = 2,
+            "AM pathogenic" = 2,
+            "CV benign" = 4,
+            "CV pathogenic" = 4
+            ))
 
-    strokeScale <- scale_discrete_manual(
+    strokeScale <-
+        scale_discrete_manual(
         name = "code_color",
         aesthetics = "stroke",
-        values = c("AM ambiguous" = 0,
-                    "AM benign" = 0,
-                    "AM pathogenic" = 0,
-                    "CV benign" = 1.5,
-                    "CV pathogenic" = 1.5))
+        values = c(
+            "AM ambiguous" = 0,
+            "AM benign" = 0,
+            "AM pathogenic" = 0,
+            "CV benign" = 1.5,
+            "CV pathogenic" = 1.5
+            ))
 
-    cv_plot <- combined_table |>
+    cv_plot <-
+        combined_table |>
         ggplot(aes(.data$aa_pos, .data$am_pathogenicity)) +
-        geom_point(
-            aes(shape = .data$code_color,
-                color = .data$code_color,
-                size = .data$code_color,
-                fill = .data$code_color,
-                stroke = .data$code_color)
-        ) +
+        geom_point(aes(
+            shape = .data$code_color,
+            color = .data$code_color,
+            size = .data$code_color,
+            fill = .data$code_color,
+            stroke = .data$code_color
+        )) +
         strokeScale +
         shapeScale +
         sizeScale +
         colScale +
         fillScale +
         geom_hline(
-            yintercept = combined_table |>
+            yintercept =
+                combined_table |>
                 filter(.data$am_class == "pathogenic") |>
                 pull(min) |>
                 unique(),
@@ -193,7 +221,8 @@ clinvar_create_plot <-
             color = "#c70606"
         ) +
         geom_hline(
-            yintercept = combined_table |>
+            yintercept =
+                combined_table |>
                 filter(.data$am_class == "benign") |>
                 pull(max) |>
                 unique(),
@@ -212,7 +241,6 @@ clinvar_create_plot <-
             legend.title = element_blank(),
             legend.text = element_text(size = 11)
         )
-
     cv_plot
 }
 
@@ -220,7 +248,7 @@ clinvar_create_plot <-
 #'
 #' @title Integrate ClinVar Labels with AlphaMissense Pathogenicity Scores
 #'
-#' @description `plot_clinvar()` integrates ClinVar classifications
+#' @description `clinvar_plot()` integrates ClinVar classifications
 #'    with AlphaMissense predicted scores derived from
 #'    `am_data("aa_substitutions")` and returns a ggplot object for
 #'    visualization.
@@ -259,7 +287,7 @@ clinvar_create_plot <-
 #'    \code{\link{tibble}} or \code{\link{data.frame}} can be
 #'    supplied.
 #'
-#' @return `plot_clinvar()` returns a `ggplot` object which overlays
+#' @return `clinvar_plot()` returns a `ggplot` object which overlays
 #'    ClinVar classifications onto AlphaMissense predicted
 #'    scores. Blue, gray, and red colors represent pathogenicity
 #'    classifications for "likely benign", "ambiguous", or
@@ -282,55 +310,45 @@ clinvar_create_plot <-
 #' \emph{Science} 381, eadg7492. DOI:10.1126/science.adg7492.
 #'
 #' @importFrom BiocBaseUtils isCharacter
+#'
 #' @importFrom utils data
 #'
 #' @export
 clinvar_plot <-
     function(uniprotId, alphamissense_table, clinvar_table)
 {
-    ## Validate arguments
+    ## Validate uniprotId to start filtering alphamissense and clinvar tables
     stopifnot(isCharacter(uniprotId))
 
     ## Filter AM and CV tables with uniProtID
-    alphamissense_table <- clinvar_filter_am_table(
-        am_table = alphamissense_table,
-        uID = uniprotId
-    )
+    alphamissense_table <-
+        clinvar_filter_am_table(
+            am_table = alphamissense_table,
+            uID = uniprotId
+        )
 
-    clinvar_table <- clinvar_filter_cv_table(
-        cv_table = clinvar_table,
-        uID = uniprotId
-    )
+    clinvar_table <-
+        clinvar_filter_cv_table(
+            cv_table = clinvar_table,
+            uID = uniprotId
+        )
 
-    # New validate section
-    # stopifnot(
-    #     is.data.frame(alphamisense_table),
-    #     all(c("...", "..."), %in% colnames(alphamisense_table)),
-    #     ...
-    # )
-
-    ## Validate AM tables
-    am_required_columns <- c("uniprot_id", "protein_variant",
-                            "am_class", "am_pathogenicity")
+    ## Validate extracted tables
     stopifnot(
-        inherits(alphamissense_table, "tbl") ||
-            inherits(alphamissense_table, "data.frame"),
-        all(am_required_columns %in% colnames(alphamissense_table))
-    )
-
-    ## Validate CV table
-    cv_required_columns <- c("uniprot_id", "protein_variant", "cv_class")
-    stopifnot(
-        inherits(clinvar_table, "tbl") ||
-            inherits(clinvar_table, "data.frame"),
-        all(cv_required_columns %in% colnames(clinvar_table))
+        is.data.frame(alphamissense_table) | is.tbl(alphamissense_table),
+        all(c("uniprot_id", "protein_variant", "am_class", "am_pathogenicity")
+            %in% colnames(alphamissense_table)),
+        is.data.frame(clinvar_table) | is.tbl(clinvar_table),
+        all(c("uniprot_id", "protein_variant", "cv_class")
+            %in% colnames(clinvar_table))
     )
 
     ## Process tables for plotting
-    combined_table <- clinvar_prepare_data_for_plot(
-        am_table = alphamissense_table,
-        cv_table = clinvar_table
-    )
+    combined_table <-
+        clinvar_prepare_data_for_plot(
+            am_table = alphamissense_table,
+            cv_table = clinvar_table
+        )
 
     ## Plot sequence window
     clinvar_create_plot(combined_table = combined_table, uId = uniprotId)
@@ -338,19 +356,20 @@ clinvar_plot <-
 
 #' @rdname ClinVar
 #'
-#' @description `clinvar_data()` loads in the default ClinVar information from
-#' the supplemental table of the AlphaMissense
-#' [\[2023\]](https://www.science.org/doi/10.1126/science.adg7492) paper. The
-#' script used to derive this table can be found in
-#' `system.file(package = "AlphaMissenseR", "scripts", "clinvar_make_dataset.R")`
+#' @description `clinvar_data()` loads in the raw ClinVar information from
+#'    the supplemental table of the AlphaMissense
+#'    [\[2023\]](https://www.science.org/doi/10.1126/science.adg7492) paper. A
+#'    processed version of this data is used in the `clinvar_plot()` function.
+#'    The script used to derive this processed table can be found in
+#'    `system.file(package = "AlphaMissenseR", "scripts", "clinvar_make_dataset.R")`
 #'
-#' @format dataframe with 82872 rows and 5 variables:
+#' @format a tbl with 82872 rows and 5 variables:
 #' \describe{
-#'     \item{cv_variant_id}{ClinVar variant identifer.}
-#'     \item{uniprot_id}{UniProt accession identifier.}
-#'     \item{transcript_id}{Ensembl transcript identifier.}
-#'     \item{protein_variant}{Protein variant identifier.}
-#'     \item{cv_class}{Binary ClinVar class. 0 for benign or 1 for pathogenic.}
+#'    \item{cv_variant_id}{ClinVar variant identifer.}
+#'    \item{uniprot_id}{UniProt accession identifier.}
+#'    \item{transcript_id}{Ensembl transcript identifier.}
+#'    \item{protein_variant}{Protein variant identifier.}
+#'    \item{cv_class}{Binary ClinVar class. 0 for benign or 1 for pathogenic.}
 #' }
 #'
 #' @export
