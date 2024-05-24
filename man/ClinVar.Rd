@@ -4,24 +4,13 @@
 \alias{clinvar_plot}
 \alias{clinvar_data}
 \title{Integrate ClinVar Labels with AlphaMissense Pathogenicity Scores}
-\format{
-a tbl with 82872 rows and 5 variables:
-\describe{
-\item{cv_variant_id}{ClinVar variant identifer.}
-\item{uniprot_id}{UniProt accession identifier.}
-\item{transcript_id}{Ensembl transcript identifier.}
-\item{protein_variant}{Protein variant identifier.}
-\item{cv_class}{Binary ClinVar class. 0 for benign or 1 for pathogenic.}
-}
-}
 \usage{
 clinvar_plot(uniprotId, alphamissense_table, clinvar_table)
 
 clinvar_data(record = ALPHAMISSENSE_RECORD, bfc = BiocFileCache())
 }
 \arguments{
-\item{uniprotId}{a string with a valid UniProt accession
-identifier.}
+\item{uniprotId}{\code{character()} a valid UniProt accession identifier.}
 
 \item{alphamissense_table}{a table containing AlphaMissense
 predictions for protein variants. By default, the table is
@@ -31,7 +20,7 @@ can be supplied.}
 
 \item{clinvar_table}{a table containing ClinVar information. By
 default, the table is derived from the supplemental data of the
-AlphaMissense paper.  Alternatively, a user-defined
+AlphaMissense paper. Alternatively, a user-defined
 \code{\link{tibble}} or \code{\link{data.frame}} can be
 supplied.}
 }
@@ -44,6 +33,16 @@ classifications for "likely benign", "ambiguous", or
 ClinVar variants colored according to their clinical
 classification, while smaller points in the background are
 AlphaMissense predictions.
+
+the processed clinvar table returned by the \code{clinvar_make_dataset.R} script
+is a tbl with 82872 rows and 5 variables:
+\itemize{
+\item \code{cv_variant_id}: ClinVar variant identifer.
+\item \code{uniprot_id}: UniProt accession identifier.
+\item \code{transcript_id}: Ensembl transcript identifier.
+\item \code{protein_variant}: Protein variant identifier.
+\item \code{cv_class}: Binary ClinVar class. 0 for benign or 1 for pathogenic.
+}
 }
 \description{
 \code{clinvar_plot()} integrates ClinVar classifications
@@ -79,6 +78,7 @@ For \code{clinvar_table}, columns must include:
 }
 }
 \examples{
+
 data(clinvar_data)
 
 alphamissense_table <- am_data("aa_substitutions")

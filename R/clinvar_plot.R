@@ -253,6 +253,20 @@ clinvar_create_plot <-
 #'    `am_data("aa_substitutions")` and returns a ggplot object for
 #'    visualization.
 #'
+#' @param uniprotId `character()` a valid UniProt accession identifier.
+#'
+#' @param alphamissense_table a table containing AlphaMissense
+#'    predictions for protein variants. By default, the table is
+#'    derived from `am_data("aa_substitution")`. Alternatively, a
+#'    user-defined \code{\link{tibble}} or \code{\link{data.frame}}
+#'    can be supplied.
+#'
+#' @param clinvar_table a table containing ClinVar information. By
+#'    default, the table is derived from the supplemental data of the
+#'    AlphaMissense paper. Alternatively, a user-defined
+#'    \code{\link{tibble}} or \code{\link{data.frame}} can be
+#'    supplied.
+#'
 #' @details
 #'
 #' For `alphamissense_table`, columns must include:
@@ -272,21 +286,6 @@ clinvar_create_plot <-
 #'    `alphamissense_table` format.
 #' - `cv_class`: binary ClinVar classification of 0 (benign) or 1 (pathogenic).
 #'
-#' @param uniprotId a string with a valid UniProt accession
-#'    identifier.
-#'
-#' @param alphamissense_table a table containing AlphaMissense
-#'    predictions for protein variants. By default, the table is
-#'    derived from `am_data("aa_substitution")`. Alternatively, a
-#'    user-defined \code{\link{tibble}} or \code{\link{data.frame}}
-#'    can be supplied.
-#'
-#' @param clinvar_table a table containing ClinVar information. By
-#'    default, the table is derived from the supplemental data of the
-#'    AlphaMissense paper.  Alternatively, a user-defined
-#'    \code{\link{tibble}} or \code{\link{data.frame}} can be
-#'    supplied.
-#'
 #' @return `clinvar_plot()` returns a `ggplot` object which overlays
 #'    ClinVar classifications onto AlphaMissense predicted
 #'    scores. Blue, gray, and red colors represent pathogenicity
@@ -297,6 +296,7 @@ clinvar_create_plot <-
 #'    AlphaMissense predictions.
 #'
 #' @examples
+#'
 #' data(clinvar_data)
 #'
 #' alphamissense_table <- am_data("aa_substitutions")
@@ -363,14 +363,16 @@ clinvar_plot <-
 #'    The script used to derive this processed table can be found in
 #'    `system.file(package = "AlphaMissenseR", "scripts", "clinvar_make_dataset.R")`
 #'
-#' @format a tbl with 82872 rows and 5 variables:
-#' \describe{
-#'    \item{cv_variant_id}{ClinVar variant identifer.}
-#'    \item{uniprot_id}{UniProt accession identifier.}
-#'    \item{transcript_id}{Ensembl transcript identifier.}
-#'    \item{protein_variant}{Protein variant identifier.}
-#'    \item{cv_class}{Binary ClinVar class. 0 for benign or 1 for pathogenic.}
-#' }
+#' @return
+#'
+#' the processed clinvar table returned by the `clinvar_make_dataset.R` script
+#' is a tbl with 82872 rows and 5 variables:
+#'
+#' - `cv_variant_id`: ClinVar variant identifer.
+#' - `uniprot_id`: UniProt accession identifier.
+#' - `transcript_id`: Ensembl transcript identifier.
+#' - `protein_variant`: Protein variant identifier.
+#' - `cv_class`: Binary ClinVar class. 0 for benign or 1 for pathogenic.
 #'
 #' @export
 clinvar_data <-
