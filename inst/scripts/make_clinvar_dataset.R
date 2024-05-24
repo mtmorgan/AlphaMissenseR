@@ -1,5 +1,3 @@
-## code to prepare `clinvar_data.rda` dataset
-
 #wget https://www.science.org/doi/suppl/10.1126/science.adg7492/suppl_file/science.adg7492_data_s1_to_s9.zip
 #unzip science.adg7492_data_s1_to_s9.zip
 #cd science.adg7492_data_s1_to_s9
