@@ -250,8 +250,8 @@ composed_view <- compose_view(
 )
 
 arranged_view <- arrange_views(
-    title = "Basic Marks: bar",
-    subtitle = "Tutorial Examples",
+    title = "Basic bar track : hg38",
+    subtitle = "Gosling Example",
     views = composed_view
 )
 
