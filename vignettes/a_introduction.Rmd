@@ -1,6 +1,7 @@
 ---
 title: "Accessing AlphaMissense Resources in R"
 output: rmarkdown::html_vignette
+runtime: shiny
 vignette: >
   %\VignetteIndexEntry{Accessing AlphaMissense Resources in R}
   %\VignetteEngine{knitr::rmarkdown}
@@ -206,8 +207,8 @@ gpos
 ```
 this can be visualized with [shiny.gosling][] or [gosling][]
 ```{r gosvis}
-require(shiny.gosling)
-require(shiny)
+library(shiny.gosling)
+library(shiny)
 
 as_GRanges <- as(gpos, "GRanges")
 as_GRanges

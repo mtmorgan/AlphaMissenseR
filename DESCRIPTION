@@ -50,7 +50,7 @@ Suggests:
     ensembldb,
     httr,
     tidyr,
-    r3dmol, bio3d, shiny,
+    r3dmol, bio3d, shiny, shiny.gosling
     colorspace,
     knitr,
     rmarkdown,
