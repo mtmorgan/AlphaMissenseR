@@ -38,17 +38,17 @@ purposes.
 
 # Access ClinVar classifications with AlphaMissense predictions
 
-The ClinVar table can be accessed using `data("clinvar_data")`.
+The ClinVar table can be accessed using `clinvar_data()` from the database.
 
 ```{r download_cv}
-data("clinvar_data")
+cv_table <- clinvar_data()
 ```
 
 The ClinVar data.frame is now available for exploration or parsing.
 
 # Compare ClinVar and AlphaMissense
 
-This section uses the `plot_clinvar()` function to generate a
+This section uses the `clinvar_plot()` function to generate a
 scatterplot for benchmarking and comparing ClinVar classification with
 AlphaMissense predictions. By default, the function takes one UniProt
 accession identifier, derives AlphaMissense scores from
