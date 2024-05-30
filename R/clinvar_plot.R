@@ -54,7 +54,7 @@ clinvar_filter_cv_table <-
     clinvar <- clinvar_data()
 
     # Separate UniProt ID and Protein Variant
-    clinvar_data <-
+    cv_table <-
         clinvar |>
         as_tibble() |>
         tidyr::separate(
