@@ -51,9 +51,26 @@ clinvar_filter_cv_table <-
             "ClinVar dataset in AlphaMissenseR package"
         ))
 
-    data_env <- new.env(parent = emptyenv())
-    data("clinvar_data", envir = data_env, package = "AlphaMissenseR")
-    cv_table <- data_env[["clinvar_data"]]
+    clinvar <- clinvar_data()
+
+    # Separate UniProt ID and Protein Variant
+    clinvar_data <-
+        clinvar |>
+        as_tibble() |>
+        tidyr::separate(
+            .data$protein_variant,
+            into = c("uniprot_id", "protein_variant"),
+            sep = ":"
+        ) |>
+        select(-('AlphaMissense')) |>
+        rename(
+            cv_variant_id = variant_id,
+            cv_class = label
+        ) |>
+        mutate(
+            cv_class = as.factor(cv_class)
+        ) |>
+        relocate('transcript_id', .after = 'uniprot_id')
     }
 
     ## Take clinvar_table and filter for the uniprotId

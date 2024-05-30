@@ -17,20 +17,3 @@ fpath <- system.file(
 )
 
 clinvar <- read.csv(fpath)
-
-# Separate UniProt ID and Protein Variant
-clinvar <-
-    clinvar |>
-    tidyr::separate(
-        .data$protein_variant,
-        into = c("uniprot_id", "protein_variant"),
-        sep = ":"
-    )
-
-clinvar_data <-
-    clinvar |>
-    select(-('AlphaMissense')) |>
-    rename(cv_variant_id = variant_id,
-           cv_class = label) |>
-    mutate(cv_class = as.factor(cv_class)) |>
-    relocate('transcript_id', .after = 'uniprot_id')
