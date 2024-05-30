@@ -1,8 +1,11 @@
-#wget https://www.science.org/doi/suppl/10.1126/science.adg7492/suppl_file/science.adg7492_data_s1_to_s9.zip
-#unzip science.adg7492_data_s1_to_s9.zip
-#cd science.adg7492_data_s1_to_s9
-#cp science.adg7492_data_s5.csv .
-#gzip science.adg7492_data_s5.csv
+#lynx -accept_all_cookies=TRUE https://www.science.org/doi/suppl/10.1126/science.adg7492/suppl_file/science.adg7492_data_s1_to_s9.zip
+
+# Unzip directory of supplmental files to access separate datasets
+unzip('inst/extdata/science.adg7492_data_s1_to_s9.zip', exdir = 'inst/extdata/')
+
+# Compress the ClinVar dataset size in order to be included in R package
+R.utils::gzip('inst/extdata/science.adg7492_data_s5.csv')
+
 library(tidyr)
 library(dplyr)
 
@@ -31,5 +34,3 @@ clinvar_data <-
            cv_class = label) |>
     mutate(cv_class = as.factor(cv_class)) |>
     relocate('transcript_id', .after = 'uniprot_id')
-
-usethis::use_data(clinvar_data, overwrite = TRUE)
