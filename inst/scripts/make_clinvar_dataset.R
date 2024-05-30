@@ -29,6 +29,7 @@ clinvar_data <-
     select(-('AlphaMissense')) |>
     rename(cv_variant_id = variant_id,
            cv_class = label) |>
+    mutate(cv_class = as.factor(cv_class)) |>
     relocate('transcript_id', .after = 'uniprot_id')
 
 usethis::use_data(clinvar_data, overwrite = TRUE)
