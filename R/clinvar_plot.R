@@ -314,13 +314,10 @@ clinvar_create_plot <-
 #'
 #' @examples
 #'
-#' data(clinvar_data)
-#'
 #' alphamissense_table <- am_data("aa_substitutions")
 #'
 #' clinvar_plot(uniprotId = "P37023",
-#'    alphamissense_table = alphamissense_table,
-#'    clinvar_table = clinvar_data)
+#'    alphamissense_table = alphamissense_table)
 #'
 #' @references Cheng et al.,
 #' Accurate proteome-wide missense variant effect prediction with AlphaMissense.
@@ -375,21 +372,17 @@ clinvar_plot <-
 #'
 #' @description `clinvar_data()` loads in the raw ClinVar information from
 #'    the supplemental table of the AlphaMissense
-#'    [\[2023\]](https://www.science.org/doi/10.1126/science.adg7492) paper. A
-#'    processed version of this data is used in the `clinvar_plot()` function.
-#'    The script used to derive this processed table can be found in
-#'    `system.file(package = "AlphaMissenseR", "scripts", "clinvar_make_dataset.R")`
+#'    [\[2023\]](https://www.science.org/doi/10.1126/science.adg7492) paper.
 #'
 #' @return
 #'
-#' the processed clinvar table returned by the `clinvar_make_dataset.R` script
-#' is a tbl with 82872 rows and 5 variables:
+#' `clinvar_data()` returns a tbl with 82872 rows and 5 variables:
 #'
-#' - `cv_variant_id`: ClinVar variant identifer.
-#' - `uniprot_id`: UniProt accession identifier.
+#' - `variant_id`: ClinVar variant identifer.
 #' - `transcript_id`: Ensembl transcript identifier.
-#' - `protein_variant`: Protein variant identifier.
-#' - `cv_class`: Binary ClinVar class. 0 for benign or 1 for pathogenic.
+#' - `protein_variant`: UniProt accession:protein variant identifier.
+#' - `AlphaMissense`: AlphaMissense pathogenicity score.
+#' - `label`: Binary ClinVar class. 0 for benign or 1 for pathogenic.
 #'
 #' @export
 clinvar_data <-

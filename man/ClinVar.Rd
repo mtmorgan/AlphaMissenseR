@@ -34,14 +34,13 @@ ClinVar variants colored according to their clinical
 classification, while smaller points in the background are
 AlphaMissense predictions.
 
-the processed clinvar table returned by the \code{clinvar_make_dataset.R} script
-is a tbl with 82872 rows and 5 variables:
+\code{clinvar_data()} returns a tbl with 82872 rows and 5 variables:
 \itemize{
-\item \code{cv_variant_id}: ClinVar variant identifer.
-\item \code{uniprot_id}: UniProt accession identifier.
+\item \code{variant_id}: ClinVar variant identifer.
 \item \code{transcript_id}: Ensembl transcript identifier.
-\item \code{protein_variant}: Protein variant identifier.
-\item \code{cv_class}: Binary ClinVar class. 0 for benign or 1 for pathogenic.
+\item \code{protein_variant}: UniProt accession:protein variant identifier.
+\item \code{AlphaMissense}: AlphaMissense pathogenicity score.
+\item \code{label}: Binary ClinVar class. 0 for benign or 1 for pathogenic.
 }
 }
 \description{
@@ -52,10 +51,7 @@ visualization.
 
 \code{clinvar_data()} loads in the raw ClinVar information from
 the supplemental table of the AlphaMissense
-\href{https://www.science.org/doi/10.1126/science.adg7492}{[2023]} paper. A
-processed version of this data is used in the \code{clinvar_plot()} function.
-The script used to derive this processed table can be found in
-\code{system.file(package = "AlphaMissenseR", "scripts", "clinvar_make_dataset.R")}
+\href{https://www.science.org/doi/10.1126/science.adg7492}{[2023]} paper.
 }
 \details{
 For \code{alphamissense_table}, columns must include:
@@ -79,13 +75,10 @@ For \code{clinvar_table}, columns must include:
 }
 \examples{
 
-data(clinvar_data)
-
 alphamissense_table <- am_data("aa_substitutions")
 
 clinvar_plot(uniprotId = "P37023",
-   alphamissense_table = alphamissense_table,
-   clinvar_table = clinvar_data)
+   alphamissense_table = alphamissense_table)
 
 }
 \references{
