@@ -62,21 +62,23 @@ clinvar_filter_cv_table <-
             into = c("uniprot_id", "protein_variant"),
             sep = ":"
         ) |>
-        select(-('AlphaMissense')) |>
-        rename(
-            cv_variant_id = variant_id,
-            cv_class = label
-        ) |>
-        mutate(
-            cv_class = as.factor(cv_class)
-        ) |>
-        relocate('transcript_id', .after = 'uniprot_id')
+        select(-('AlphaMissense'))
+
+    new_cols <- c(cv_variant_id = variant_id,
+                  cv_class = label)
+    cv_table <-
+        cv_table |>
+        rename(all_of(new_cols)) |>
+            mutate(
+                cv_class = as.factor(.data$cv_class)
+            )
     }
 
     ## Take clinvar_table and filter for the uniprotId
     clinvar_table <-
         cv_table |>
         filter(.data$uniprot_id == uID)
+
 
     ## Check if the table is empty after filtering
     if (!nrow(clinvar_table)) {
