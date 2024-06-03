@@ -64,8 +64,8 @@ clinvar_filter_cv_table <-
         ) |>
         select(-('AlphaMissense'))
 
-    new_cols <- c(cv_variant_id = variant_id,
-                  cv_class = label)
+    new_cols <- c(cv_variant_id = "variant_id", cv_class = "label")
+
     cv_table <-
         cv_table |>
         rename(all_of(new_cols)) |>
