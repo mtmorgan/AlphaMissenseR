@@ -63,20 +63,14 @@ clinvar_filter_cv_table <-
             sep = ":"
         ) |>
         select(-('AlphaMissense'))
-
-    new_cols <- c(cv_variant_id = "variant_id", cv_class = "label")
-
-    cv_table <-
-        cv_table |>
-        rename(all_of(new_cols)) |>
-            mutate(
-                cv_class = as.factor(.data$cv_class)
-            )
     }
 
     ## Take clinvar_table and filter for the uniprotId
     clinvar_table <-
         cv_table |>
+        mutate(
+            cv_class = as.factor(.data$label)
+        ) |>
         filter(.data$uniprot_id == uID)
 
 
@@ -355,7 +349,7 @@ clinvar_plot <-
         all(c("uniprot_id", "protein_variant", "am_class", "am_pathogenicity")
             %in% colnames(alphamissense_table)),
         is.data.frame(clinvar_table) | is.tbl(clinvar_table),
-        all(c("uniprot_id", "protein_variant", "cv_class")
+        all(c("uniprot_id", "protein_variant", "label")
             %in% colnames(clinvar_table))
     )
 
