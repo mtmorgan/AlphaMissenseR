@@ -1,9 +1,8 @@
 test_that("clinvar_filter_am_table() works", {
 
     ## Test case when am_table is missing
-    res <- suppressMessages(clinvar_filter_am_table(uID = "P37023"))
+    res <- clinvar_filter_am_table(uID = "P37023")
 
-    expect_message(clinvar_filter_am_table(uID = "P37023"))
     expect_equal(res |> nrow(), 9557L)
 
     ## Test case when am_table is provided by user
@@ -23,8 +22,8 @@ test_that("clinvar_filter_am_table() works", {
     expect_error(
         clinvar_filter_am_table(uID = "C", am_table = am_data),
         paste0(
-            "No AlphaMissense information found for the protein ",
-            "accession. Check that the UniProt ID is correct."
+            "no AlphaMissense information found for the protein accession ",
+            "'C'; check that the UniProt ID is correct"
         )
     )
 })
@@ -32,9 +31,8 @@ test_that("clinvar_filter_am_table() works", {
 test_that("clinvar_filter_cv_table() works", {
 
     ## Test case when cv_table is missing
-    res <- suppressMessages(clinvar_filter_cv_table(uID = "P37023"))
+    res <- clinvar_filter_cv_table(uID = "P37023")
 
-    expect_message(clinvar_filter_cv_table(uID = "P37023"))
     expect_equal(res |> nrow(), 113L)
 
     ## Test case when cv_table is provided by user
@@ -49,8 +47,8 @@ test_that("clinvar_filter_cv_table() works", {
 
     ## Test case when bad cv_table is given i.e uniprotID with no hits
     expect_error(clinvar_filter_cv_table(uID = "C", cv_table = cv_data),
-                 paste0("No ClinVar information found for the protein ",
-                        "accession. Check that the UniProt ID is correct.")
+                 paste0("no ClinVar information found for the protein ",
+                        "accession 'C'; check that the UniProt ID is correct")
     )
 })
 
@@ -67,13 +65,14 @@ test_that("clinvar_prepare_data_for_plot() works", {
                           protein_variant = c("M1A", "M2C", "G5L", "P10R"),
                           cv_class = c(1, 0, 0, 0))
 
-    res <- clinvar_prepare_data_for_plot(
-        am_table = am_data,
-        cv_table = cv_data
-    )
+    res <- suppressWarnings(
+        clinvar_prepare_data_for_plot(
+            am_table = am_data,
+            cv_table = cv_data
+    ))
 
     ## Amino acid positions extracted correctly
-    pos <- c(3, 4, 50, 2, 5, 1)
+    pos <- as.integer(c(3, 4, 50, 2, 5, 1))
     expect_identical(res |> pull(aa_pos), pos)
 
     ## All colnames are correctly present
@@ -120,9 +119,11 @@ test_that("'clinvar_plot()' works", {
                           cv_class = c(1, 0, 0, 0))
 
     ## Call the function with example input
-    plot <- clinvar_plot(uniprotId = "A",
-                         alphamissense_table = am_data,
-                         clinvar_table = cv_data)
+    plot <- suppressWarnings(
+        clinvar_plot(uniprotId = "A",
+        alphamissense_table = am_data,
+        clinvar_table = cv_data)
+    )
 
     ## Check aesthetics values are assigned correctly to groups
     stroke_vec <- c(0.0, 0.0, 1.5, 1.5, 1.5)
@@ -162,3 +163,4 @@ test_that("'clinvar_plot()' works", {
     ## check if the result is a ggplot object
     expect_true("ggplot" %in% class(plot))
 })
+
