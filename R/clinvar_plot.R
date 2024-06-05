@@ -62,15 +62,14 @@ clinvar_filter_cv_table <-
             into = c("uniprot_id", "protein_variant"),
             sep = ":"
         ) |>
-        select(-('AlphaMissense'))
+        mutate(
+            cv_class = as.factor(.data$label)
+        )
     }
 
     ## Take clinvar_table and filter for the uniprotId
     clinvar_table <-
         cv_table |>
-        mutate(
-            cv_class = as.factor(.data$label)
-        ) |>
         filter(.data$uniprot_id == uID)
 
 
@@ -147,7 +146,8 @@ clinvar_prepare_data_for_plot <-
 #'
 #' @importFrom ggplot2 ggplot geom_point aes scale_colour_manual element_text
 #'     scale_fill_manual scale_shape_manual scale_size_manual element_blank
-#'     scale_discrete_manual geom_hline labs xlab ylab theme_classic theme
+#'     scale_discrete_manual geom_hline labs xlab ylab theme_classic
+#'     theme ggplot_build
 #'
 clinvar_create_plot <-
     function(combined_table, uId)
@@ -349,7 +349,7 @@ clinvar_plot <-
         all(c("uniprot_id", "protein_variant", "am_class", "am_pathogenicity")
             %in% colnames(alphamissense_table)),
         is.data.frame(clinvar_table) | is.tbl(clinvar_table),
-        all(c("uniprot_id", "protein_variant", "label")
+        all(c("uniprot_id", "protein_variant", "cv_class")
             %in% colnames(clinvar_table))
     )
 
