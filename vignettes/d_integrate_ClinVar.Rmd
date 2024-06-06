@@ -38,17 +38,17 @@ purposes.
 
 # Access ClinVar classifications with AlphaMissense predictions
 
-The ClinVar table can be accessed using `data("clinvar_data")`.
+The ClinVar table can be accessed using `clinvar_data()` from the database.
 
 ```{r download_cv}
-data("clinvar_data")
+clinvar_data()
 ```
 
-The ClinVar data.frame is now available for exploration or parsing.
+The ClinVar table is now available for exploration or parsing.
 
 # Compare ClinVar and AlphaMissense
 
-This section uses the `plot_clinvar()` function to generate a
+This section uses the `clinvar_plot()` function to generate a
 scatterplot for benchmarking and comparing ClinVar classification with
 AlphaMissense predictions. By default, the function takes one UniProt
 accession identifier, derives AlphaMissense scores from
@@ -57,8 +57,8 @@ the data.frame previously obtained. Alternatively, it is possible to
 pass a custom AlphaMissense or ClinVar table to the function.  See
 function details for more information.
 
-```{r plot_P37023}
-plot_clinvar(uniprotId = "P37023")
+```{r plot_P37023, fig.width = 7}
+clinvar_plot(uniprotId = "P37023")
 ```
 
 We returned a `ggplot` object which overlays ClinVar classifications
@@ -77,6 +77,11 @@ while ClinVar identifies them as pathogenic.
 Because the ClinVar dataset is not exhaustive (not all proteins have
 been clinically-assessed), there may be proteins where information is
 not available.  In this case, the function will provide an error.
+
+Remember to disconnect from the database.
+```{r, close_db}
+db_disconnect_all()
+```
 
 # Session information {.unnumbered}
 

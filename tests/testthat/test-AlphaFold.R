@@ -27,7 +27,20 @@ test_that("af_predictions() works", {
         tbl <- af_predictions(c("P35557", "xyz")),
         "1 of 2 uniprot accessions not found\n  'xyz'"
     )
-    expect_identical(dim(tbl), c(1L, 21L))
+    expect_true(NROW(tbl) == 1L)
+    expect_true(NCOL(tbl) >= 23L)
+
+    ## as of 22 May, 2024
+    colnames <- c(
+        "entryId", "gene", "uniprotAccession", "uniprotId",
+        "uniprotDescription", "taxId", "organismScientificName",
+        "uniprotStart", "uniprotEnd", "uniprotSequence",
+        "modelCreatedDate", "latestVersion", "allVersions",
+        "isReviewed", "isReferenceProteome", "cifUrl", "bcifUrl",
+        "pdbUrl", "paeImageUrl", "paeDocUrl", "amAnnotationsUrl",
+        "amAnnotationsHg19Url", "amAnnotationsHg38Url"
+    )
+    expect_true(all(colnames %in% names(tbl)))
 })
 
 test_that("af_colorfunc_by_position() works", {
