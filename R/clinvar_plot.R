@@ -260,7 +260,7 @@ clinvar_create_plot <-
     cv_plot
 }
 
-#' @rdname ClinVar
+#' @rdname clinvar_plot
 #'
 #' @title Integrate ClinVar Labels with AlphaMissense Pathogenicity Scores
 #'
@@ -274,13 +274,13 @@ clinvar_create_plot <-
 #' @param alphamissense_table a table containing AlphaMissense
 #'    predictions for protein variants. By default, the table is
 #'    derived from `am_data("aa_substitution")`. Alternatively, a
-#'    user-defined \code{\link{tibble}} or \code{\link{data.frame}}
+#'    user-defined [`tibble::tbl_df`] or [`data.frame`]
 #'    can be supplied.
 #'
 #' @param clinvar_table a table containing ClinVar information. By
 #'    default, the table is derived from the supplemental data of the
 #'    AlphaMissense paper. Alternatively, a user-defined
-#'    \code{\link{tibble}} or \code{\link{data.frame}} can be
+#'    [`tibble::tbl_df`] or [`data.frame`] can be
 #'    supplied.
 #'
 #' @details
@@ -367,7 +367,7 @@ clinvar_plot <-
     clinvar_create_plot(combined_table = combined_table, uId = uniprotId)
 }
 
-#' @rdname ClinVar
+#' @rdname clinvar_plot
 #'
 #' @description `clinvar_data()` loads in the raw ClinVar information from
 #'    the supplemental table of the AlphaMissense
