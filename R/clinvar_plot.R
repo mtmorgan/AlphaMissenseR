@@ -14,6 +14,7 @@ clinvar_filter_am_table <-
             "'am_data(\"aa_substitution\")' table accessed through ",
             "the AlphaMissenseR package"
         ))
+
         am_table <- am_data("aa_substitutions")
     }
 
@@ -51,20 +52,20 @@ clinvar_filter_cv_table <-
             "ClinVar dataset in AlphaMissenseR package"
         ))
 
-    clinvar <- clinvar_data()
+        clinvar <- clinvar_data()
 
-    # Separate UniProt ID and Protein Variant
-    cv_table <-
-        clinvar |>
-        as_tibble() |>
-        tidyr::separate(
-            .data$protein_variant,
-            into = c("uniprot_id", "protein_variant"),
-            sep = ":"
-        ) |>
-        mutate(
-            cv_class = as.factor(.data$label)
-        )
+        # Separate UniProt ID and Protein Variant
+        cv_table <-
+            clinvar |>
+            as_tibble() |>
+            tidyr::separate(
+                .data$protein_variant,
+                into = c("uniprot_id", "protein_variant"),
+                sep = ":"
+            ) |>
+            mutate(
+                cv_class = as.factor(.data$label)
+            )
     }
 
     ## Take clinvar_table and filter for the uniprotId
@@ -138,6 +139,8 @@ clinvar_prepare_data_for_plot <-
             min = min(.data$am_pathogenicity, na.rm=TRUE)
         ) |>
         ungroup()
+
+    combined_data
 }
 
 #' Create a ClinVar plotting function using ggplot
