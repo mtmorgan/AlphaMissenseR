@@ -71,7 +71,8 @@ clinvar_filter_cv_table <-
     ## Take clinvar_table and filter for the uniprotId
     clinvar_table <-
         cv_table |>
-        filter(.data$uniprot_id == uID)
+        filter(.data$uniprot_id == uID) |>
+        as_tibble()
 
 
     ## Check if the table is empty after filtering
