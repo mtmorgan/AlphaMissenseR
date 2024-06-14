@@ -2,7 +2,7 @@
 #'
 #' @noRd
 #'
-#' @importFrom dplyr filter as_tibble
+#' @importFrom dplyr filter as_tibble vars
 #'
 clinvar_filter_am_table <-
     function(am_table, uID)
@@ -326,6 +326,8 @@ clinvar_create_plot <-
 #' @importFrom BiocBaseUtils isCharacter
 #'
 #' @importFrom utils data
+#'
+#' @importFrom dplyr is.tbl
 #'
 #' @export
 clinvar_plot <-
