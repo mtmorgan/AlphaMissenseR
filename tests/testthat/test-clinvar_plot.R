@@ -3,7 +3,7 @@ test_that("clinvar_filter_am_table() works", {
     ## Test case when am_table is missing
     res <- clinvar_filter_am_table(uID = "P37023")
 
-    expect_equal(res |> nrow(), 9557L)
+    expect_equal(res |> NROW(), 9557L)
 
     ## Test case when am_table is provided by user
     am_data <- data.frame(uniprot_id = c("A", "A", "A", "A", "A", "B"),
@@ -16,7 +16,7 @@ test_that("clinvar_filter_am_table() works", {
     res <- clinvar_filter_am_table(uID = "A", am_data)
 
     expect_identical(unique(res$uniprot_id), "A")
-    expect_equal(res |> nrow(), 5L)
+    expect_equal(res |> NROW(), 5L)
 
     ## Test case when bad am_table is given i.e uniprotID with no hits
     expect_error(
@@ -33,7 +33,7 @@ test_that("clinvar_filter_cv_table() works", {
     ## Test case when cv_table is missing
     res <- clinvar_filter_cv_table(uID = "P37023")
 
-    expect_equal(res |> nrow(), 113L)
+    expect_equal(res |> NROW(), 113L)
 
     ## Test case when cv_table is provided by user
     cv_data <- data.frame(uniprot_id = c("A", "A", "A", "A"),
@@ -43,7 +43,7 @@ test_that("clinvar_filter_cv_table() works", {
     res <- clinvar_filter_cv_table(uID = "A", cv_table = cv_data)
 
     expect_identical(unique(res$uniprot_id), "A")
-    expect_equal(res |> nrow(), 4L)
+    expect_equal(res |> NROW(), 4L)
 
     ## Test case when bad cv_table is given i.e uniprotID with no hits
     expect_error(clinvar_filter_cv_table(uID = "C", cv_table = cv_data),
@@ -83,7 +83,7 @@ test_that("clinvar_prepare_data_for_plot() works", {
     expect_true(all(names(res) %in% col_names))
 
     ## There are only 3 am_class types - ambiguous, benign, pathogenic
-    expect_equal(res |> distinct(am_class) |> nrow(), 3L)
+    expect_equal(res |> distinct(am_class) |> NROW(), 3L)
 
     ## There are only 5 code_color types - check assigned correctly
     color_names <- c("AM ambiguous", "AM benign", "AM pathogenic",

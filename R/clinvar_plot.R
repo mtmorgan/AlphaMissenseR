@@ -25,7 +25,7 @@ clinvar_filter_am_table <-
 
     ## Check if table is empty after filtering
     ## This will work for a tibble or a data.frame
-    if (!nrow(alphamissense_table)) {
+    if (!NROW(alphamissense_table)) {
         stop(
             "no AlphaMissense information found for the protein ",
             "accession '", uID, "'; check that the UniProt ID is correct"
@@ -74,7 +74,7 @@ clinvar_filter_cv_table <-
 
 
     ## Check if the table is empty after filtering
-    if (!nrow(clinvar_table)) {
+    if (!NROW(clinvar_table)) {
         stop(
             "no ClinVar information found for the protein ",
             "accession '", uID, "'; check that the UniProt ID is correct"
