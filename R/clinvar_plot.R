@@ -2,7 +2,7 @@
 #'
 #' @noRd
 #'
-#' @importFrom dplyr filter as_tibble
+#' @importFrom dplyr filter as_tibble vars
 #'
 clinvar_filter_am_table <-
     function(am_table, uID)
@@ -14,6 +14,7 @@ clinvar_filter_am_table <-
             "'am_data(\"aa_substitution\")' table accessed through ",
             "the AlphaMissenseR package"
         ))
+
         am_table <- am_data("aa_substitutions")
     }
 
@@ -25,7 +26,7 @@ clinvar_filter_am_table <-
 
     ## Check if table is empty after filtering
     ## This will work for a tibble or a data.frame
-    if (!nrow(alphamissense_table)) {
+    if (!NROW(alphamissense_table)) {
         stop(
             "no AlphaMissense information found for the protein ",
             "accession '", uID, "'; check that the UniProt ID is correct"
@@ -51,30 +52,31 @@ clinvar_filter_cv_table <-
             "ClinVar dataset in AlphaMissenseR package"
         ))
 
-    clinvar <- clinvar_data()
+        clinvar <- clinvar_data()
 
-    # Separate UniProt ID and Protein Variant
-    cv_table <-
-        clinvar |>
-        as_tibble() |>
-        tidyr::separate(
-            .data$protein_variant,
-            into = c("uniprot_id", "protein_variant"),
-            sep = ":"
-        ) |>
-        mutate(
-            cv_class = as.factor(.data$label)
-        )
+        # Separate UniProt ID and Protein Variant
+        cv_table <-
+            clinvar |>
+            as_tibble() |>
+            tidyr::separate(
+                .data$protein_variant,
+                into = c("uniprot_id", "protein_variant"),
+                sep = ":"
+            ) |>
+            mutate(
+                cv_class = as.factor(.data$label)
+            )
     }
 
     ## Take clinvar_table and filter for the uniprotId
     clinvar_table <-
         cv_table |>
-        filter(.data$uniprot_id == uID)
+        filter(.data$uniprot_id == uID) |>
+        as_tibble()
 
 
     ## Check if the table is empty after filtering
-    if (!nrow(clinvar_table)) {
+    if (!NROW(clinvar_table)) {
         stop(
             "no ClinVar information found for the protein ",
             "accession '", uID, "'; check that the UniProt ID is correct"
@@ -138,6 +140,8 @@ clinvar_prepare_data_for_plot <-
             min = min(.data$am_pathogenicity, na.rm=TRUE)
         ) |>
         ungroup()
+
+    combined_data
 }
 
 #' Create a ClinVar plotting function using ggplot
@@ -257,7 +261,7 @@ clinvar_create_plot <-
     cv_plot
 }
 
-#' @rdname ClinVar
+#' @rdname clinvar_plot
 #'
 #' @title Integrate ClinVar Labels with AlphaMissense Pathogenicity Scores
 #'
@@ -271,13 +275,13 @@ clinvar_create_plot <-
 #' @param alphamissense_table a table containing AlphaMissense
 #'    predictions for protein variants. By default, the table is
 #'    derived from `am_data("aa_substitution")`. Alternatively, a
-#'    user-defined \code{\link{tibble}} or \code{\link{data.frame}}
+#'    user-defined [`tibble::tbl_df`] or [`data.frame`]
 #'    can be supplied.
 #'
 #' @param clinvar_table a table containing ClinVar information. By
 #'    default, the table is derived from the supplemental data of the
 #'    AlphaMissense paper. Alternatively, a user-defined
-#'    \code{\link{tibble}} or \code{\link{data.frame}} can be
+#'    [`tibble::tbl_df`] or [`data.frame`] can be
 #'    supplied.
 #'
 #' @details
@@ -323,6 +327,8 @@ clinvar_create_plot <-
 #'
 #' @importFrom utils data
 #'
+#' @importFrom dplyr is.tbl
+#'
 #' @export
 clinvar_plot <-
     function(uniprotId, alphamissense_table, clinvar_table)
@@ -364,7 +370,7 @@ clinvar_plot <-
     clinvar_create_plot(combined_table = combined_table, uId = uniprotId)
 }
 
-#' @rdname ClinVar
+#' @rdname clinvar_plot
 #'
 #' @description `clinvar_data()` loads in the raw ClinVar information from
 #'    the supplemental table of the AlphaMissense

@@ -15,13 +15,13 @@ clinvar_data(record = ALPHAMISSENSE_RECORD, bfc = BiocFileCache())
 \item{alphamissense_table}{a table containing AlphaMissense
 predictions for protein variants. By default, the table is
 derived from \code{am_data("aa_substitution")}. Alternatively, a
-user-defined \code{\link{tibble}} or \code{\link{data.frame}}
+user-defined \code{\link[tibble:tbl_df-class]{tibble::tbl_df}} or \code{\link{data.frame}}
 can be supplied.}
 
 \item{clinvar_table}{a table containing ClinVar information. By
 default, the table is derived from the supplemental data of the
 AlphaMissense paper. Alternatively, a user-defined
-\code{\link{tibble}} or \code{\link{data.frame}} can be
+\code{\link[tibble:tbl_df-class]{tibble::tbl_df}} or \code{\link{data.frame}} can be
 supplied.}
 }
 \value{

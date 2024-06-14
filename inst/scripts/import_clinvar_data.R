@@ -1,4 +1,5 @@
-#lynx -accept_all_cookies=TRUE https://www.science.org/doi/suppl/10.1126/science.adg7492/suppl_file/science.adg7492_data_s1_to_s9.zip
+# Download Supplemental Materials from AlphaMissense publication
+# browseURL('https://www.science.org/doi/suppl/10.1126/science.adg7492/suppl_file/science.adg7492_data_s1_to_s9.zip'
 
 # Unzip directory of supplmental files to access separate datasets
 unzip('inst/extdata/science.adg7492_data_s1_to_s9.zip', exdir = 'inst/extdata/')
