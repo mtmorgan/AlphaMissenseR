@@ -227,7 +227,7 @@ track_1 <- add_single_track(
     height = 180,
     data = track_data_gr(
         as_GRanges, chromosomeField = "seqnames",
-        genomicFields = c("start", "end")
+        genomicFields = c("start", "end"),sampleLength = 2000
     ),
     mark = "bar",
     x = visual_channel_x(
