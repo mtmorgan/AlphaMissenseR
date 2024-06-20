@@ -276,10 +276,6 @@ ui <- fluidPage(
   goslingOutput("gosling_plot")
 )
 
-bases = c("A", "T", "G", "C")
-
-categories = c("Likely_benign", "Likely_pathogenic", "ambiguous")
-
 
 track1_data <- track_data_gr(
     as_GRanges,chromosomeField = "seqnames", genomicFields = c("start", "end"))
@@ -358,7 +354,7 @@ ui <- fluidPage(
 categories = c("Likely_benign", "Likely_pathogenic", "ambiguous")
 
 
-track1_data <- track_data_gr(
+track2_data <- track_data_gr(
     as_GRanges,chromosomeField = "seqnames", genomicFields = c("start", "end"))
 
 ui <- fluidPage(
@@ -366,10 +362,10 @@ ui <- fluidPage(
     goslingOutput("gosling_plot")
 )
 
-track_1 <- add_single_track(
+track_2 <- add_single_track(
     width = 800,
     height = 180,
-    data = track1_data,
+    data = track2_data,
     mark = "text",
     x = visual_channel_x(
         field = "start", type = "genomic", axis = "bottom"
@@ -397,24 +393,24 @@ track_1 <- add_single_track(
     size = list(value = 20)
 )
 
-composed_view <- compose_view(
+composed_view2 <- compose_view(
     layout = "linear",
     xDomain = list(chromosome = "chr2",interval = c(46000, 46400)),
-    tracks = track_1
+    tracks = track_2
     
 )
 
-arranged_view <- arrange_views(
+arranged_view2 <- arrange_views(
     title = "Test track track : Q1W6H9 ",
     subtitle = "Gosling Example with text labels",
-    views = composed_view
+    views = composed_view2
 )
 
 server <- function(input, output, session) {
     output$gosling_plot <- renderGosling({
         gosling(
-            component_id = "component_1",
-            arranged_view
+            component_id = "component_2",
+            arranged_view2
         )
     })
 }
@@ -423,7 +419,7 @@ shiny::shinyApp(ui, server)
 ```
 
 
-```{r, two-track}
+```{r, multi-track}
 library(shiny.gosling)
 library(shiny)
 
@@ -434,7 +430,7 @@ ui <- fluidPage(
 
 colormapping = c( "#029F73", "gray", "#CB3B8C")
 
-track2_data <- track_data_gr(
+track3_data <- track_data_gr(
     as_GRanges,chromosomeField = "seqnames", genomicFields = c("start", "end"))
 
 ui <- fluidPage(
@@ -442,7 +438,7 @@ ui <- fluidPage(
     goslingOutput("gosling_plot")
 )
 
-track_2ref <- add_single_track(
+track_3ref <- add_single_track(
     data = track2_data,
     mark = "text",
     x = visual_channel_x(
@@ -453,7 +449,7 @@ track_2ref <- add_single_track(
     size = list(value = 20)
 )
 
-track_2alt <- add_single_track(
+track_3alt <- add_single_track(
 
     data = track2_data,
     mark = "text",
@@ -465,7 +461,7 @@ track_2alt <- add_single_track(
     size = list(value = 20)
 )
 
-composed_view <- compose_view(
+composed_view3 <- compose_view(
     width = 800,
     height = 180,
     multi = TRUE,
@@ -478,11 +474,11 @@ composed_view <- compose_view(
         range = colormapping,
         legend = TRUE
     ),
-    tracks = add_multi_tracks(track_2ref,track_2alt)
+    tracks = add_multi_tracks(track_3ref,track_3alt)
     
 )
 
-arranged_view <- arrange_views(
+arranged_view3 <- arrange_views(
     title = "Test track track : Q1W6H9 ",
     subtitle = "stacked nucleotide example",
     views = composed_view
@@ -491,8 +487,8 @@ arranged_view <- arrange_views(
 server <- function(input, output, session) {
     output$gosling_plot <- renderGosling({
         gosling(
-            component_id = "component_1",
-            arranged_view
+            component_id = "component_3",
+            arranged_view3
         )
     })
 }
