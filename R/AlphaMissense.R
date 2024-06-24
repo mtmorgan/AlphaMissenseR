@@ -150,7 +150,8 @@ am_available <-
 }
 
 am_data_import_csv <-
-    function(record, bfc, db_tbl_name, rname = NULL, fpath, delim = "\\t")
+    function(record, bfc, db_tbl_name, rname = NULL, fpath, delim = "\\t",
+             template = "import_csv")
 {
     ## must be 'read_only = FALSE' so new database can be created. use
     ## 'managed = FALSE' so connection is independent of other
@@ -164,7 +165,7 @@ am_data_import_csv <-
             file_path <- bfcrpath(bfc, rnames  = rname, fpath = fpath)
         spdl::info("creating database table '{}'", db_tbl_name)
         sql <- sql_template(
-            "import_csv",
+            template,
             db_tbl_name = db_tbl_name, file_path = file_path, delim = delim
         )
         dbExecute(db_rw, sql)

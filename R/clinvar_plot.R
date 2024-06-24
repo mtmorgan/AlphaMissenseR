@@ -64,7 +64,7 @@ clinvar_filter_cv_table <-
                 sep = ":"
             ) |>
             mutate(
-                cv_class = as.factor(.data$label)
+                cv_class = as.factor(.data$label_category)
             )
     }
 
@@ -380,11 +380,12 @@ clinvar_plot <-
 #'
 #' `clinvar_data()` returns a tbl with 82872 rows and 5 variables:
 #'
-#' - `variant_id`: ClinVar variant identifer.
+#' - `variant_id`: ClinVar variant identifier.
 #' - `transcript_id`: Ensembl transcript identifier.
 #' - `protein_variant`: UniProt accession:protein variant identifier.
 #' - `AlphaMissense`: AlphaMissense pathogenicity score.
 #' - `label`: Binary ClinVar class. 0 for benign or 1 for pathogenic.
+#' - `label_category`: Binary ClinVar class as a character category.
 #'
 #' @export
 clinvar_data <-
@@ -399,5 +400,6 @@ clinvar_data <-
     fpath <- system.file(
         package = "AlphaMissenseR", "extdata", "science.adg7492_data_s5.csv.gz"
     )
-    am_data_import_csv(record, bfc, db_tbl_name, fpath = fpath, delim = ",")
+    am_data_import_csv(record, bfc, db_tbl_name, fpath = fpath, delim = ",",
+                       template = "import_clinvar_csv")
 }
