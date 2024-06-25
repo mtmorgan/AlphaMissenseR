@@ -64,7 +64,7 @@ clinvar_filter_cv_table <-
                 sep = ":"
             ) |>
             mutate(
-                cv_class = as.factor(.data$label_category)
+                cv_class = as.factor(.data$label)
             )
     }
 
