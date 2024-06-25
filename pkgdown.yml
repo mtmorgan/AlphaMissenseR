@@ -5,7 +5,8 @@ articles:
   a_introduction: a_introduction.html
   b_visualization: b_visualization.html
   c_issues: c_issues.html
-last_built: 2024-05-05T21:57Z
+  d_integrate_ClinVar: d_integrate_ClinVar.html
+last_built: 2024-06-25T19:31Z
 urls:
   reference: https://mtmorgan.github.io/AlphaMissenseR/reference
   article: https://mtmorgan.github.io/AlphaMissenseR/articles

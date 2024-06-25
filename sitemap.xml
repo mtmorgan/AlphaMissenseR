@@ -13,6 +13,9 @@
     <loc>https://mtmorgan.github.io/AlphaMissenseR/articles/c_issues.html</loc>
   </url>
   <url>
+    <loc>https://mtmorgan.github.io/AlphaMissenseR/articles/d_integrate_ClinVar.html</loc>
+  </url>
+  <url>
     <loc>https://mtmorgan.github.io/AlphaMissenseR/articles/index.html</loc>
   </url>
   <url>
@@ -35,6 +38,9 @@
   </url>
   <url>
     <loc>https://mtmorgan.github.io/AlphaMissenseR/reference/am_aa.html</loc>
+  </url>
+  <url>
+    <loc>https://mtmorgan.github.io/AlphaMissenseR/reference/clinvar_plot.html</loc>
   </url>
   <url>
     <loc>https://mtmorgan.github.io/AlphaMissenseR/reference/db.html</loc>
