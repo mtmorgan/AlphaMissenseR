@@ -42,14 +42,14 @@ test_that("clinvar_filter_cv_table() works", {
     cv_data <- data.frame(
         uniprot_id = c("A", "A", "A", "A", "B"),
         protein_variant = c("M1A", "M2C", "G5L", "P10R", "F50G"),
-        cv_class = c(1, 0, 0, 0, 1)
+        cv_class = c("pathogenic", "benign", "benign", "benign", "pathogenic")
     )
     object <- clinvar_filter_cv_table(uID = "A", cv_table = cv_data)
 
     expected <- tibble(
         uniprot_id = c("A", "A", "A", "A"),
         protein_variant = c("M1A", "M2C", "G5L", "P10R"),
-        cv_class = c(1, 0, 0, 0),
+        cv_class = c("pathogenic", "benign", "benign", "benign"),
     )
 
     expect_identical(object, expected)
@@ -75,7 +75,7 @@ test_that("clinvar_prepare_data_for_plot() works", {
     cv_data <- data.frame(
         uniprot_id = c("A", "A", "A", "A"),
         protein_variant = c("M1A", "M2C", "G5L", "P10R"),
-        cv_class = c(1, 0, 0, 0)
+        cv_class = c("pathogenic", "benign", "benign", "benign")
     )
 
     object <- suppressWarnings(
@@ -91,7 +91,7 @@ test_that("clinvar_prepare_data_for_plot() works", {
         am_class = c("ambiguous", "benign", "pathogenic", "pathogenic",
                      "ambiguous", "benign"),
         aa_pos = c(3L, 4L, 50L, 2L, 5L, 1L),
-        cv_class = c(NA, NA, NA, 0, 0, 1),
+        cv_class = c(NA, NA, NA, "benign", "benign", "pathogenic"),
         code_color = as.factor(
             c("AM ambiguous", "AM benign", "AM pathogenic",
             "CV benign", "CV benign", "CV pathogenic")
@@ -170,7 +170,7 @@ test_that("'clinvar_plot()' works", {
     cv_data <- data.frame(
         uniprot_id = c("A", "A", "A", "A"),
         protein_variant = c("M1A", "M2C", "G5L", "P10R"),
-        cv_class = c(1, 0, 0, 0)
+        cv_class = c("pathogenic", "benign", "benign", "benign")
     )
 
     ## Call the function with example input
