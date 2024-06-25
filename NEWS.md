@@ -1,5 +1,9 @@
 # AlphaMissenseR 1.2.0
 
+* (v. 1.1.4) Add `clinvar_data()` and `clinvar_plot()` for visualizing
+  ClinVar data. Merges
+  <https://github.com/mtmorgan/AlphaMissenseR/pull/4> Thanks
+  @tram-nguyen-n
 * (v. 1.1.2) `af_predictions()` returns a tibble with 21 columns,
   instead of 20. Merges
   <https://github.com/mtmorgan/AlphaMissenseR/pull/3>.
