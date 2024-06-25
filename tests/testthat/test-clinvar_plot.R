@@ -1,5 +1,7 @@
 test_that("clinvar_filter_am_table() works", {
     ## Test case when am_table is missing
+    spdl::set_level("warn")
+    on.exit(spdl::set_level("info"))
     res <- clinvar_filter_am_table(uID = "P37023")
 
     expect_equal(res |> NROW(), 9557L)
@@ -34,6 +36,8 @@ test_that("clinvar_filter_am_table() works", {
 
 test_that("clinvar_filter_cv_table() works", {
     ## Test case when cv_table is missing
+    spdl::set_level("warn")
+    on.exit(spdl::set_level("info"))
     res <- clinvar_filter_cv_table(uID = "P37023")
 
     expect_equal(res |> NROW(), 113L)
@@ -42,14 +46,14 @@ test_that("clinvar_filter_cv_table() works", {
     cv_data <- data.frame(
         uniprot_id = c("A", "A", "A", "A", "B"),
         protein_variant = c("M1A", "M2C", "G5L", "P10R", "F50G"),
-        cv_class = c(1, 0, 0, 0, 1)
+        cv_class = c("pathogenic", rep("benign", 3L), "pathogenic")
     )
     object <- clinvar_filter_cv_table(uID = "A", cv_table = cv_data)
 
     expected <- tibble(
         uniprot_id = c("A", "A", "A", "A"),
         protein_variant = c("M1A", "M2C", "G5L", "P10R"),
-        cv_class = c(1, 0, 0, 0),
+        cv_class = c("pathogenic", rep("benign", 3L))
     )
 
     expect_identical(object, expected)
@@ -68,14 +72,16 @@ test_that("clinvar_prepare_data_for_plot() works", {
         uniprot_id = c("A", "A", "A", "A", "A", "B"),
         protein_variant = c("M1A", "M2C", "R3L", "K4L", "G5L", "F50G"),
         am_pathogenicity = c(0.2, 0.8, 0.5, 0.2, 0.4, 0.6),
-        am_class = c("benign", "pathogenic", "ambiguous",
-                     "benign", "ambiguous", "pathogenic")
+        am_class = c(
+            "benign", "pathogenic", "ambiguous", "benign", "ambiguous",
+            "pathogenic"
+        )
     )
 
     cv_data <- data.frame(
         uniprot_id = c("A", "A", "A", "A"),
         protein_variant = c("M1A", "M2C", "G5L", "P10R"),
-        cv_class = c(1, 0, 0, 0)
+        cv_class = c("pathogenic", rep("benign", 3L))
     )
 
     object <- suppressWarnings(
@@ -91,7 +97,7 @@ test_that("clinvar_prepare_data_for_plot() works", {
         am_class = c("ambiguous", "benign", "pathogenic", "pathogenic",
                      "ambiguous", "benign"),
         aa_pos = c(3L, 4L, 50L, 2L, 5L, 1L),
-        cv_class = c(NA, NA, NA, 0, 0, 1),
+        cv_class = c(NA, NA, NA, "benign", "benign", "pathogenic"),
         code_color = as.factor(
             c("AM ambiguous", "AM benign", "AM pathogenic",
             "CV benign", "CV benign", "CV pathogenic")
@@ -163,21 +169,25 @@ test_that("'clinvar_plot()' works", {
         uniprot_id = c("A", "A", "A", "A", "A", "B"),
         protein_variant = c("M1A", "M2C", "R3L", "K4L", "G5L", "F50G"),
         am_pathogenicity = c(0.2, 0.8, 0.5, 0.2, 0.4, 0.6),
-        am_class = c("benign", "pathogenic", "ambiguous",
-                    "benign", "ambiguous", "pathogenic")
+        am_class = c(
+            "benign", "pathogenic", "ambiguous", "benign", "ambiguous",
+            "pathogenic"
+        )
     )
 
     cv_data <- data.frame(
         uniprot_id = c("A", "A", "A", "A"),
         protein_variant = c("M1A", "M2C", "G5L", "P10R"),
-        cv_class = c(1, 0, 0, 0)
+        cv_class = c("pathogenic", rep("benign", 3))
     )
 
     ## Call the function with example input
     plot <- suppressWarnings(
-        clinvar_plot(uniprotId = "A",
-        alphamissense_table = am_data,
-        clinvar_table = cv_data)
+        clinvar_plot(
+            uniprotId = "A",
+            alphamissense_table = am_data,
+            clinvar_table = cv_data
+        )
     )
 
     ## Check aesthetics values are assigned correctly to groups
@@ -224,4 +234,3 @@ test_that("'clinvar_plot()' works", {
     ## check if the result is a ggplot object
     expect_true("ggplot" %in% class(plot))
 })
-

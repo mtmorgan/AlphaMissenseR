@@ -64,7 +64,7 @@ clinvar_filter_cv_table <-
                 sep = ":"
             ) |>
             mutate(
-                cv_class = as.factor(.data$label_category)
+                cv_class = .data$label
             )
     }
 
@@ -375,6 +375,13 @@ clinvar_plot <-
 #' @description `clinvar_data()` loads in the raw ClinVar information from
 #'    the supplemental table of the AlphaMissense
 #'    [\[2023\]](https://www.science.org/doi/10.1126/science.adg7492) paper.
+#'
+#' @param record character(1) Zenodo record for the AlphaMissense data
+#'     resources.
+#'
+#' @param bfc an object returned by `BiocFileCache()` representing the
+#'     location of the AlphaMissenseR database. The default is the
+#'     'global' BiocFileCache.
 #'
 #' @return
 #'

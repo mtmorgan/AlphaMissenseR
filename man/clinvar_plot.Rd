@@ -23,6 +23,13 @@ default, the table is derived from the supplemental data of the
 AlphaMissense paper. Alternatively, a user-defined
 \code{\link[tibble:tbl_df-class]{tibble::tbl_df}} or \code{\link{data.frame}} can be
 supplied.}
+
+\item{record}{character(1) Zenodo record for the AlphaMissense data
+resources.}
+
+\item{bfc}{an object returned by \code{BiocFileCache()} representing the
+location of the AlphaMissenseR database. The default is the
+'global' BiocFileCache.}
 }
 \value{
 \code{clinvar_plot()} returns a \code{ggplot} object which overlays
