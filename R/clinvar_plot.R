@@ -117,9 +117,9 @@ clinvar_prepare_data_for_plot <-
         combined_data |>
         mutate(
             code_color = case_when(
-                !is.na(.data$cv_class) & .data$cv_class == "0" ~
+                !is.na(.data$cv_class) & .data$cv_class == "benign" ~
                     "CV benign",
-                !is.na(.data$cv_class) & .data$cv_class == "1" ~
+                !is.na(.data$cv_class) & .data$cv_class == "pathogenic" ~
                     "CV pathogenic",
                 is.na(.data$cv_class) & .data$am_class == "pathogenic" ~
                     "AM pathogenic",
@@ -301,7 +301,7 @@ clinvar_create_plot <-
 #' - `uniprot_id`: UniProt accession identifier, matching `alphamissense_table`.
 #' - `protein_variant`: variant identifier string, matching
 #'    `alphamissense_table` format.
-#' - `cv_class`: binary ClinVar classification of 0 (benign) or 1 (pathogenic).
+#' - `cv_class`: binary ClinVar classification of "benign" or "pathogenic".
 #'
 #' @return `clinvar_plot()` returns a `ggplot` object which overlays
 #'    ClinVar classifications onto AlphaMissense predicted
@@ -384,8 +384,7 @@ clinvar_plot <-
 #' - `transcript_id`: Ensembl transcript identifier.
 #' - `protein_variant`: UniProt accession:protein variant identifier.
 #' - `AlphaMissense`: AlphaMissense pathogenicity score.
-#' - `label`: Binary ClinVar class. 0 for benign or 1 for pathogenic.
-#' - `label_category`: Binary ClinVar class as a character category.
+#' - `label`: Binary ClinVar class, either "benign" or "pathogenic".
 #'
 #' @export
 clinvar_data <-

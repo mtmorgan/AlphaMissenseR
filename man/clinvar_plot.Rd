@@ -36,11 +36,11 @@ AlphaMissense predictions.
 
 \code{clinvar_data()} returns a tbl with 82872 rows and 5 variables:
 \itemize{
-\item \code{variant_id}: ClinVar variant identifer.
+\item \code{variant_id}: ClinVar variant identifier.
 \item \code{transcript_id}: Ensembl transcript identifier.
 \item \code{protein_variant}: UniProt accession:protein variant identifier.
 \item \code{AlphaMissense}: AlphaMissense pathogenicity score.
-\item \code{label}: Binary ClinVar class. 0 for benign or 1 for pathogenic.
+\item \code{label}: Binary ClinVar class, either "benign" or "pathogenic".
 }
 }
 \description{
@@ -70,7 +70,7 @@ For \code{clinvar_table}, columns must include:
 \item \code{uniprot_id}: UniProt accession identifier, matching \code{alphamissense_table}.
 \item \code{protein_variant}: variant identifier string, matching
 \code{alphamissense_table} format.
-\item \code{cv_class}: binary ClinVar classification of 0 (benign) or 1 (pathogenic).
+\item \code{cv_class}: binary ClinVar classification of "benign" or "pathogenic".
 }
 }
 \examples{
