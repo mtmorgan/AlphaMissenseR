@@ -1,3 +1,50 @@
+#' @rdname ClinVar
+#'
+#' @title Integrate ClinVar Labels with AlphaMissense Pathogenicity Scores
+#'
+#' @description `clinvar_data()` loads ClinVar information from the
+#'     supplemental table of the AlphaMissense
+#'     [\[2023\]](https://www.science.org/doi/10.1126/science.adg7492)
+#'     paper.
+#'
+#' @param record character(1) Zenodo record for the AlphaMissense data
+#'     resources.
+#'
+#' @param bfc an object returned by `BiocFileCache()` representing the
+#'     location of the AlphaMissenseR database. The default is the
+#'     'global' BiocFileCache.
+#'
+#' @return
+#'
+#' `clinvar_data()` returns a tbl with 82872 rows and 5 variables:
+#'
+#' - `variant_id`: ClinVar variant identifier.
+#' - `transcript_id`: Ensembl transcript identifier.
+#' - `protein_variant`: UniProt accession:protein variant identifier.
+#' - `AlphaMissense`: AlphaMissense pathogenicity score.
+#' - `label`: Binary ClinVar class, either "benign" or "pathogenic".
+#'
+#' @examples
+#' clinvar_data()
+#' @export
+clinvar_data <-
+    function(record = ALPHAMISSENSE_RECORD, bfc = BiocFileCache())
+{
+    db_rname <- paste0("AlphaMissense_", record)
+    db_tbl_name <- "clinvar"
+    if (!NROW(bfcquery(bfc, db_rname))) {
+        spdl::info("creating AlphaMissense database for record '{}'", record)
+        bfcnew(bfc, db_rname)
+    }
+    fpath <- system.file(
+        package = "AlphaMissenseR", "extdata", "science.adg7492_data_s5.csv.gz"
+    )
+    db_table(
+        record, bfc, db_tbl_name, fpath = fpath,
+        template = "import_clinvar_csv", delim = ","
+    )
+}
+
 #' Filter the AlphaMissense table with uniprotID
 #'
 #' @noRd
@@ -36,7 +83,6 @@ clinvar_filter_am_table <-
     alphamissense_table
 }
 
-
 #' Filter the clinvar table with uniprot ID
 #'
 #' @noRd
@@ -74,7 +120,6 @@ clinvar_filter_cv_table <-
         filter(.data$uniprot_id == uID) |>
         as_tibble()
 
-
     ## Check if the table is empty after filtering
     if (!NROW(clinvar_table)) {
         stop(
@@ -97,20 +142,19 @@ clinvar_prepare_data_for_plot <-
     function(am_table, cv_table)
 {
     ## grab amino acid positions
-    am_table <-
-        am_table |>
-        mutate(
-            aa_pos = as.integer(
-                gsub(".*?([0-9]+).*", "\\1", .data$protein_variant)
-            ))
+    am_table <- mutate(
+        am_table,
+        aa_pos = as.integer(
+            gsub(".*?([0-9]+).*", "\\1", .data$protein_variant)
+        )
+    )
 
     ## join datasets
-    combined_data <-
-        left_join(
-            am_table,
-            cv_table,
-            by = c('uniprot_id', 'protein_variant')
-        )
+    combined_data <- left_join(
+        am_table,
+        cv_table,
+        by = c('uniprot_id', 'protein_variant')
+    )
 
     ## add color code matching AM and CV labels
     combined_data <-
@@ -263,8 +307,6 @@ clinvar_create_plot <-
 
 #' @rdname ClinVar
 #'
-#' @title Integrate ClinVar Labels with AlphaMissense Pathogenicity Scores
-#'
 #' @description `clinvar_plot()` integrates ClinVar classifications
 #'    with AlphaMissense predicted scores derived from
 #'    `am_data("aa_substitutions")` and returns a ggplot object for
@@ -286,7 +328,7 @@ clinvar_create_plot <-
 #'
 #' @details
 #'
-#' For `alphamissense_table`, columns must include:
+#' For `clinvar_plot()`,  `alphamissense_table` columns must include:
 #'
 #' - `uniprot_id`: UniProt accession identifier.
 #' - `protein_variant`: variant identifier string, with protein
@@ -296,7 +338,7 @@ clinvar_create_plot <-
 #'    "ambiguous", or "pathogenic".
 #' - `am_pathogenicity`: AlphaMissense predicted score.
 #'
-#' For `clinvar_table`, columns must include:
+#' `clinvar_table` columns must include:
 #'
 #' - `uniprot_id`: UniProt accession identifier, matching `alphamissense_table`.
 #' - `protein_variant`: variant identifier string, matching
@@ -316,8 +358,10 @@ clinvar_create_plot <-
 #'
 #' alphamissense_table <- am_data("aa_substitutions")
 #'
-#' clinvar_plot(uniprotId = "P37023",
-#'    alphamissense_table = alphamissense_table)
+#' clinvar_plot(
+#'     uniprotId = "P37023",
+#'     alphamissense_table = alphamissense_table
+#' )
 #'
 #' @references Cheng et al.,
 #' Accurate proteome-wide missense variant effect prediction with AlphaMissense.
@@ -351,10 +395,10 @@ clinvar_plot <-
 
     ## Validate extracted tables
     stopifnot(
-        is.data.frame(alphamissense_table) | is.tbl(alphamissense_table),
+        is.data.frame(alphamissense_table) || is.tbl(alphamissense_table),
         all(c("uniprot_id", "protein_variant", "am_class", "am_pathogenicity")
             %in% colnames(alphamissense_table)),
-        is.data.frame(clinvar_table) | is.tbl(clinvar_table),
+        is.data.frame(clinvar_table) || is.tbl(clinvar_table),
         all(c("uniprot_id", "protein_variant", "cv_class")
             %in% colnames(clinvar_table))
     )
@@ -368,46 +412,4 @@ clinvar_plot <-
 
     ## Plot sequence window
     clinvar_create_plot(combined_table = combined_table, uId = uniprotId)
-}
-
-#' @rdname ClinVar
-#'
-#' @description `clinvar_data()` loads in the raw ClinVar information from
-#'    the supplemental table of the AlphaMissense
-#'    [\[2023\]](https://www.science.org/doi/10.1126/science.adg7492) paper.
-#'
-#' @param record character(1) Zenodo record for the AlphaMissense data
-#'     resources.
-#'
-#' @param bfc an object returned by `BiocFileCache()` representing the
-#'     location of the AlphaMissenseR database. The default is the
-#'     'global' BiocFileCache.
-#'
-#' @return
-#'
-#' `clinvar_data()` returns a tbl with 82872 rows and 5 variables:
-#'
-#' - `variant_id`: ClinVar variant identifier.
-#' - `transcript_id`: Ensembl transcript identifier.
-#' - `protein_variant`: UniProt accession:protein variant identifier.
-#' - `AlphaMissense`: AlphaMissense pathogenicity score.
-#' - `label`: Binary ClinVar class, either "benign" or "pathogenic".
-#'
-#' @export
-clinvar_data <-
-    function(record = ALPHAMISSENSE_RECORD, bfc = BiocFileCache())
-{
-    db_rname <- paste0("AlphaMissense_", record)
-    db_tbl_name <- "clinvar"
-    if (!NROW(bfcquery(bfc, db_rname))) {
-        spdl::info("creating AlphaMissense database for record '{}'", record)
-        bfcnew(bfc, db_rname)
-    }
-    fpath <- system.file(
-        package = "AlphaMissenseR", "extdata", "science.adg7492_data_s5.csv.gz"
-    )
-    db_table(
-        record, bfc, db_tbl_name, fpath = fpath,
-        template = "import_clinvar_csv", delim = ","
-    )
 }

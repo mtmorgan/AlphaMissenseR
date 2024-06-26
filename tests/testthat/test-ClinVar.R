@@ -11,8 +11,10 @@ test_that("clinvar_filter_am_table() works", {
         uniprot_id = c("A", "A", "A", "A", "A", "B"),
         protein_variant = c("M1A", "M2C", "R3L", "K4L", "G5L", "F50G"),
         am_pathogenicity = c(0.2, 0.8, 0.5, 0.2, 0.4, 0.6),
-        am_class = c("benign", "pathogenic", "ambiguous",
-                     "benign", "ambiguous", "pathogenic")
+        am_class = c(
+            "benign", "pathogenic", "ambiguous", "benign",
+            "ambiguous", "pathogenic"
+        )
     )
     object <- clinvar_filter_am_table(uID = "A", am_data)
 
@@ -20,8 +22,10 @@ test_that("clinvar_filter_am_table() works", {
         uniprot_id = c("A", "A", "A", "A", "A"),
         protein_variant = c("M1A", "M2C", "R3L", "K4L", "G5L"),
         am_pathogenicity = c(0.2, 0.8, 0.5, 0.2, 0.4),
-        am_class = c("benign", "pathogenic", "ambiguous",
-                     "benign", "ambiguous")
+        am_class = c(
+            "benign", "pathogenic", "ambiguous", "benign",
+            "ambiguous"
+        )
     )
 
     expect_identical(object, expected)
@@ -29,8 +33,10 @@ test_that("clinvar_filter_am_table() works", {
     ## Test case when bad am_table is given i.e uniprotID with no hits
     expect_error(
         clinvar_filter_am_table(uID = "C", am_table = am_data),
-        paste("no AlphaMissense information found for the protein accession",
-            "'C'; check that the UniProt ID is correct")
+        paste(
+            "no AlphaMissense information found for the protein accession",
+            "'C'; check that the UniProt ID is correct"
+        )
     )
 })
 
@@ -61,8 +67,10 @@ test_that("clinvar_filter_cv_table() works", {
     ## Test case when bad cv_table is given i.e uniprotID with no hits
     expect_error(
         clinvar_filter_cv_table(uID = "C", cv_table = cv_data),
-        paste("no ClinVar information found for the protein",
-            "accession 'C'; check that the UniProt ID is correct")
+        paste(
+            "no ClinVar information found for the protein",
+            "accession 'C'; check that the UniProt ID is correct"
+        )
     )
 })
 
@@ -84,10 +92,9 @@ test_that("clinvar_prepare_data_for_plot() works", {
         cv_class = c("pathogenic", rep("benign", 3L))
     )
 
-    object <- suppressWarnings(
-        clinvar_prepare_data_for_plot(
-            am_table = am_data,
-            cv_table = cv_data
+    object <- suppressWarnings(clinvar_prepare_data_for_plot(
+        am_table = am_data,
+        cv_table = cv_data
     ))
 
     expected <- tibble(
@@ -98,10 +105,10 @@ test_that("clinvar_prepare_data_for_plot() works", {
                      "ambiguous", "benign"),
         aa_pos = c(3L, 4L, 50L, 2L, 5L, 1L),
         cv_class = c(NA, NA, NA, "benign", "benign", "pathogenic"),
-        code_color = as.factor(
-            c("AM ambiguous", "AM benign", "AM pathogenic",
-            "CV benign", "CV benign", "CV pathogenic")
-        ),
+        code_color = as.factor(c(
+            "AM ambiguous", "AM benign", "AM pathogenic", "CV benign",
+            "CV benign", "CV pathogenic"
+        )),
         max = c(0.5, 0.2, 0.8, 0.8, 0.5, 0.2),
         min = c(0.4, 0.2, 0.6, 0.6, 0.4, 0.2)
     )
@@ -109,9 +116,10 @@ test_that("clinvar_prepare_data_for_plot() works", {
     expect_identical(object, expected)
 
     ## All colnames are correctly present
-    col_names <- c("uniprot_id", "protein_variant", "am_pathogenicity",
-                   "am_class", "aa_pos", "cv_class", "code_color",
-                   "max", "min")
+    col_names <- c(
+        "uniprot_id", "protein_variant", "am_pathogenicity",
+        "am_class", "aa_pos", "cv_class", "code_color", "max", "min"
+    )
 
     expect_true(all(names(object) %in% col_names))
 
@@ -119,8 +127,10 @@ test_that("clinvar_prepare_data_for_plot() works", {
     expect_equal(object |> distinct(am_class) |> NROW(), 3L)
 
     ## There are only 5 code_color types - check assigned correctly
-    color_names <- c("AM ambiguous", "AM benign", "AM pathogenic",
-                     "CV benign", "CV benign", "CV pathogenic")
+    color_names <- c(
+        "AM ambiguous", "AM benign", "AM pathogenic", "CV benign",
+        "CV benign", "CV pathogenic"
+    )
 
     expect_identical(
         object |>
@@ -182,13 +192,11 @@ test_that("'clinvar_plot()' works", {
     )
 
     ## Call the function with example input
-    plot <- suppressWarnings(
-        clinvar_plot(
-            uniprotId = "A",
-            alphamissense_table = am_data,
-            clinvar_table = cv_data
-        )
-    )
+    plot <- suppressWarnings(clinvar_plot(
+        uniprotId = "A",
+        alphamissense_table = am_data,
+        clinvar_table = cv_data
+    ))
 
     ## Check aesthetics values are assigned correctly to groups
     stroke_vec <- c(0.0, 0.0, 1.5, 1.5, 1.5)

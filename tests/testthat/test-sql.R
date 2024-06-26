@@ -15,18 +15,35 @@ test_that("sql templates exist with expected variables", {
         !grepl("red_herring", sql)
     )
 
-    ## 'import_csv' args 'db_tbl_name', 'file_path'
+    ## 'import_csv' args 'db_tbl_name', 'file_path', 'delim'
     sql <- sql_template("import_csv")
     expect_true(isScalarCharacter(sql))
 
     sql <- sql_template(
         "import_csv",
-        db_tbl_name = "db_tbl_name", file_path = "file_path", 
-        red_herring = "red_herring"
+        db_tbl_name = "db_tbl_name", file_path = "file_path",
+        delim = "delim", red_herring = "red_herring"
     )
     expect_true(
         grepl("db_tbl_name", sql) &&
         grepl("file_path", sql) &&
+        grepl("delim", sql) &&
+        !grepl("red_herring", sql)
+    )
+
+    ## 'import_clinvar_csv' args 'db_tbl_name', 'file_path', 'delim'
+    sql <- sql_template("import_clinvar_csv")
+    expect_true(isScalarCharacter(sql))
+
+    sql <- sql_template(
+        "import_clinvar_csv",
+        db_tbl_name = "db_tbl_name", file_path = "file_path",
+        delim = "delim", red_herring = "red_herring"
+    )
+    expect_true(
+        grepl("db_tbl_name", sql) &&
+        grepl("file_path", sql) &&
+        grepl("delim", sql) &&
         !grepl("red_herring", sql)
     )
 })
