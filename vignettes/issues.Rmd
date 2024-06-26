@@ -1,8 +1,8 @@
 ---
-title: "Issues & Solutions"
+title: "D. Issues & Solutions"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Issues & Solutions}
+  %\VignetteIndexEntry{D. Issues & Solutions}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
