@@ -261,7 +261,7 @@ clinvar_create_plot <-
     cv_plot
 }
 
-#' @rdname clinvar_plot
+#' @rdname ClinVar
 #'
 #' @title Integrate ClinVar Labels with AlphaMissense Pathogenicity Scores
 #'
@@ -370,7 +370,7 @@ clinvar_plot <-
     clinvar_create_plot(combined_table = combined_table, uId = uniprotId)
 }
 
-#' @rdname clinvar_plot
+#' @rdname ClinVar
 #'
 #' @description `clinvar_data()` loads in the raw ClinVar information from
 #'    the supplemental table of the AlphaMissense
