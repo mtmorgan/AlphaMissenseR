@@ -28,7 +28,7 @@ pathogenicity."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/l
     
     <a class="navbar-brand me-2" href="../index.html">AlphaMissenseR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,10 +42,10 @@ pathogenicity."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/l
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/a_introduction.html">Accessing AlphaMissense Resources in R</a>
-    <a class="dropdown-item" href="../articles/b_visualization.html">Visualization</a>
-    <a class="dropdown-item" href="../articles/c_issues.html">Issues &amp; Solutions</a>
-    <a class="dropdown-item" href="../articles/d_integrate_ClinVar.html">Integration with ClinVar</a>
+    <a class="dropdown-item" href="../articles/introduction.html">A. Introduction</a>
+    <a class="dropdown-item" href="../articles/alphafold.html">B. AlphaFold Integration</a>
+    <a class="dropdown-item" href="../articles/clinvar.html">C. ClinVar Integration</a>
+    <a class="dropdown-item" href="../articles/issues.html">D. Issues &amp; Solutions</a>
   </div>
 </li>
 <li class="nav-item">
@@ -226,13 +226,13 @@ specified are colored <code>'gray'</code>. The template can be seen with
 <span class="r-in"><span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="va">uniprot_id</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">uniprot_id</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">af_predictions</span><span class="op">(</span><span class="va">uniprot_ids</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * [15:32:00][info] 2 of 4 uniprot accessions not found</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   'P35556', 'P35555'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * [14:04:32][info] 2 of 4 uniprot accessions not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   'P35555', 'P35556'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 23</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   entryId      gene  uniprotAccession uniprotId   uniprotDescription       taxId</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> AF-P35558-F1 PCK1  P35558           PCKGC_HUMAN Phosphoenolpyruvate car…  <span style="text-decoration: underline;">9</span>606</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> AF-P35557-F1 GCK   P35557           HXK4_HUMAN  Hexokinase-4              <span style="text-decoration: underline;">9</span>606</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> AF-P35557-F1 GCK   P35557           HXK4_HUMAN  Hexokinase-4              <span style="text-decoration: underline;">9</span>606</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> AF-P35558-F1 PCK1  P35558           PCKGC_HUMAN Phosphoenolpyruvate car…  <span style="text-decoration: underline;">9</span>606</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 17 more variables: organismScientificName &lt;chr&gt;, uniprotStart &lt;int&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   uniprotEnd &lt;int&gt;, uniprotSequence &lt;chr&gt;, modelCreatedDate &lt;chr&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   latestVersion &lt;int&gt;, allVersions &lt;list&gt;, isReviewed &lt;lgl&gt;,</span></span>

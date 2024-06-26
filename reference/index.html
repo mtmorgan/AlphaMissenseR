@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">AlphaMissenseR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,10 +24,10 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/a_introduction.html">Accessing AlphaMissense Resources in R</a>
-    <a class="dropdown-item" href="../articles/b_visualization.html">Visualization</a>
-    <a class="dropdown-item" href="../articles/c_issues.html">Issues &amp; Solutions</a>
-    <a class="dropdown-item" href="../articles/d_integrate_ClinVar.html">Integration with ClinVar</a>
+    <a class="dropdown-item" href="../articles/introduction.html">A. Introduction</a>
+    <a class="dropdown-item" href="../articles/alphafold.html">B. AlphaFold Integration</a>
+    <a class="dropdown-item" href="../articles/clinvar.html">C. ClinVar Integration</a>
+    <a class="dropdown-item" href="../articles/issues.html">D. Issues &amp; Solutions</a>
   </div>
 </li>
 <li class="nav-item">
@@ -75,6 +75,11 @@
         <dd>Retrieve AlphaMissense Resources as DuckDB Databases</dd>
       </dl><dl><dt>
           
+          <code><a href="ClinVar.html">clinvar_data()</a></code> <code><a href="ClinVar.html">clinvar_plot()</a></code> 
+        </dt>
+        <dd>Integrate ClinVar Labels with AlphaMissense Pathogenicity Scores</dd>
+      </dl><dl><dt>
+          
           <code><a href="GenomicRanges.html">to_GPos()</a></code> 
         </dt>
         <dd>Create GenomicRanges Objects from AlphaMissense Annotations</dd>
@@ -83,11 +88,6 @@
           <code><a href="am_aa.html">am_aa_pos()</a></code> <code><a href="am_aa.html">am_aa_pathogenicity()</a></code> 
         </dt>
         <dd>Common Amino Acid-level Transformations</dd>
-      </dl><dl><dt>
-          
-          <code><a href="clinvar_plot.html">clinvar_plot()</a></code> <code><a href="clinvar_plot.html">clinvar_data()</a></code> 
-        </dt>
-        <dd>Integrate ClinVar Labels with AlphaMissense Pathogenicity Scores</dd>
       </dl><dl><dt>
           
           <code><a href="db.html">db_connect()</a></code> <code><a href="db.html">db_tables()</a></code> <code><a href="db.html">db_temporary_table()</a></code> <code><a href="db.html">db_range_join()</a></code> <code><a href="db.html">db_disconnect()</a></code> <code><a href="db.html">db_disconnect_all()</a></code> 

@@ -4,19 +4,19 @@
     <loc>https://mtmorgan.github.io/AlphaMissenseR/404.html</loc>
   </url>
   <url>
-    <loc>https://mtmorgan.github.io/AlphaMissenseR/articles/a_introduction.html</loc>
+    <loc>https://mtmorgan.github.io/AlphaMissenseR/articles/alphafold.html</loc>
   </url>
   <url>
-    <loc>https://mtmorgan.github.io/AlphaMissenseR/articles/b_visualization.html</loc>
-  </url>
-  <url>
-    <loc>https://mtmorgan.github.io/AlphaMissenseR/articles/c_issues.html</loc>
-  </url>
-  <url>
-    <loc>https://mtmorgan.github.io/AlphaMissenseR/articles/d_integrate_ClinVar.html</loc>
+    <loc>https://mtmorgan.github.io/AlphaMissenseR/articles/clinvar.html</loc>
   </url>
   <url>
     <loc>https://mtmorgan.github.io/AlphaMissenseR/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://mtmorgan.github.io/AlphaMissenseR/articles/introduction.html</loc>
+  </url>
+  <url>
+    <loc>https://mtmorgan.github.io/AlphaMissenseR/articles/issues.html</loc>
   </url>
   <url>
     <loc>https://mtmorgan.github.io/AlphaMissenseR/authors.html</loc>
@@ -34,13 +34,13 @@
     <loc>https://mtmorgan.github.io/AlphaMissenseR/reference/AlphaMissense.html</loc>
   </url>
   <url>
+    <loc>https://mtmorgan.github.io/AlphaMissenseR/reference/ClinVar.html</loc>
+  </url>
+  <url>
     <loc>https://mtmorgan.github.io/AlphaMissenseR/reference/GenomicRanges.html</loc>
   </url>
   <url>
     <loc>https://mtmorgan.github.io/AlphaMissenseR/reference/am_aa.html</loc>
-  </url>
-  <url>
-    <loc>https://mtmorgan.github.io/AlphaMissenseR/reference/clinvar_plot.html</loc>
   </url>
   <url>
     <loc>https://mtmorgan.github.io/AlphaMissenseR/reference/db.html</loc>
