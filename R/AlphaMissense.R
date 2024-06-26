@@ -149,51 +149,6 @@ am_available <-
     }
 }
 
-am_data_import_csv <-
-    function(record, bfc, db_tbl_name, rname = NULL, fpath, delim = "\\t",
-             template = "import_csv")
-{
-    ## must be 'read_only = FALSE' so new database can be created. use
-    ## 'managed = FALSE' so connection is independent of other
-    ## read-write connections
-    db_rw <- db_connect(record, bfc, read_only = FALSE)
-    renew <- FALSE
-    if (!db_tbl_name %in% db_tables(db_rw)) {
-        spdl::info("downloading or finding local file")
-        file_path <- fpath
-        if (!is.null(rname))
-            file_path <- bfcrpath(bfc, rnames  = rname, fpath = fpath)
-        spdl::info("creating database table '{}'", db_tbl_name)
-        sql <- sql_template(
-            template,
-            db_tbl_name = db_tbl_name, file_path = file_path, delim = delim
-        )
-        dbExecute(db_rw, sql)
-
-        renew <- TRUE
-    }
-    if ("#CHROM" %in% dbListFields(db_rw, db_tbl_name)) {
-        spdl::info("renaming '#CHROM' to 'CHROM' in table '{}'", db_tbl_name)
-        sql <- sql_template(
-            "rename_column",
-            db_tbl_name = db_tbl_name, from = "#CHROM", to = "CHROM"
-        )
-        dbExecute(db_rw, sql)
-
-        renew <- TRUE
-    }
-    db_disconnect(db_rw)
-
-    if (renew) {
-        ## flush managed read-only connection
-        ## FIXME: but this invalidates existing read-only connections
-        db <- db_connect_or_renew(record, bfc)
-    } else {
-        db <- db_connect(record, bfc)
-    }
-    tbl(db, db_tbl_name)
-}
-
 #' @rdname AlphaMissense
 #'
 #' @description `am_data()` retrieves a single `key` from the the
@@ -286,7 +241,7 @@ am_data <-
         spdl::info("creating AlphaMissense database for record '{}'", record)
         bfcnew(bfc, db_rname)
     }
-    tbl <- am_data_import_csv(record, bfc, db_tbl_name, key$filename, key$link)
+    tbl <- db_table(record, bfc, db_tbl_name, key$filename, key$link)
 
     switch(
         as,

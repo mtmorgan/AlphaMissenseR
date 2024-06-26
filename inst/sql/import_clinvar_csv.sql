@@ -1,7 +1,7 @@
 -- import csv from file at 'file_path' to data table 'db_tbl_name'
 -- create the clinvar table, but with label as TEXT
 CREATE TABLE {{db_tbl_name}} AS
-SELECT 
+SELECT
     * EXCLUDE(label),
     CASE
         WHEN label = 0 THEN 'benign'

@@ -1,8 +1,8 @@
 ---
-title: "Visualization"
+title: "B. AlphaFold Integration"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Visualization}
+  %\VignetteIndexEntry{B. AlphaFold Integration}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,9 +18,8 @@ Original version: 31 October, 2023
 
 # Introduction
 
-This vignette focuses on visualization. One example plots
-[AlphaMissense][] predictions on [AlphaFold][] predicted protein
-structure.
+This vignette illustrates how to display [AlphaMissense][] predictions
+on [AlphaFold][] predicted protein structure.
 
 [AlphaMissense]: https://www.science.org/doi/10.1126/science.adg7492
 [AlphaFold]: https://alphafold.ebi.ac.uk/
