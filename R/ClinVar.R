@@ -406,6 +406,8 @@ clinvar_data <-
     fpath <- system.file(
         package = "AlphaMissenseR", "extdata", "science.adg7492_data_s5.csv.gz"
     )
-    am_data_import_csv(record, bfc, db_tbl_name, fpath = fpath, delim = ",",
-                       template = "import_clinvar_csv")
+    db_table(
+        record, bfc, db_tbl_name, fpath = fpath,
+        template = "import_clinvar_csv", delim = ","
+    )
 }
