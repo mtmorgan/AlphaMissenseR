@@ -28,15 +28,19 @@
 #'
 #' @examples
 #' \dontrun{
+#' library(AlphamissenseR)
 #' library(GenomicRanges)
 #'
-#' # Create a sample GRanges object
-#' gr <- GRanges(
-#'   seqnames = c("chr1", "chr2", "chr1"),
-#'   ranges = IRanges(start = c(1, 3, 5), end = c(2, 4, 6)),
-#'   am_class = c("likely_benign", "ambiguous", "likely_pathogenic"),
-#'   ALT = c("A", "T", "G")
-#' )
+#' # Create a sample GRanges object from AlphamissenseR
+#' tbl <-
+#'    am_data("hg38") |>
+#'    filter(uniprot_id == "Q1W6H9")
+#' gpos <-
+#'    tbl |>
+#'    to_GPos()
+#' gr <- as(gpos, "GRanges")
+#' 
+#' 
 #'
 #' # Plot the GRanges object
 #' AlphaMissenseR::plot_granges(gr, title = "My GRanges Plot", subtitle = "Custom subtitle")
@@ -54,7 +58,7 @@ plot_granges <-
 {
     # Define categories and color mapping
     categories <- c("likely_benign", "ambiguous", "likely_pathogenic")
-    colormapping <- c("#029F73", "gray", "#CB3B8C")
+    colormapping <- c("#89d5f5", "gray", "#f56c6c")
 
     # Get range from GRanges object
     get_range <- range(as_GRanges)
@@ -107,6 +111,7 @@ plot_granges <-
         color = visual_channel_color(
             field = "am_class",
             type = "nominal",
+            domain = categories,
             range = colormapping,
             legend = TRUE
         ),
