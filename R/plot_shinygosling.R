@@ -59,6 +59,11 @@ plot_granges <-
     # Get range from GRanges object
     get_range <- range(as_GRanges)
 
+    # This fixes the bug if .gosling directory does not already exist
+    if (!dir.exists(".gosling")){
+        dir.create(".gosling")
+    }
+    
     # Prepare track data
     track_data <- track_data_gr(
         as_GRanges,
