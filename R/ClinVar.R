@@ -131,7 +131,6 @@ clinvar_filter_cv_table <-
     clinvar_table
 }
 
-
 #' Prepare data for the function clinvar_plot
 #'
 #' @noRd
@@ -305,7 +304,6 @@ clinvar_create_plot <-
         )
     cv_plot
 }
-
 
 #' @rdname ClinVar
 #'
