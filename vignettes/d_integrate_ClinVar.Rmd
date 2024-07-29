@@ -40,6 +40,8 @@ The ClinVar table can be accessed using `data("clinvar_data")`.
 
 ```{r download_cv}
 data("clinvar_data")
+
+AlphaMissenseR::clinvar_data()
 ```
 
 The ClinVar data.frame is now available for exploration or parsing. 
@@ -56,6 +58,8 @@ See function details for more information.
 
 ```{r plot_P37023}
 plot_clinvar(uniprotId = "P37023") 
+
+AlphaMissenseR::clinvar_plot(uniprotId = "P37023")
 ```
 
 We returned a `ggplot` object which overlays ClinVar classifications onto 
