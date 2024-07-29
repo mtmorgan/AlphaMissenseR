@@ -9,14 +9,13 @@ Authors@R:
     ), person(
 	"Tram", "Nguyen",
 	role = "aut"
-    ),person(
+    ), person(
 	"Tyrone", "Lee",
 	role = "ctb"
     ), person(
 	"Nitesh", "Turaga",
 	role = "ctb"
-    ),  
-    person(
+    ), person(
 	"Chan Zuckerberg Initiative DAF CZF2019-002443",
 	role = "fnd"
     ), person(
