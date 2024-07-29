@@ -243,9 +243,10 @@ r3dmol::r3dmol() |>
 
 # Visualizing sequence tracks
 
-The variant prediction data can also be visualized on a genome browser. Mis-sense point mutations can be tracked alongside pathogenicity on multiple scales by utilizing Gosling, a declarative genomics visualization library.  
+The variant prediction data can also be visualized on a genome browser. Mis-sense point mutations can be tracked alongside pathogenicity on multiple scales by utilizing Gosling, a declarative genomics visualization library.
 
-```{r}
+First, create a GPos object for a protein of interest.
+```{r mk_gpos}
 library(GenomicRanges)
 
 tbl <-
@@ -255,10 +256,16 @@ tbl <-
 gpos <-
     tbl |>
     to_GPos()
-as_GRanges <- as(gpos, "GRanges")
-as_GRanges
+gp <- as(gpos, "GRanges")
+gp
 
 ```
+
+The function `plot_granges` serves as a wrapper that processes the alphamissenseR formatted GPos object into a multiscale lolipop plot in [shiny.gosling][]. The resulting plot is a shinyapp object that can be embedded in Rmarkdown or Quarto.
+```{r plot_example}
+AlphaMissenseR::plot_granges(gr, title = "Test track : Q1W6H9", subtitle = "Multiscale plot in Shiny.Gosling")
+```
+
 
 # Finally
 
