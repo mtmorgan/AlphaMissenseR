@@ -32,34 +32,6 @@ test_that("'am_available()' works", {
     expect_true(setequal(keys, result$key))
 })
 
-test_that("'am_data_import_csv()' works", {
-    record <- ALPHAMISSENSE_RECORD
-    fl <- tempfile(); dir.create(fl)
-    bfc <- BiocFileCache::BiocFileCache(fl)
-
-    tsv_file <- tempfile()
-    filename <- basename(tsv_file)
-    writeLines(c(
-        "# Comment",
-        "#",
-        "# Comment",
-        "#CHROM\tPOS",
-        "chr1\t1",
-        "chr1\t2"
-    ), gzfile(tsv_file))
-
-    spdl::set_level("warn")
-    output <- capture.output({
-        tbl <- am_data_import_csv(record, bfc, "tsv_file", filename, tsv_file)
-    }, type = "message")
-    spdl::set_level("info")
-    expect_true(nzchar(output))
-    expect_true(NROW(tbl |> collect()) == 2L)
-    expect_identical(colnames(tbl), c("CHROM", "POS"))
-
-    db_disconnect(db_connect(record, bfc))
-})
-
 test_that("'am_data()' works", {
     ## hmm, not sure how to test without excessive download...
     expect_error(am_data("unknown_key"))

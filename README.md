@@ -54,9 +54,15 @@ library(AlphaMissenseR)
 
 ## Next steps
 
-Visit the [introductory][intro] article to learn more about using this
-package. The [visualization][viz] article shows how missense effects
-can be plotted on (AlphaFold or other) protein structures.
+- Visit the [Introduction][intro] to learn more about accessing
+  AlphaMissense data in *R*.
+- The [AlphaFold Integration][alphafold] article shows how missense
+  effects can be plotted on AlphaFold (or other) protein structures.
+- Use [ClinVar Integration][clinvar] to compare AlphaMissense and
+  ClinVar predictions.
+- Troubleshoot common problems with [Issues & Solutions][issues].
 
-[intro]: ./articles/a_introduction.html
-[viz]: ./articles/b_visualization.html
+[intro]: ./articles/introduction.html
+[alphafold]: ./articles/alphafold.html
+[clinvar]: ./articles/clinvar.html
+[issues]: ./articles/issues.html

@@ -68,6 +68,35 @@ test_that("'db_tables() works", {
     db_disconnect(db)
 })
 
+
+test_that("'db_table()' works", {
+    record <- ALPHAMISSENSE_RECORD
+    fl <- tempfile(); dir.create(fl)
+    bfc <- BiocFileCache::BiocFileCache(fl)
+
+    tsv_file <- tempfile()
+    filename <- basename(tsv_file)
+    writeLines(c(
+        "# Comment",
+        "#",
+        "# Comment",
+        "#CHROM\tPOS",
+        "chr1\t1",
+        "chr1\t2"
+    ), gzfile(tsv_file))
+
+    spdl::set_level("warn")
+    output <- capture.output({
+        tbl <- db_table(record, bfc, "tsv_file", filename, tsv_file)
+    }, type = "message")
+    spdl::set_level("info")
+    expect_true(nzchar(output))
+    expect_true(NROW(tbl |> collect()) == 2L)
+    expect_identical(colnames(tbl), c("CHROM", "POS"))
+
+    db_disconnect(db_connect(record, bfc))
+})
+
 test_that("'db_temporary_table()' works", {
     fl <- tempfile(); dir.create(fl)
     bfc <- BiocFileCache::BiocFileCache(fl)

@@ -1,9 +1,9 @@
 ---
-title: "Accessing AlphaMissense Resources in R"
+title: "A. Introduction"
 output: rmarkdown::html_vignette
 runtime: shiny
 vignette: >
-  %\VignetteIndexEntry{Accessing AlphaMissense Resources in R}
+  %\VignetteIndexEntry{A. Introduction}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

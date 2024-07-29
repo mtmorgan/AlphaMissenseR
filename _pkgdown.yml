@@ -1,4 +1,19 @@
 url: https://mtmorgan.github.io/AlphaMissenseR/
+
 template:
   bootstrap: 5
 
+articles:
+- title: Using AlphaMissenseR
+  navbar: ~
+  contents:
+  - introduction
+  - alphafold
+  - clinvar
+  - issues
+
+redirects:
+- ["articles/a_introduction.html", "articles/introduction.html"]
+- ["articles/b_visualization.html", "articles/alphafold.html"]
+- ["articles/c_issues.html", "articles/issues.html"]
+- ["articles/d_integrate_ClinVar.html", "articles/clinvar.html"]
