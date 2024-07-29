@@ -1,27 +1,35 @@
 #' @rdname plot_shinygosling
-#' Plot a GRanges object using Shiny and Gosling
 #'
-#' This function creates a Shiny app that displays a Gosling plot of a given GRanges object.
-#' It visualizes genomic ranges with both rectangle and point representations, and allows
-#' for customization of the plot title and subtitle.
+#' @title Plot a GRanges object using Shiny and Gosling
 #'
-#' @param as_GRanges A GRanges object containing the genomic ranges to be plotted.
-#' @param title Character string. The title of the plot. Default is "GRanges Plot".
-#' @param subtitle Character string. The subtitle of the plot. Default is "Stacked nucleotide example".
+#' @description This function creates a Shiny app that displays a
+#'     Gosling plot of a given GRanges object.  It visualizes genomic
+#'     ranges with both rectangle and point representations, and
+#'     allows for customization of the plot title and subtitle.
+
+#'     The function creates two tracks: a reference track with
+#'     rectangles and an alternative track with points. It assumes
+#'     that the GRanges object has 'am_class' and 'ALT' metadata
+#'     columns. The 'am_class' column is used for coloring the points,
+#'     while 'ALT' is used for the text of the points.
+
+#' @param as_GRanges A GRanges object containing the genomic ranges to
+#'     be plotted.
+#' @param title Character string. The title of the plot. Default is
+#'     "GRanges Plot".
+#' @param subtitle Character string. The subtitle of the plot. Default
+#'     is "Stacked nucleotide example".
 #'
-#' @return A Shiny app object that, when run, displays the Gosling plot.
+#' @return A Shiny app object that, when run, displays the Gosling
+#'     plot.
 #'
-#' @details The function creates two tracks: a reference track with rectangles and an
-#' alternative track with points. It assumes that the GRanges object has 'am_class' and 'ALT'
-#' metadata columns. The 'am_class' column is used for coloring the points, while 'ALT' is
-#' used for the text of the points.
-#'
-#' @note This function requires the shiny, gosling, and GenomicRanges packages to be installed.
+#' @note This function requires the shiny, gosling, and GenomicRanges
+#'     packages to be installed.
 #'
 #' @examples
 #' \dontrun{
 #' library(GenomicRanges)
-#' 
+#'
 #' # Create a sample GRanges object
 #' gr <- GRanges(
 #'   seqnames = c("chr1", "chr2", "chr1"),
@@ -29,34 +37,38 @@
 #'   am_class = c("likely_benign", "ambiguous", "likely_pathogenic"),
 #'   ALT = c("A", "T", "G")
 #' )
-#' 
+#'
 #' # Plot the GRanges object
-#' plot_granges(gr, title = "My GRanges Plot", subtitle = "Custom subtitle")
+#' AlphaMissenseR::plot_granges(gr, title = "My GRanges Plot", subtitle = "Custom subtitle")
 #' }
 #'
 #' @import shiny
-#' @import gosling
+#' @import shiny.gosling
 #' @import GenomicRanges
 #'
 #' @export
-plot_granges <- function(as_GRanges, title = "GRanges Plot", subtitle = "Stacked nucleotide example") {
+plot_granges <-
+    function(as_GRanges,
+             title = "GRanges Plot",
+             subtitle = "Stacked nucleotide example")
+{
     # Define categories and color mapping
     categories <- c("likely_benign", "ambiguous", "likely_pathogenic")
     colormapping <- c("#029F73", "gray", "#CB3B8C")
-    
+
     # Get range from GRanges object
     get_range <- range(as_GRanges)
-    
+
     # Prepare track data
     track_data <- track_data_gr(
         as_GRanges,
         chromosomeField = "seqnames",
         genomicFields = c("start", "end")
     )
-    
+
     # Define tracks
     track_ref <- add_single_track(
-        data = track3_data,
+        data = track_data,
         mark = "rect",
         x = visual_channel_x(field = "start", type = "genomic", axis = "bottom"),
         xe = visual_channel_x(field = "end", type = "genomic"),
@@ -65,7 +77,7 @@ plot_granges <- function(as_GRanges, title = "GRanges Plot", subtitle = "Stacked
         strokeWidth = list(value = 1),
         opacity = list(value = 0.3)
     )
-    
+
     track_alt <- add_single_track(
         data = track_data,
         mark = "point",
@@ -75,7 +87,7 @@ plot_granges <- function(as_GRanges, title = "GRanges Plot", subtitle = "Stacked
         text = list(field = "ALT", type = "nominal"),
         size = list(value = 5)
     )
-    
+
     # Compose view
     composed_view_a <- compose_view(
         width = 800,
@@ -95,20 +107,20 @@ plot_granges <- function(as_GRanges, title = "GRanges Plot", subtitle = "Stacked
         ),
         tracks = add_multi_tracks(track_ref, track_alt)
     )
-    
+
     # Arrange view
     arranged_view3 <- arrange_views(
         title = title,
         subtitle = subtitle,
         views = composed_view_a
     )
-    
+
     # Create Shiny app
     ui <- fluidPage(
         use_gosling(clear_files = FALSE),
         goslingOutput("gosling_plot")
     )
-    
+
     server <- function(input, output, session) {
         output$gosling_plot <- renderGosling({
             gosling(
@@ -117,7 +129,7 @@ plot_granges <- function(as_GRanges, title = "GRanges Plot", subtitle = "Stacked
             )
         })
     }
-    
+
     # Return the Shiny app
     shinyApp(ui, server)
 }
