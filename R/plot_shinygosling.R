@@ -23,7 +23,7 @@
 #' @return A Shiny app object that, when run, displays the Gosling
 #'     plot.
 #'
-#' @note This function requires the shiny, gosling, and GenomicRanges
+#' @note This function requires the shiny, shiny.gosling, and GenomicRanges
 #'     packages to be installed.
 #'
 #' @examples
