@@ -27,23 +27,18 @@
 #'     packages to be installed.
 #'
 #' @examples
-#' \dontrun{
-#' library(AlphamissenseR)
-#' library(GenomicRanges)
+#' if (requireNamespace("GenomicRanges")) {
 #'
-#' # Create a sample GRanges object from AlphamissenseR
-#' tbl <-
-#'    am_data("hg38") |>
-#'    filter(uniprot_id == "Q1W6H9")
+#' ## Create a sample GRanges object from AlphamissenseR
 #' gpos <-
-#'    tbl |>
+#'    am_data("hg38") |>
+#'    filter(uniprot_id == "Q1W6H9") |>
 #'    to_GPos()
-#' gr <- as(gpos, "GRanges")
 #' 
 #' 
 #'
 #' # Plot the GRanges object
-#' AlphaMissenseR::plot_granges(gr, title = "My GRanges Plot", subtitle = "Custom subtitle")
+#' plot_granges(gpos, title = "My GRanges Plot", subtitle = "Custom subtitle")
 #' }
 #'
 #' @import shiny
