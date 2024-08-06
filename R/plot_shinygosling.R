@@ -47,7 +47,24 @@ plot_granges <-
              title = "GRanges Plot",
              subtitle = "Stacked nucleotide example")
 {
-    # Define categories and color mapping
+    ## Validate input
+    stopifnot(
+        "Input must be a GRanges or GPos object" = 
+            inherits(gr, c("GRanges", "GPos"))
+    )
+    stopifnot(
+        "Option must be a " = 
+            class(title)=="character"
+        )
+    stopifnot(
+        "Option must be a " = 
+            class(subtitle)=="character"
+    )
+    
+    
+            
+    
+    ## Define categories and color mapping
     categories <- c("likely_benign", "ambiguous", "likely_pathogenic")
     colormapping <- c("#89d5f5", "gray", "#f56c6c")
 
