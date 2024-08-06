@@ -19,6 +19,11 @@
 #'     "GRanges Plot".
 #' @param subtitle Character string. The subtitle of the plot. Default
 #'     is "Stacked nucleotide example".
+#' @param plot_type Character string. Select the type of gosling plot. 
+#' Default is "bar"
+#'     - "bars": Stacked bar plot with height based on pathogenicity score
+#'     - "lolipop": variation of a bar chart where the bar is replaced with a 
+#'     line and a dot at the end to show mutation variations.
 #'
 #' @return A Shiny app object that, when run, displays the Gosling
 #'     plot.
@@ -45,7 +50,8 @@
 plot_granges <-
     function(gr,
              title = "GRanges Plot",
-             subtitle = "Stacked nucleotide example")
+             subtitle = "Stacked nucleotide example",
+             plot_type = "bars")
 {
     ## Validate input
     stopifnot(
@@ -53,18 +59,20 @@ plot_granges <-
             inherits(gr, c("GRanges", "GPos"))
     )
     stopifnot(
-        "Option must be a " = 
+        "Title must be a scalar string" = 
             is.character(title) && length (title) == 1 && !is.na(title) && 
             nzchar(title)
         )
     stopifnot(
-        "Option must be a " = 
+        "Subtitle must be a scalar string" = 
             is.character(subtitle) && length (subtitle) == 1 && !is.na(subtitle)
             && nzchar(subtitle)
     )
-    
-    
-            
+    stopifnot(
+        "Type must be a scalar string" = 
+            is.character(plot_type) && length (plot_type) == 1 && !is.na(plot_type)
+        && nzchar(plot_type)
+    )
     
     ## Define categories and color mapping
     categories <- c("likely_benign", "ambiguous", "likely_pathogenic")
@@ -72,10 +80,6 @@ plot_granges <-
 
     ## Get range from GRanges object
     r <- range(gr)
-
-    ## This fixes the bug if .gosling directory does not already exist
-    gosling_cache <- file.path(R_user_dir("AlphaMissenseR", which = "cache"), ".gosling")
-    if (!dir.exists(cache_dir))
     
     ## Prepare track data
     track_data <- track_data_gr(
@@ -84,11 +88,61 @@ plot_granges <-
         genomicFields = c("start", "end")
     )
 
-    ## Define tracks
+    ## This fixes the bug if .gosling directory does not already exist
+    cache_dir <- file.path(tools::R_user_dir("AlphaMissenseR", which = "cache"), ".gosling")
+    if (!dir.exists(cache_dir))
+        ## TODO: check return value to ensure directory is created successfully
+        dir.create(cache_dir, recursive = TRUE)
+    
+    ## trigger the option for bars or lolipop        
+    if (plot_type =="bars"){
+        #define single track
+        track_bar <- add_single_track(
+            width = 800,
+            height = 180,
+            data = track_data,
+            mark = "bar",
+            x = visual_channel_x(
+                field = "start", type = "genomic", axis = "bottom"
+            ),
+            xe = visual_channel_x(field = "end", type = "genomic"),
+            y = visual_channel_y(
+                field = "am_pathogenicity", type = "quantitative", axis = "right"
+            ),
+            color = visual_channel_color(
+                field = "am_pathogenicity",
+                type = "quantitative"
+            ),
+            tooltip = visual_channel_tooltips(
+                visual_channel_tooltip(field = "REF", type = "nominal",
+                                       alt = "Reference"),
+                visual_channel_tooltip(field = "ALT", type = "nominal",
+                                       alt = "Alternative / Mutation"),
+                visual_channel_tooltip(
+                    field = "am_pathogenicity",
+                    type = "quantitative",
+                    alt = "AM_Pathogenicity Score",
+                    format = "0.2"
+                ) ),
+            size = list(value = 5)
+        )
+        
+        composed_view <- compose_view(
+            layout = "linear",
+            xDomain = list(chromosome = as.character(seqnames(r)),
+                           interval = c(start(r), end(r))),
+            tracks = track_bar
+            
+        )
+        
+    ## other track    
+    } else if (plot_type == "lolipop"){
+
+    ## Define multi tracks
     track_ref <- add_single_track(
         data = track_data,
         mark = "rect",
-        x = visual_channel_x(field = "start", type = "genomic", axis = "bottom"),
+        x = visual_channel_x(field = "start", type = "genomic", axis = "top"),
         xe = visual_channel_x(field = "end", type = "genomic"),
         size = list(value = 50),
         stroke = "lightgrey",
@@ -99,9 +153,10 @@ plot_granges <-
     track_alt <- add_single_track(
         data = track_data,
         mark = "point",
-        x = visual_channel_x(field = "start", type = "genomic", axis = "bottom"),
+        x = visual_channel_x(field = "start", type = "genomic", axis = "top"),
         xe = visual_channel_x(field = "end", type = "genomic"),
-        y = visual_channel_y(field = "am_class", type = "nominal", axis = "right"),
+        y = visual_channel_y(field = "am_class", type="nominal", 
+                       domain= categories, axis = "left",baseline = "ambiguous" ),
         text = list(field = "ALT", type = "nominal"),
         size = list(value = 5),
         tooltip = visual_channel_tooltips(
@@ -118,7 +173,7 @@ plot_granges <-
     )
 
     ## Compose view
-    composed_view_a <- compose_view(
+    composed_view <- compose_view(
         width = 800,
         height = 180,
         multi = TRUE,
@@ -132,17 +187,23 @@ plot_granges <-
             field = "am_class",
             type = "nominal",
             domain = categories,
+            baseline = "ambiguous",
             range = colormapping,
             legend = TRUE
         ),
         tracks = add_multi_tracks(track_ref, track_alt)
     )
-
-    ## Arrange view
+    
+    } 
+    ## trigger check
+    else {
+        stop("Invalid plot_type. Use 'bars' or 'lolipop'")
+    }
+    ## Arrange into view
     arranged_view3 <- arrange_views(
         title = title,
         subtitle = subtitle,
-        views = composed_view_a
+        views = composed_view
     )
 
     ## Create Shiny app
