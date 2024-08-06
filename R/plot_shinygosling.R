@@ -13,7 +13,7 @@
 #'     columns. The 'am_class' column is used for coloring the points,
 #'     while 'ALT' is used for the text of the points.
 
-#' @param as_GRanges A GRanges object containing the genomic ranges to
+#' @param gr A GRanges object containing the genomic ranges to
 #'     be plotted.
 #' @param title Character string. The title of the plot. Default is
 #'     "GRanges Plot".
@@ -34,20 +34,16 @@
 #'    am_data("hg38") |>
 #'    filter(uniprot_id == "Q1W6H9") |>
 #'    to_GPos()
-#' 
-#' 
 #'
-#' # Plot the GRanges object
-#' plot_granges(gpos, title = "My GRanges Plot", subtitle = "Custom subtitle")
+#' ## Plot the GRanges object
+#' plot_granges(gpos, mode = "bar", title = "Q1W6H9 track", subtitle 
+#' = "bar plot example")
 #' }
 #'
-#' @import shiny
-#' @import shiny.gosling
-#' @import GenomicRanges
 #'
 #' @export
 plot_granges <-
-    function(as_GRanges,
+    function(gr,
              title = "GRanges Plot",
              subtitle = "Stacked nucleotide example")
 {
@@ -56,7 +52,7 @@ plot_granges <-
     colormapping <- c("#89d5f5", "gray", "#f56c6c")
 
     # Get range from GRanges object
-    get_range <- range(as_GRanges)
+    r <- range(gr)
 
     # This fixes the bug if .gosling directory does not already exist
     if (!dir.exists(".gosling")){
@@ -65,7 +61,7 @@ plot_granges <-
     
     # Prepare track data
     track_data <- track_data_gr(
-        as_GRanges,
+        gr,
         chromosomeField = "seqnames",
         genomicFields = c("start", "end")
     )
@@ -99,8 +95,8 @@ plot_granges <-
         multi = TRUE,
         layout = "linear",
         xDomain = list(
-            chromosome = as.character(get_range@seqnames@values),
-            interval = c(get_range@ranges@start, get_range@ranges@start + get_range@ranges@width)
+            chromosome = as.character(seqnames(r)),
+            interval = c(start(r), end(r))
         ),
         alignment = "overlay",
         color = visual_channel_color(
