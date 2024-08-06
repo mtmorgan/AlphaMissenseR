@@ -103,7 +103,18 @@ plot_granges <-
         xe = visual_channel_x(field = "end", type = "genomic"),
         y = visual_channel_y(field = "am_class", type = "nominal", axis = "right"),
         text = list(field = "ALT", type = "nominal"),
-        size = list(value = 5)
+        size = list(value = 5),
+        tooltip = visual_channel_tooltips(
+            visual_channel_tooltip(field = "REF", type = "nominal",
+                                   alt = "Reference"),
+            visual_channel_tooltip(field = "ALT", type = "nominal",
+                                   alt = "Alternative / Mutation"),
+            visual_channel_tooltip(
+                field = "am_pathogenicity",
+                type = "quantitative",
+                alt = "AM_Pathogenicity Score",
+                format = "0.2"
+            ) )
     )
 
     ## Compose view
