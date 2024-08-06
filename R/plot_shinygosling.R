@@ -54,11 +54,13 @@ plot_granges <-
     )
     stopifnot(
         "Option must be a " = 
-            class(title)=="character"
+            is.character(title) && length (title) == 1 && !is.na(title) && 
+            nzchar(title)
         )
     stopifnot(
         "Option must be a " = 
-            class(subtitle)=="character"
+            is.character(subtitle) && length (subtitle) == 1 && !is.na(subtitle)
+            && nzchar(subtitle)
     )
     
     
@@ -68,22 +70,21 @@ plot_granges <-
     categories <- c("likely_benign", "ambiguous", "likely_pathogenic")
     colormapping <- c("#89d5f5", "gray", "#f56c6c")
 
-    # Get range from GRanges object
+    ## Get range from GRanges object
     r <- range(gr)
 
-    # This fixes the bug if .gosling directory does not already exist
-    if (!dir.exists(".gosling")){
-        dir.create(".gosling")
-    }
+    ## This fixes the bug if .gosling directory does not already exist
+    gosling_cache <- file.path(R_user_dir("AlphaMissenseR", which = "cache"), ".gosling")
+    if (!dir.exists(cache_dir))
     
-    # Prepare track data
+    ## Prepare track data
     track_data <- track_data_gr(
         gr,
         chromosomeField = "seqnames",
         genomicFields = c("start", "end")
     )
 
-    # Define tracks
+    ## Define tracks
     track_ref <- add_single_track(
         data = track_data,
         mark = "rect",
@@ -105,7 +106,7 @@ plot_granges <-
         size = list(value = 5)
     )
 
-    # Compose view
+    ## Compose view
     composed_view_a <- compose_view(
         width = 800,
         height = 180,
@@ -126,14 +127,14 @@ plot_granges <-
         tracks = add_multi_tracks(track_ref, track_alt)
     )
 
-    # Arrange view
+    ## Arrange view
     arranged_view3 <- arrange_views(
         title = title,
         subtitle = subtitle,
         views = composed_view_a
     )
 
-    # Create Shiny app
+    ## Create Shiny app
     ui <- fluidPage(
         use_gosling(clear_files = FALSE),
         goslingOutput("gosling_plot")
@@ -148,6 +149,6 @@ plot_granges <-
         })
     }
 
-    # Return the Shiny app
+    ## Return the Shiny app
     shinyApp(ui, server)
 }
