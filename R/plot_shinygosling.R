@@ -45,6 +45,8 @@
 #' = "bar plot example")
 #' }
 #'
+#'@importFrom shiny.gosling add_single_track compose_view visual_channel_x visual_channel_y add_multi_tracks visual_channel_tooltip visual_channel_tooltips visual_channel_color 
+#'
 #'
 #' @export
 plot_granges <-
@@ -84,17 +86,21 @@ plot_granges <-
     r <- range(gr)
     
     ## Prepare track data
-    track_data <- track_data_gr(
+    track_data <- shiny.gosling::track_data_gr(
         gr,
         chromosomeField = "seqnames",
         genomicFields = c("start", "end")
     )
 
-    ## This fixes the bug if .gosling directory does not already exist
-    cache_dir <- file.path(tools::R_user_dir("AlphaMissenseR", which = "cache"), ".gosling")
-    if (!dir.exists(cache_dir))
-        ## TODO: check return value to ensure directory is created successfully
-        dir.create(cache_dir, recursive = TRUE)
+    # This fixes the bug if .gosling directory does not already exist
+    if (!dir.exists(".gosling")){
+        dir.create(".gosling")
+    }
+    ## This does not fix the bug, shiny.gosling is hardcoded to search local wd
+    #cache_dir <- file.path(tools::R_user_dir("AlphaMissenseR", which = "cache"), ".gosling")
+    #if (!dir.exists(cache_dir))
+    #    ## TODO: check return value to ensure directory is created successfully
+    #    dir.create(cache_dir, recursive = TRUE)
     
     ## trigger the option for bars or lollipop        
     if (plot_type =="bars"){
@@ -209,14 +215,14 @@ plot_granges <-
     )
 
     ## Create Shiny app
-    ui <- fluidPage(
-        use_gosling(clear_files = FALSE),
-        goslingOutput("gosling_plot")
+    ui <- shiny::fluidPage(
+        shiny.gosling::use_gosling(clear_files = FALSE),
+        shiny.gosling::goslingOutput("gosling_plot")
     )
 
     server <- function(input, output, session) {
-        output$gosling_plot <- renderGosling({
-            gosling(
+        output$gosling_plot <- shiny.gosling::renderGosling({
+            shiny.gosling::gosling(
                 component_id = "component_3",
                 arranged_view3
             )
@@ -224,5 +230,5 @@ plot_granges <-
     }
 
     ## Return the Shiny app
-    shinyApp(ui, server)
+    shiny::shinyApp(ui, server)
 }
