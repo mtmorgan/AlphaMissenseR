@@ -1,7 +1,6 @@
 ---
 title: "A. Introduction"
 output: rmarkdown::html_vignette
-runtime: shiny
 vignette: >
   %\VignetteIndexEntry{A. Introduction}
   %\VignetteEngine{knitr::rmarkdown}
