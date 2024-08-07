@@ -256,10 +256,6 @@ gpos <-
     am_data("hg38") |>
     filter(uniprot_id == "Q1W6H9") |>
     to_GPos()
-#'
-#' ## Plot the GRanges object
-#' plot_granges(gpos, mode = "bar", title = "Q1W6H9 track", subtitle 
-#' = "bar plot example")
 
 ```
 
@@ -269,14 +265,14 @@ shows the pathogenicity score for each point mutation in a linear genomic track.
 The resulting plot is a shinyapp object that can be embedded in Rmarkdown or 
 Quarto.
 ```{r Gpos_plot_bar}
-plot_granges(gpos, mode = "bar", title = "Q1W6H9 track", subtitle 
+plot_granges(gpos, plot_type = "bars", title = "Q1W6H9 track", subtitle 
              = "bar plot example")
 ```
 
 A multiscale-lollipop plot can be generated with the same function to highlight
 predicted class outcomes of each positional mutation.
 ```{r Gpos_plot_lolipop}
-plot_granges(gpos, mode = "lollipop", title = "Q1W6H9 track", subtitle 
+plot_granges(gpos, plot_type = "lollipop", title = "Q1W6H9 track", subtitle 
              = "lollipop plot example")
 ```
 

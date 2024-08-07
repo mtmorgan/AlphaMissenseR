@@ -77,7 +77,9 @@ plot_granges <-
     ## Define categories and color mapping
     categories <- c("likely_benign", "ambiguous", "likely_pathogenic")
     colormapping <- c("#89d5f5", "gray", "#f56c6c")
-
+    
+    ## Turns out gr must be coerced to GRanges(), will look into this later
+    gr <- as(gr, "GRanges")
     ## Get range from GRanges object
     r <- range(gr)
     
