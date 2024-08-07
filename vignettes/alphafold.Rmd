@@ -1,6 +1,7 @@
 ---
 title: "B. AlphaFold Integration"
 output: rmarkdown::html_vignette
+runtime: shiny
 vignette: >
   %\VignetteIndexEntry{B. AlphaFold Integration}
   %\VignetteEngine{knitr::rmarkdown}
@@ -243,29 +244,41 @@ r3dmol::r3dmol() |>
 
 # Visualizing sequence tracks
 
-The variant prediction data can also be visualized on a genome browser. Mis-sense point mutations can be tracked alongside pathogenicity on multiple scales by utilizing Gosling, a declarative genomics visualization library.
+The variant prediction data can also be visualized on a genome browser. 
+Mis-sense point mutations can be tracked alongside pathogenicity on multiple 
+scales by utilizing Gosling, a declarative genomics visualization library.
 
 First, create a GPos object for a protein of interest.
 ```{r mk_gpos}
 library(GenomicRanges)
 
-tbl <-
-    am_data("hg38") |>
-    filter(uniprot_id == "Q1W6H9")
-
 gpos <-
-    tbl |>
+    am_data("hg38") |>
+    filter(uniprot_id == "Q1W6H9") |>
     to_GPos()
-gp <- as(gpos, "GRanges")
-gp
+#'
+#' ## Plot the GRanges object
+#' plot_granges(gpos, mode = "bar", title = "Q1W6H9 track", subtitle 
+#' = "bar plot example")
 
 ```
 
-The function `plot_granges` serves as a wrapper that processes the alphamissenseR formatted GPos object into a multiscale lolipop plot in [shiny.gosling][]. The resulting plot is a shinyapp object that can be embedded in Rmarkdown or Quarto.
-```{r plot_example}
-AlphaMissenseR::plot_granges(gr, title = "Test track : Q1W6H9", subtitle = "Multiscale plot in Shiny.Gosling")
+The function `plot_granges` serves as a wrapper that processes the 
+alphamissenseR formatted GPos object into a bar plot in [shiny.gosling][] which
+shows the pathogenicity score for each point mutation in a linear genomic track. 
+The resulting plot is a shinyapp object that can be embedded in Rmarkdown or 
+Quarto.
+```{r Gpos_plot_bar}
+plot_granges(gpos, mode = "bar", title = "Q1W6H9 track", subtitle 
+             = "bar plot example")
 ```
 
+A multiscale-lollipop plot can be generated with the same function to highlight
+predicted class outcomes of each positional mutation.
+```{r Gpos_plot_lolipop}
+plot_granges(gpos, mode = "lollipop", title = "Q1W6H9 track", subtitle 
+             = "lollipop plot example")
+```
 
 # Finally
 

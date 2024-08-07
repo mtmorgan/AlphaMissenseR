@@ -22,7 +22,7 @@
 #' @param plot_type Character string. Select the type of gosling plot. 
 #' Default is "bar"
 #'     - "bars": Stacked bar plot with height based on pathogenicity score
-#'     - "lolipop": variation of a bar chart where the bar is replaced with a 
+#'     - "lollipop": variation of a bar chart where the bar is replaced with a 
 #'     line and a dot at the end to show mutation variations.
 #'
 #' @return A Shiny app object that, when run, displays the Gosling
@@ -94,7 +94,7 @@ plot_granges <-
         ## TODO: check return value to ensure directory is created successfully
         dir.create(cache_dir, recursive = TRUE)
     
-    ## trigger the option for bars or lolipop        
+    ## trigger the option for bars or lollipop        
     if (plot_type =="bars"){
         #define single track
         track_bar <- add_single_track(
@@ -136,7 +136,7 @@ plot_granges <-
         )
         
     ## other track    
-    } else if (plot_type == "lolipop"){
+    } else if (plot_type == "lollipop"){
 
     ## Define multi tracks
     track_ref <- add_single_track(
@@ -197,7 +197,7 @@ plot_granges <-
     } 
     ## trigger check
     else {
-        stop("Invalid plot_type. Use 'bars' or 'lolipop'")
+        stop("Invalid plot_type. Use 'bars' or 'lollipop'")
     }
     ## Arrange into view
     arranged_view3 <- arrange_views(
