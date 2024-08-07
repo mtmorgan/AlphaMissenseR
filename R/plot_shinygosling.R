@@ -150,8 +150,8 @@ plot_granges <-
     track_ref <- shiny.gosling::add_single_track(
         data = track_data,
         mark = "rect",
-        x = visual_channel_x(field = "start", type = "genomic", axis = "top"),
-        xe = visual_channel_x(field = "end", type = "genomic"),
+        x = shiny.gosling::visual_channel_x(field = "start", type = "genomic", axis = "top"),
+        xe = shiny.gosling::visual_channel_x(field = "end", type = "genomic"),
         size = list(value = 50),
         stroke = "lightgrey",
         strokeWidth = list(value = 1),
