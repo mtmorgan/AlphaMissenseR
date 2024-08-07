@@ -45,7 +45,6 @@
 #' = "bar plot example")
 #' }
 #'
-#'@importFrom shiny.gosling add_single_track compose_view visual_channel_x visual_channel_y add_multi_tracks visual_channel_tooltip visual_channel_tooltips visual_channel_color 
 #'
 #'
 #' @export
@@ -85,6 +84,16 @@ plot_granges <-
     ## Get range from GRanges object
     r <- range(gr)
     
+    # This fixes the bug if .gosling directory does not already exist
+    if (!dir.exists(".gosling")){
+        dir.create(".gosling")
+    }
+    # This does not fix the bug, shiny.gosling is hardcoded to search local wd
+    #cache_dir <- file.path(tools::R_user_dir("AlphaMissenseR", which = "cache"), ".gosling")
+    #if (!dir.exists(cache_dir))
+    #    ## TODO: check return value to ensure directory is created successfully
+    #    dir.create(cache_dir, recursive = TRUE)    
+
     ## Prepare track data
     track_data <- shiny.gosling::track_data_gr(
         gr,
@@ -92,41 +101,32 @@ plot_granges <-
         genomicFields = c("start", "end")
     )
 
-    # This fixes the bug if .gosling directory does not already exist
-    if (!dir.exists(".gosling")){
-        dir.create(".gosling")
-    }
-    ## This does not fix the bug, shiny.gosling is hardcoded to search local wd
-    #cache_dir <- file.path(tools::R_user_dir("AlphaMissenseR", which = "cache"), ".gosling")
-    #if (!dir.exists(cache_dir))
-    #    ## TODO: check return value to ensure directory is created successfully
-    #    dir.create(cache_dir, recursive = TRUE)
     
     ## trigger the option for bars or lollipop        
     if (plot_type =="bars"){
         #define single track
-        track_bar <- add_single_track(
+        track_bar <- shiny.gosling::add_single_track(
             width = 800,
             height = 180,
             data = track_data,
             mark = "bar",
-            x = visual_channel_x(
+            x = shiny.gosling::visual_channel_x(
                 field = "start", type = "genomic", axis = "bottom"
             ),
-            xe = visual_channel_x(field = "end", type = "genomic"),
-            y = visual_channel_y(
+            xe = shiny.gosling::visual_channel_x(field = "end", type = "genomic"),
+            y = shiny.gosling::visual_channel_y(
                 field = "am_pathogenicity", type = "quantitative", axis = "right"
             ),
-            color = visual_channel_color(
+            color = shiny.gosling::visual_channel_color(
                 field = "am_pathogenicity",
                 type = "quantitative"
             ),
-            tooltip = visual_channel_tooltips(
-                visual_channel_tooltip(field = "REF", type = "nominal",
+            tooltip = shiny.gosling::visual_channel_tooltips(
+                shiny.gosling::visual_channel_tooltip(field = "REF", type = "nominal",
                                        alt = "Reference"),
-                visual_channel_tooltip(field = "ALT", type = "nominal",
+                shiny.gosling::visual_channel_tooltip(field = "ALT", type = "nominal",
                                        alt = "Alternative / Mutation"),
-                visual_channel_tooltip(
+                shiny.gosling::visual_channel_tooltip(
                     field = "am_pathogenicity",
                     type = "quantitative",
                     alt = "AM_Pathogenicity Score",
@@ -135,7 +135,7 @@ plot_granges <-
             size = list(value = 5)
         )
         
-        composed_view <- compose_view(
+        composed_view <- shiny.gosling::compose_view(
             layout = "linear",
             xDomain = list(chromosome = as.character(seqnames(r)),
                            interval = c(start(r), end(r))),
@@ -147,7 +147,7 @@ plot_granges <-
     } else if (plot_type == "lollipop"){
 
     ## Define multi tracks
-    track_ref <- add_single_track(
+    track_ref <- shiny.gosling::add_single_track(
         data = track_data,
         mark = "rect",
         x = visual_channel_x(field = "start", type = "genomic", axis = "top"),
@@ -158,21 +158,21 @@ plot_granges <-
         opacity = list(value = 0.3)
     )
 
-    track_alt <- add_single_track(
+    track_alt <- shiny.gosling::add_single_track(
         data = track_data,
         mark = "point",
-        x = visual_channel_x(field = "start", type = "genomic", axis = "top"),
-        xe = visual_channel_x(field = "end", type = "genomic"),
-        y = visual_channel_y(field = "am_class", type="nominal", 
+        x = shiny.gosling::visual_channel_x(field = "start", type = "genomic", axis = "top"),
+        xe = shiny.gosling::visual_channel_x(field = "end", type = "genomic"),
+        y = shiny.gosling::visual_channel_y(field = "am_class", type="nominal", 
                        domain= categories, axis = "left",baseline = "ambiguous" ),
         text = list(field = "ALT", type = "nominal"),
         size = list(value = 5),
-        tooltip = visual_channel_tooltips(
-            visual_channel_tooltip(field = "REF", type = "nominal",
+        tooltip = shiny.gosling::visual_channel_tooltips(
+            shiny.gosling::visual_channel_tooltip(field = "REF", type = "nominal",
                                    alt = "Reference"),
-            visual_channel_tooltip(field = "ALT", type = "nominal",
+            shiny.gosling::visual_channel_tooltip(field = "ALT", type = "nominal",
                                    alt = "Alternative / Mutation"),
-            visual_channel_tooltip(
+            shiny.gosling::visual_channel_tooltip(
                 field = "am_pathogenicity",
                 type = "quantitative",
                 alt = "AM_Pathogenicity Score",
@@ -181,7 +181,7 @@ plot_granges <-
     )
 
     ## Compose view
-    composed_view <- compose_view(
+    composed_view <- shiny.gosling::compose_view(
         width = 800,
         height = 180,
         multi = TRUE,
@@ -191,7 +191,7 @@ plot_granges <-
             interval = c(start(r), end(r))
         ),
         alignment = "overlay",
-        color = visual_channel_color(
+        color = shiny.gosling::visual_channel_color(
             field = "am_class",
             type = "nominal",
             domain = categories,
@@ -199,7 +199,7 @@ plot_granges <-
             range = colormapping,
             legend = TRUE
         ),
-        tracks = add_multi_tracks(track_ref, track_alt)
+        tracks = shiny.gosling::add_multi_tracks(track_ref, track_alt)
     )
     
     } 
@@ -208,7 +208,7 @@ plot_granges <-
         stop("Invalid plot_type. Use 'bars' or 'lollipop'")
     }
     ## Arrange into view
-    arranged_view3 <- arrange_views(
+    arranged_view3 <- shiny.gosling::arrange_views(
         title = title,
         subtitle = subtitle,
         views = composed_view
