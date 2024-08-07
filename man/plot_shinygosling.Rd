@@ -5,13 +5,14 @@
 \title{Plot a GRanges object using Shiny and Gosling}
 \usage{
 plot_granges(
-  as_GRanges,
+  gr,
   title = "GRanges Plot",
-  subtitle = "Stacked nucleotide example"
+  subtitle = "Stacked nucleotide example",
+  plot_type = "bars"
 )
 }
 \arguments{
-\item{as_GRanges}{A GRanges object containing the genomic ranges to
+\item{gr}{A GRanges object containing the genomic ranges to
 be plotted.}
 
 \item{title}{Character string. The title of the plot. Default is
@@ -19,6 +20,12 @@ be plotted.}
 
 \item{subtitle}{Character string. The subtitle of the plot. Default
 is "Stacked nucleotide example".}
+
+\item{plot_type}{Character string. Select the type of gosling plot.
+Default is "bar"
+- "bars": Stacked bar plot with height based on pathogenicity score
+- "lollipop": variation of a bar chart where the bar is replaced with a
+line and a dot at the end to show mutation variations.}
 }
 \value{
 A Shiny app object that, when run, displays the Gosling
@@ -36,23 +43,22 @@ columns. The 'am_class' column is used for coloring the points,
 while 'ALT' is used for the text of the points.
 }
 \note{
-This function requires the shiny, gosling, and GenomicRanges
+This function requires the shiny, shiny.gosling, and GenomicRanges
 packages to be installed.
 }
 \examples{
-\dontrun{
-library(GenomicRanges)
+if (requireNamespace("GenomicRanges")) {
 
-# Create a sample GRanges object
-gr <- GRanges(
-  seqnames = c("chr1", "chr2", "chr1"),
-  ranges = IRanges(start = c(1, 3, 5), end = c(2, 4, 6)),
-  am_class = c("likely_benign", "ambiguous", "likely_pathogenic"),
-  ALT = c("A", "T", "G")
-)
+## Create a sample GRanges object from AlphamissenseR
+gpos <-
+   am_data("hg38") |>
+   filter(uniprot_id == "Q1W6H9") |>
+   to_GPos()
 
-# Plot the GRanges object
-AlphaMissenseR::plot_granges(gr, title = "My GRanges Plot", subtitle = "Custom subtitle")
+## Plot the GRanges object
+plot_granges(gpos, mode = "bar", title = "Q1W6H9 track", subtitle 
+= "bar plot example")
 }
+
 
 }
