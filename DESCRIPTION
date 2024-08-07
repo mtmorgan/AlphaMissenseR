@@ -3,21 +3,21 @@ Title: Accessing AlphaMissense Data Resources in R
 Version: 1.1.5
 Authors@R:
     c(person(
-	"Martin", "Morgan", role = c("aut", "cre"),
-	email = "mtmorgan.xyz@gmail.com",
-	comment = c(ORCID = "0000-0002-5874-8148")
+    "Martin", "Morgan", role = c("aut", "cre"),
+    email = "mtmorgan.xyz@gmail.com",
+    comment = c(ORCID = "0000-0002-5874-8148")
     ), person(
-	"Tram", "Nguyen",
-	role = "aut"
+    "Tram", "Nguyen",
+    role = "aut"
     ), person(
-	"Tyrone", "Lee",
+    "Tyrone", "Lee",
 	role = "ctb"
     ), person(
-	"Nitesh", "Turaga",
-	role = "ctb"
+    "Nitesh", "Turaga",
+    role = "ctb"
     ), person(
-	"Chan Zuckerberg Initiative DAF CZF2019-002443",
-	role = "fnd"
+    "Chan Zuckerberg Initiative DAF CZF2019-002443",
+    role = "fnd"
     ), person(
 	"NIH NCI ITCR U24CA180996",
 	role = "fnd"
