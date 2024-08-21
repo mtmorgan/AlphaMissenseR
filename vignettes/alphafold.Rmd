@@ -243,43 +243,47 @@ r3dmol::r3dmol() |>
     r3dmol::m_zoom_to()
 ```
 
-# Visualizing sequence tracks
+# Visualizing genomic tracks
 
-The variant prediction data can also be visualized on a genome browser.
-Mis-sense point mutations can be tracked alongside pathogenicity on
-multiple scales by utilizing Gosling, a declarative genomics
-visualization library.
+The variant effect prediction data can also be visualized in a genome browser
+view. This allows the user to explore the predicted pathogenicity of single nucleotide
+missense mutations in a gene of interest.
+This multi-scale visualization is based on [Gosling](http://gosling-lang.org/),
+a grammar-based toolkit for scalable and interactive genomics data visualization.
 
-First, create a GPos object for a protein of interest.
+For demonstration, we create a `GPos` object for a protein of interest.
 
-```{r mk_gpos,  results='hide', message=FALSE}
+```{r mk_gpos, message=FALSE}
 library(GenomicRanges)
 
 gpos <-
     am_data("hg38") |>
     filter(uniprot_id == "Q1W6H9") |>
     to_GPos()
-
 ```
 
-The function `plot_granges` serves as a wrapper that processes the
-alphamissenseR formatted GPos object into a bar plot in
-[shiny.gosling](https://github.com/Appsilon/shiny.gosling) which shows
-the pathogenicity score for each point mutation in a linear genomic
-track. The resulting plot is a shinyapp object that can be embedded in
-Rmarkdown or Quarto.
+The function `plot_granges` invokes functionality from the
+[shiny.gosling](https://bioconductor.org/packages/shiny.gosling) package
+to produce an interactive genome track plot in which the pathogenicity score for
+each point mutation in a linear genomic track. 
 
-```{r Gpos_plot_bar}
-plot_granges(gpos, plot_type = "bars", title = "Q1W6H9 track", subtitle 
-             = "bar plot example")
+The resulting plot is a [Shiny](https://shiny.posit.co/) app that can be displayed
+when running the following command in an interactive R session.
+
+```{r gos_bar, results = 'hide'}
+plot_granges(gpos, plot_type = "bars",
+             title = "Q1W6H9 track", 
+             subtitle = "bar plot example")
 ```
 
-A multiscale-lollipop plot can be generated with the same function to
-highlight predicted class outcomes of each positional mutation.
+Alternatively, a multiscale-lollipop plot can be generated with the same function
+by changing the `plot_type` argument to highlight the predicted class outcomes
+for each mutation (ambigious, benign, pathogenic).
 
-```{r Gpos_plot_lolipop, results='hide'}
-plot_granges(gpos, plot_type = "lollipop", title = "Q1W6H9 track", subtitle 
-             = "lollipop plot example")
+```{r gos_lollipop, results = 'hide'}
+plot_granges(gpos, plot_type = "lollipop", 
+             title = "Q1W6H9 track",
+             subtitle = "lollipop plot example")
 ```
 
 # Finally
