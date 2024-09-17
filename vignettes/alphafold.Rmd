@@ -270,21 +270,29 @@ each point mutation in a linear genomic track.
 The resulting plot is a [Shiny](https://shiny.posit.co/) app that can be displayed
 when running the following command in an interactive R session.
 
-```{r gos_bar, results = 'hide'}
+```{r gos_bar}
+if(interactive()){
 plot_granges(gpos, plot_type = "bars",
              title = "Q1W6H9 track", 
              subtitle = "bar plot example")
+}
 ```
+
+![Image example of bar plot for Q1W6H9](example_gosling_bar.png "gosling bar plot example")
 
 Alternatively, a multiscale-lollipop plot can be generated with the same function
 by changing the `plot_type` argument to highlight the predicted class outcomes
 for each mutation (ambigious, benign, pathogenic).
 
-```{r gos_lollipop, results = 'hide'}
+```{r gos_lollipop}
+if(interactive()){
 plot_granges(gpos, plot_type = "lollipop", 
              title = "Q1W6H9 track",
              subtitle = "lollipop plot example")
+}
 ```
+
+![Image example of lollipop plot for Q1W6H9](example_gosling_lollipop.png "gosling bar plot example")
 
 # Finally
 

@@ -1,4 +1,4 @@
-#' @rdname plot_shinygosling
+#' @rdname plot_granges
 #'
 #' @title Plot a GRanges object using Shiny and Gosling
 #'
@@ -7,42 +7,46 @@
 #'     ranges with both rectangle and point representations, and
 #'     allows for customization of the plot title and subtitle.
 
-#'     The function creates two tracks: a reference track with
-#'     rectangles and an alternative track with points. It assumes
-#'     that the GRanges object has 'am_class' and 'ALT' metadata
-#'     columns. The 'am_class' column is used for coloring the points,
-#'     while 'ALT' is used for the text of the points.
+#' @details
+#' The function supports 2 types of plots as selected through the `plot_type` 
+#' argument: (1) a barplot-like view of the pathogenicity score at each position, 
+#' similar to a sequencing coverage plot, and (2) a lollipop plot focusing on 
+#' the pathogenicity classification (ambiguous, benign, pathogenic) at each 
+#' position. It requires that the [`GRanges`] object has the following metadata
+#' columns: 'am_class' (effect classification),'am_pathogenicity' 
+#' (pathogenicity score), 'ALT' (alternative allele) and 'REF' 
+#' (reference allele).
 
-#' @param gr A GRanges object containing the genomic ranges to
+#' @param gr A [`GRanges`] object containing the genomic ranges to
 #'     be plotted.
-#' @param title Character string. The title of the plot. Default is
+#' @param title Character. Title of the plot. Default is
 #'     "GRanges Plot".
-#' @param subtitle Character string. The subtitle of the plot. Default
+#' @param subtitle Character. The subtitle of the plot. Default
 #'     is "Stacked nucleotide example".
-#' @param plot_type Character string. Select the type of gosling plot. 
-#' Default is "bar"
-#'     - "bars": Stacked bar plot with height based on pathogenicity score
+#' @param plot_type Character. Select the type of gosling plot. 
+#' Default is "bars".
+#'     - "bars": Stacked bar plot with height based on pathogenicity score,
 #'     - "lollipop": variation of a bar chart where the bar is replaced with a 
 #'     line and a dot at the end to show mutation variations.
 #'
-#' @return A Shiny app object that, when run, displays the Gosling
+#' @return A `shinyApp` object that, when run, displays the Gosling
 #'     plot.
 #'
-#' @note This function requires the shiny, shiny.gosling, and GenomicRanges
+#' @note This function requires the `shiny`, `shiny.gosling`, and `GenomicRanges`
 #'     packages to be installed.
 #'
 #' @examples
 #' if (requireNamespace("GenomicRanges")) {
 #'
-#' ## Create a sample GRanges object from AlphamissenseR
-#' gpos <-
-#'    am_data("hg38") |>
-#'    filter(uniprot_id == "Q1W6H9") |>
-#'    to_GPos()
+#'    ## Create a sample GRanges object from AlphamissenseR
+#'    gpos <-
+#'        am_data("hg38") |>
+#'        filter(uniprot_id == "Q1W6H9") |>
+#'        to_GPos()
 #'
-#' ## Plot the GRanges object
-#' plot_granges(gpos, mode = "bar", title = "Q1W6H9 track", subtitle 
-#' = "bar plot example")
+#'    ## Plot the GRanges object
+#'    plot_granges(gpos, mode = "bar", title = "Q1W6H9 track", subtitle 
+#'    = "bar plot example")
 #' }
 #'
 #'
@@ -88,11 +92,6 @@ plot_granges <-
     if (!dir.exists(".gosling")){
         dir.create(".gosling")
     }
-    # This does not fix the bug, shiny.gosling is hardcoded to search local wd
-    #cache_dir <- file.path(tools::R_user_dir("AlphaMissenseR", which = "cache"), ".gosling")
-    #if (!dir.exists(cache_dir))
-    #    ## TODO: check return value to ensure directory is created successfully
-    #    dir.create(cache_dir, recursive = TRUE)    
 
     ## Prepare track data
     track_data <- shiny.gosling::track_data_gr(
@@ -143,7 +142,7 @@ plot_granges <-
             
         )
         
-    ## other track    
+    ## other option    
     } else if (plot_type == "lollipop"){
 
     ## Define multi tracks
