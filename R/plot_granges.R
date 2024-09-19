@@ -53,7 +53,7 @@
 #'
 #' @export
 plot_granges <-
-    function(gr,
+    function(gr_input,
              title = "GRanges Plot",
              subtitle = "Stacked nucleotide example",
              plot_type = "bars")
@@ -61,7 +61,7 @@ plot_granges <-
     ## Validate input
     stopifnot(
         "Input must be a GRanges or GPos object" = 
-            inherits(gr, c("GRanges", "GPos"))
+            inherits(gr_input, c("GRanges", "GPos"))
     )
     stopifnot(
         "Title must be a scalar string" = 
@@ -84,9 +84,9 @@ plot_granges <-
     colormapping <- c("#89d5f5", "gray", "#f56c6c")
     
     ## Turns out gr must be coerced to GRanges(), will look into this later
-    gr <- as(gr, "GRanges")
+    gr_input <- as(gr_input, "GRanges")
     ## Get range from GRanges object
-    r <- range(gr)
+    r <- range(gr_input)
     
     # This fixes the bug if .gosling directory does not already exist
     if (!dir.exists(".gosling")){
@@ -95,7 +95,7 @@ plot_granges <-
 
     ## Prepare track data
     track_data <- shiny.gosling::track_data_gr(
-        gr,
+        gr_input,
         chromosomeField = "seqnames",
         genomicFields = c("start", "end")
     )
