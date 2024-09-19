@@ -60,24 +60,11 @@ plot_granges <-
 {
     ## Validate input
     stopifnot(
-        "Input must be a GRanges or GPos object" = 
-            inherits(gr_input, c("GRanges", "GPos"))
-    )
-    stopifnot(
-        "Title must be a scalar string" = 
-            is.character(title) && length (title) == 1 && !is.na(title) && 
-            nzchar(title)
+            is(granges, "GRanges"),
+            isScalarCharacter(title),
+            isScalarCharacter(subtitle),
+            isScalarCharacter(plot_type)
         )
-    stopifnot(
-        "Subtitle must be a scalar string" = 
-            is.character(subtitle) && length (subtitle) == 1 && !is.na(subtitle)
-            && nzchar(subtitle)
-    )
-    stopifnot(
-        "Type must be a scalar string" = 
-            is.character(plot_type) && length (plot_type) == 1 && !is.na(plot_type)
-        && nzchar(plot_type)
-    )
     
     ## Define categories and color mapping
     categories <- c("likely_benign", "ambiguous", "likely_pathogenic")
