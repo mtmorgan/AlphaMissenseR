@@ -2,68 +2,68 @@ Package: AlphaMissenseR
 Title: Accessing AlphaMissense Data Resources in R
 Version: 1.1.5
 Authors@R:
-    c(person(
-    "Martin", "Morgan", role = c("aut", "cre"),
-    email = "mtmorgan.xyz@gmail.com",
-    comment = c(ORCID = "0000-0002-5874-8148")
-    ), person(
-    "Tram", "Nguyen",
-    role = "aut"
-    ), person(
-    "Tyrone", "Lee",
-	role = "ctb"
-    ), person(
-    "Nitesh", "Turaga",
-    role = "ctb"
-    ), person(
-    "Chan Zuckerberg Initiative DAF CZF2019-002443",
-    role = "fnd"
-    ), person(
-	"NIH NCI ITCR U24CA180996",
-	role = "fnd"
-    ), person(
-	"NIH NCI IOTN U24CA232979",
-	role = "fnd"
-    ), person(
-	"NIH NCI ARTNet U24CA274159",
-	role = "fnd"
-    ))
+        c(person(
+        "Martin", "Morgan", role = c("aut", "cre"),
+        email = "mtmorgan.xyz@gmail.com",
+        comment = c(ORCID = "0000-0002-5874-8148")
+        ), person(
+        "Tram", "Nguyen",
+        role = "aut"
+        ), person(
+        "Tyrone", "Lee",
+        role = "ctb"
+        ), person(
+        "Nitesh", "Turaga",
+        role = "ctb"
+        ), person(
+        "Chan Zuckerberg Initiative DAF CZF2019-002443",
+        role = "fnd"
+        ), person(
+        "NIH NCI ITCR U24CA180996",
+        role = "fnd"
+        ), person(
+        "NIH NCI IOTN U24CA232979",
+        role = "fnd"
+        ), person(
+        "NIH NCI ARTNet U24CA274159",
+        role = "fnd"
+        ))
 Description:
-    The AlphaMissense publication
-    <https://www.science.org/doi/epdf/10.1126/science.adg7492>
-    outlines how a variant of AlphaFold / DeepMind was used to predict
-    missense variant pathogenicity. Supporting data on Zenodo
-    <https://zenodo.org/record/10813168> include, for instance, 71M
-    variants across hg19 and hg38 genome builds. The 'AlphaMissenseR'
-    package allows ready access to the data, downloading individual
-    files to DuckDB databases for exploration and integration into *R*
-    and *Bioconductor* workflows.
+        The AlphaMissense publication
+        <https://www.science.org/doi/epdf/10.1126/science.adg7492>
+        outlines how a variant of AlphaFold / DeepMind was used to predict
+        missense variant pathogenicity. Supporting data on Zenodo
+        <https://zenodo.org/record/10813168> include, for instance, 71M
+        variants across hg19 and hg38 genome builds. The 'AlphaMissenseR'
+        package allows ready access to the data, downloading individual
+        files to DuckDB databases for exploration and integration into *R*
+        and *Bioconductor* workflows.
 License: Artistic-2.0
 URL: https://mtmorgan.github.io/AlphaMissenseR/
 BugReports: https://github.com/mtmorgan/AlphaMissenseR/issues
 Depends:
-    R (>= 4.3.0),
-    dplyr
+        R (>= 4.3.0),
+        dplyr
 Imports:
-    rjsoncons (>= 1.0.1), DBI, duckdb (>= 0.9.1), rlang,
-    curl, BiocFileCache, spdl, memoise, BiocBaseUtils,
-    utils, stats, methods, whisker, ggplot2
+        rjsoncons (>= 1.0.1), DBI, duckdb (>= 0.9.1), rlang,
+        curl, BiocFileCache, spdl, memoise, BiocBaseUtils,
+        utils, stats, methods, whisker, ggplot2
 Suggests:
-    BiocManager,
-    BiocGenerics,
-    GenomicRanges,
-    GenomeInfoDb,
-    AnnotationHub,
-    ensembldb,
-    httr,
-    tidyr,
-    r3dmol, bio3d, shiny, shiny.gosling,
-    colorspace,
-    knitr,
-    rmarkdown,
-    testthat (>= 3.0.0)
+        BiocManager,
+        BiocGenerics,
+        GenomicRanges,
+        GenomeInfoDb,
+        AnnotationHub,
+        ensembldb,
+        httr,
+        tidyr,
+        r3dmol, bio3d, shiny, shiny.gosling,
+        colorspace,
+        knitr,
+        rmarkdown,
+        testthat (>= 3.0.0)
 biocViews: SNP, Annotation, FunctionalGenomics, StructuralPrediction,
-    Transcriptomics, VariantAnnotation, GenePrediction, ImmunoOncology
+        Transcriptomics, VariantAnnotation, GenePrediction, ImmunoOncology
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
