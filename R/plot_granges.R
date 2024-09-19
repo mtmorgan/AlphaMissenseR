@@ -89,7 +89,7 @@ plot_granges <-
 
     
     ## trigger the option for bars or lollipop        
-    if (plot_type =="bars"){
+    if (identical(plot_type, "bars")){
         #define single track
         track_bar <- shiny.gosling::add_single_track(
             width = 800,
@@ -130,7 +130,7 @@ plot_granges <-
         )
         
     ## other option    
-    } else if (plot_type == "lollipop"){
+    } else if (identical(plot_type, "lollipop")){
 
     ## Define multi tracks
     track_ref <- shiny.gosling::add_single_track(
