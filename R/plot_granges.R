@@ -45,9 +45,11 @@
 #'        to_GPos()
 #'
 #'    ## Plot the GRanges object
-#'    plot_granges(gpos, mode = "bar", title = "Q1W6H9 track", subtitle 
-#'    = "bar plot example")
-#' }
+#'     plot_granges(
+#'        gpos, mode = "bar", title = "Q1W6H_track",
+#'        subtitle = "bar plot example"
+#'     )
+#'}
 #'
 #'
 #'
