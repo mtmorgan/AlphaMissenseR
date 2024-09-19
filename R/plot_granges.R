@@ -19,11 +19,11 @@
 
 #' @param gr A [`GRanges`] object containing the genomic ranges to
 #'     be plotted.
-#' @param title Character. Title of the plot. Default is
+#' @param title character(1) Title of the plot. Default is
 #'     "GRanges Plot".
-#' @param subtitle Character. The subtitle of the plot. Default
+#' @param subtitle character(1) The subtitle of the plot. Default
 #'     is "Stacked nucleotide example".
-#' @param plot_type Character. Select the type of gosling plot. 
+#' @param plot_type character(1) Select the type of gosling plot. 
 #' Default is "bars".
 #'     - "bars": Stacked bar plot with height based on pathogenicity score,
 #'     - "lollipop": variation of a bar chart where the bar is replaced with a 
