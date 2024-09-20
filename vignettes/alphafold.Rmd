@@ -1,11 +1,10 @@
 ---
 title: "B. AlphaFold Integration"
 output: rmarkdown::html_vignette
-runtime: shiny
 vignette: >
   %\VignetteIndexEntry{B. AlphaFold Integration}
-  %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
@@ -19,15 +18,17 @@ Original version: 31 October, 2023
 
 # Introduction
 
-This vignette illustrates how to display
-[AlphaMissense](https://www.science.org/doi/10.1126/science.adg7492)
-predictions on [AlphaFold](https://alphafold.ebi.ac.uk/) predicted
-protein structure.
+This vignette illustrates how to display [AlphaMissense][] predictions
+on [AlphaFold][] predicted protein structure.
 
-Visualization makes use of CRAN packages
-[bio3d](https://CRAN.R-project.org/package=bio3d) and
-[r3dmol](https://CRAN.R-project.org/package=r3dmol). Install these (if
-necessary) with
+[AlphaMissense]: https://www.science.org/doi/10.1126/science.adg7492
+[AlphaFold]: https://alphafold.ebi.ac.uk/
+
+Visualization makes use of CRAN packages [bio3d][] and
+[r3dmol][]. Install these (if necessary) with
+
+[bio3d]: https://CRAN.R-project.org/package=bio3d
+[r3dmol]: https://CRAN.R-project.org/package=r3dmol
 
 ```{r dependencies, eval = FALSE}
 pkgs <- c("bio3d", "r3dmol")
@@ -36,8 +37,9 @@ if (length(pkgs_to_install))
     BiocManager::install(pkgs_to_install)
 ```
 
-Start by loading the
-[AlphaMissenseR](https://mtmorgan.github.io/AlphaMissenseR) library.
+Start by loading the [AlphaMissenseR][] library.
+
+[AlphaMissenseR]: https://mtmorgan.github.io/AlphaMissenseR
 
 ```{r setup, message = FALSE}
 library(AlphaMissenseR)
@@ -59,15 +61,15 @@ am_data("hg38")
 
 # AlphaFold protein structure
 
-AlphaMissense predictions on pathogenicity of amino acid changes can be
-combined with AlphaFold (or other) predictions of protein structure.
+AlphaMissense predictions on pathogenicity of amino acid changes can
+be combined with AlphaFold (or other) predictions of protein
+structure.
 
 ## Fast path
 
-Figure 3F of the
-[AlphaMissense](https://www.science.org/doi/10.1126/science.adg7492)
-publication visualizes mean pathogenicity for UniProt id P35557. Filter
-amino acid data for that identifier
+Figure 3F of the [AlphaMissense][] publication visualizes mean
+pathogenicity for UniProt id P35557. Filter amino acid data for that
+identifier
 
 ```{r P35557}
 P35557_aa <-
@@ -86,12 +88,11 @@ sections explore this visualization in more detail.
 
 ## UniProt identifiers
 
-Both AlphaMissense and AlphaFold use UniProt identifiers. Find all
-AlphaMissense amino acid substitutions with UniProt identifiers starting
-with `P3555`; the choice of this identifier is so that results can be
-compared with Figure 3F of the
-[AlphaMissense](https://www.science.org/doi/10.1126/science.adg7492)
-publication.
+Both AlphaMissense and AlphaFold use UniProt
+identifiers. Find all AlphaMissense amino acid substitutions with
+UniProt identifiers starting with `P3555`; the choice of this
+identifier is so that results can be compared with Figure 3F of the
+[AlphaMissense][] publication.
 
 ```{r uniprot_ids}
 uniprot_ids <-
@@ -102,11 +103,10 @@ uniprot_ids <-
 uniprot_ids
 ```
 
-The [AlphaMissenseR](https://mtmorgan.github.io/AlphaMissenseR) package
-includes several functions that facilitate interaction with
-[AlphaFold](https://alphafold.ebi.ac.uk/); these functions start with
-`af_*()`. Use `af_predictions()` to discover AlphaFold predictions (via
-the AlphaFold API) associated with UniProt identifiers.
+The [AlphaMissenseR][] package includes several functions that
+facilitate interaction with [AlphaFold][]; these functions start with
+`af_*()`. Use `af_predictions()` to discover AlphaFold predictions
+(via the AlphaFold API) associated with UniProt identifiers.
 
 ```{r af_predictions}
 prediction <- af_predictions(uniprot_ids)
@@ -116,8 +116,9 @@ glimpse(prediction)
 Note the message indicating that some UniProt identifiers (accessions)
 are not found in the AlphaFold database. The query returns a tibble
 containing columns with information on organism and UniProt
-characteristics (including protein sequence) , as well as URLs for files
-representing three-dimensional protein structure. We will use `pdbUrl`.
+characteristics (including protein sequence) , as well as URLs for
+files representing three-dimensional protein structure. We will use
+`pdbUrl`.
 
 ## Protein structure
 
@@ -131,7 +132,7 @@ pdb_url <-
 ```
 
 Cache the PDB file using BiocFileCache, and read the PDB file using
-[bio3d](https://CRAN.R-project.org/package=bio3d).
+[bio3d][].
 
 ```{r pdb}
 pdb_file <- BiocFileCache::bfcrpath(rnames = basename(pdb_url), fpath = pdb_url)
@@ -139,9 +140,7 @@ pdb <- bio3d::read.pdb(pdb_file)
 pdb
 ```
 
-Visualize the protein using
-[r3dmol](https://CRAN.R-project.org/package=r3dmol), using the 'cartoon'
-style.
+Visualize the protein using [r3dmol][], using the 'cartoon' style.
 
 ```{r pdb_r3dmol}
 r3dmol::r3dmol() |>
@@ -155,10 +154,10 @@ r3dmol::r3dmol() |>
 
 ## Average pathogenicity
 
-Our goal is to visualize some measure of 'average' pathogenicity on the
-three-dimensional protein structure provided by AlphaFold. Start with a
-specific genome sequence (e.g., `hg38`). Filter to the amino acids in
-our UniProt region of interest.
+Our goal is to visualize some measure of 'average' pathogenicity on
+the three-dimensional protein structure provided by AlphaFold.  Start
+with a specific genome sequence (e.g., `hg38`). Filter to the amino
+acids in our UniProt region of interest.
 
 ```{r am_data-hg38}
 P35557 <-
@@ -167,9 +166,9 @@ P35557 <-
 ```
 
 At each chromosome position, the AlphaMissense predictions contain
-several alternative alleles and hence protein variants. The (arithmetic)
-average pathogenicity (this is an extremely naive computation) at each
-amino acid position is
+several alternative alleles and hence protein variants. The
+(arithmetic) average pathogenicity (this is an extremely naive
+computation) at each amino acid position is
 
 ```{r am_aa_pathogenicity}
 pathogenicity <- am_aa_pathogenicity(P35557)
@@ -178,12 +177,11 @@ pathogenicity
 
 ## Coloring amino acids by position
 
-Individual amino acids can be colored using the `colorfunc=` argument to
-`r3dmol::m_style_cartoon()`. This is a Javascript function that takes
-each atom position and returns the corresponding color. The approach
-taken in [AlphaMissenseR](https://mtmorgan.github.io/AlphaMissenseR) is
-to use a template, ultimately replacing `...` with a vector of residue
-colors.
+Individual amino acids can be colored using the `colorfunc=` argument
+to `r3dmol::m_style_cartoon()`. This is a Javascript function that
+takes each atom position and returns the corresponding color. The
+approach taken in [AlphaMissenseR][] is to use a template, ultimately
+replacing `...` with a vector of residue colors.
 
 ```{r js_template}
 cat(
@@ -194,8 +192,8 @@ cat(
 
 The function `af_colorfunc_by_position()` provides a mechanism for
 translating a vector of scores between zero and one into a vector of
-colors. This is illustrated for a 12-amino acid sequence where the first
-and last residues are uncolored.
+colors. This is illustrated for a 12-amino acid sequence where the
+first and last residues are uncolored.
 
 ```{r af_colorfunc_by_position}
 df <- tibble(
