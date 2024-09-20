@@ -255,8 +255,6 @@ visualization.
 For demonstration, we create a `GPos` object for a protein of interest.
 
 ```{r mk_gpos, message=FALSE}
-library(GenomicRanges)
-
 gpos <-
     am_data("hg38") |>
     filter(uniprot_id == "Q1W6H9") |>
@@ -274,34 +272,30 @@ running the following command in an interactive R session.
 [shiny.gosling]: https://bioconductor.org/packages/shiny.gosling
 [Shiny]: https://shiny.posit.co/
 
-```{r gos_bar}
-if (interactive()) {
-    plot_granges(
-        gpos, plot_type = "bars",
-        title = "Q1W6H9 track",
-        subtitle = "bar plot example"
-    )
-}
+```{r gosling_bar}
+gosling_plot(
+    gpos, plot_type = "bar",
+    title = "Q1W6H9 track",
+    subtitle = "bar plot example"
+)
 ```
 
-![Image example of bar plot for Q1W6H9](example_gosling_bar.png "gosling bar plot example")
+![Bar plot for Q1W6H9](images/gosling_bar.png)
 
 Alternatively, a multiscale-lollipop plot can be generated with the
 same function by changing the `plot_type` argument to highlight the
 predicted class outcomes for each mutation (ambigious, benign,
 pathogenic).
 
-```{r gos_lollipop}
-if (interactive()) {
-    plot_granges(
-        gpos, plot_type = "lollipop",
-        title = "Q1W6H9 track",
-        subtitle = "lollipop plot example"
-    )
-}
+```{r gosling_lollipop}
+gosling_plot(
+    gpos, plot_type = "lollipop",
+    title = "Q1W6H9 track",
+    subtitle = "lollipop plot example"
+)
 ```
 
-![Image example of lollipop plot for Q1W6H9](example_gosling_lollipop.png "gosling bar plot example")
+![Lollipop plot for Q1W6H9](images/gosling_lollipop.png)
 
 # Finally
 

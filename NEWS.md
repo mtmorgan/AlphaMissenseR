@@ -1,5 +1,7 @@
 # AlphaMissenseR 1.2.0
 
+* (v. 1.1.6) Add `gosling_plot()` for visualizing variants as bar
+  or lollipop plots
 * (v. 1.1.4) Add `clinvar_data()` and `clinvar_plot()` for visualizing
   ClinVar data. Merges
   <https://github.com/mtmorgan/AlphaMissenseR/pull/4> Thanks
