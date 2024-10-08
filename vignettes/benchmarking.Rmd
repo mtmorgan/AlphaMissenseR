@@ -1,0 +1,338 @@
+---
+title: "D. Benchmarking with ProteinGym"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{D. Benchmarking with ProteinGym}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+    collapse = TRUE,
+    comment = "#>"
+)
+```
+
+Original version: 8 October, 2024
+
+```{r setup, message = FALSE}
+library(AlphaMissenseR)
+library(dplyr)
+library(tidyr)
+library(ggdist)
+library(gghalves)
+library(ggplot2)
+```
+
+# Introduction
+
+Benchmarking is essential for assessing different variant effect prediction 
+approaches, potentially aiding in decisions about which models are most suitable
+for specific research questions or clinical applications. 
+
+To evaluate the performance of AlphaMissense and its predictions, we integrate
+with the [ProteinGym][pg_link] database, a comprehensive collection of
+benchmarks aimed at comparing the ability of models that predict the effects of
+protein mutations. It consists of an extensive dataset of deep mutational
+scanning (DMS) assays covering approximately 2.7 million missense variants
+across 217 experiments, as well as annotated human clinical variants for 2,525
+proteins. DMS assays are highly valuable as they systematically test all
+possible single mutations in a protein, recording their fitness effects. They
+can reveal the impacts of both deleterious and beneficial mutations on fitness,
+offering insights into protein structure and activity.
+
+Furthermore, ProteinGym provides several standardized model evaluation 
+metric scores ("AUC", "MCC", "NDCG", "Spearman", "Top_recall") for 62 models 
+calculated across the 217 DMS assays, offering a consistent and extensive 
+benchmarking framework across approaches.
+
+This vignette demonstrates how to 1) compare AlphaMissense predictions to DMS 
+scores on a per-protein basis, and 2) how to benchmark AlphaMissense against
+other models aimed at predicting protein mutation effects.
+
+[pg_link]: https://proteingym.org/
+[Notin_link]: https://papers.nips.cc/paper_files/paper/2023/hash/cac723e5ff29f65e3fcbb0739ae91bee-Abstract-Datasets_and_Benchmarks.html
+[AlphaMissense]: https://www.science.org/doi/10.1126/science.adg7492
+
+# Access ProteinGym datasets through `ExperimentHub`.
+
+The ProteinGym DMS assays can be accessed by querying `ExperimentHub`.
+
+```{r access_dms}
+eh <- ExperimentHub::ExperimentHub()
+dms_data <- eh[['EH9555']]
+
+head(names(dms_data))
+```
+
+Each element of the list is an individual DMS assay with the following
+information for each column: the UniProt protein identifier, the DMS 
+experiment assay identifier, the mutant at a given protein position, the mutated
+protein sequence, the recorded DMS score, and a binary DMS score bin 
+categorizing whether the mutation has high (1) or low fitness (0). For 
+more details, reference the publication from Notin et al. [2023][Notin_link].
+
+A supplementary table of AlphaMissense pathogencity scores for ~1.6 M 
+substitutions matching those in the ProteinGym DMS assays is provided by Cheng 
+et al. [2023][AlphaMissense], and can also be accessed through `ExperimentHub`.
+
+```{r am_scores}
+am_scores <- eh[['EH9554']]
+am_scores |> head()
+```
+
+The `data.frame` shows the `DMS_id` matching a ProteinGym assay, the 
+UniProt entry name of the protein evaluated, the mutation and position, and 
+the aggregated AlphaMissense score for that mutation. For more details about 
+the table, reference the [AlphaMissense][AlphaMissense] paper.
+
+# Correlate DMS scores and AlphaMissense predictions
+
+The DMS scores serve as an experimental measure to compare the accuracy of
+AlphaMissense mutation effect predictions. For a given protein, we can plot the 
+relationship between the two measures and report their Spearman correlation. 
+
+Here, we demonstrate using the "NUD15_HUMAN" assay. First, we filter both 
+datasets to the chosen assay.
+
+```{r dms_am_NUD15}
+NUD15_dms <- dms_data[["NUD15_HUMAN_Suiter_2020"]]
+
+NUD15_am <- am_scores |> 
+    filter(DMS_id == "NUD15_HUMAN_Suiter_2020")
+```
+
+Wrangle and merge the DMS and AlphaMissense tables together by the UniProt and 
+mutant identifers.
+
+```{r dms_am_wrangle}
+NUD15_am <- NUD15_am |>
+    mutate(Uniprot_ID = "Q9NV35")
+
+merged_table <- 
+    left_join(
+        NUD15_am, NUD15_dms, 
+        by = c("Uniprot_ID" = "UniProt_id", "variant_id" = "mutant"),
+        relationship = "many-to-many"
+    ) |>
+    select(Uniprot_ID, variant_id, AlphaMissense, DMS_score) |> 
+    na.omit()
+```
+
+Now, we plot the correlation.
+
+```{r dms_am_plot, fig.width=5, fig.height=3.5}
+correlation_plot <- 
+    merged_table |> 
+    ggplot(
+        aes(y = .data$AlphaMissense, x = .data$DMS_score)
+    ) +
+    geom_bin2d(bins = 60) +
+    scale_fill_continuous(type = "viridis") +
+    xlab("DMS score") +
+    ylab("AlphaMissense score") +
+    theme_classic() +
+    theme(
+        axis.text.x = element_text(size = 16),
+        axis.text.y = element_text(size = 16),
+        axis.title.y = element_text(size = 16, vjust = 2),
+        axis.title.x = element_text(size = 16, vjust = 0),
+        legend.title = element_text(size = 16),
+        legend.text = element_text(size = 16)
+    )
+
+correlation_plot
+```
+
+If mutating a residue resulted in reduced fitness in the DMS assay 
+(low DMS score), we would expect it to be predicted as pathogenic 
+(higher AlphaMissense score). Therefore, a stronger negative correlation 
+represents a tighter relationship between the two measures. We can see this 
+with the NUD15 protein.
+
+We can also print the Spearman correlation.
+
+```{r corrtest}
+cor.test(
+    merged_table$AlphaMissense, merged_table$DMS_score, 
+    method="spearman", 
+    exact = FALSE
+)
+```
+The correlation is r = -0.67 and is statistically significant.
+
+
+# Benchmark AlphaMissense with other variant effect prediction models
+
+We can calculate the Spearman correlation across multiple DMS assays in 
+which we have corresponding AlphaMissense scores, and use this metric to 
+benchmark across multiple models aimed at predicting mutation effects. For this
+analysis, we will load in the metric scores for 62 models calculated across the 
+217 DMS assays from the ProteinGym database available through `ExperimentHub`.
+
+```{r load_metrics}
+metrics_scores <- eh[['EH9593']]
+```
+
+`metrics_scores` is a `list` object where each element is a `data.frame` 
+corresponding to one of five model evaluation metrics ("AUC", "MCC", "NDCG", 
+"Spearman", "Top_recall") available from ProteinGym. Briefly, these metrics were
+calculated on the DMS assays for 62 models in a zero-shot setting. The 
+[Protein Gym paper][Notin_link] provides more information about these metrics. 
+
+To demonstrate, we will benchmarking using the Spearman correlation 
+calculated on 10 DMS assays for 5 models. The following code subsets and 
+merges the relevant datasets.
+
+```{r prep_data}
+chosen_assays <- c(
+    "A0A1I9GEU1_NEIME_Kennouche_2019", 
+    "A0A192B1T2_9HIV1_Haddox_2018", 
+    "ADRB2_HUMAN_Jones_2020", 
+    "BRCA1_HUMAN_Findlay_2018", 
+    "CALM1_HUMAN_Weile_2017",
+    "GAL4_YEAST_Kitzman_2015", 
+    "Q59976_STRSQ_Romero_2015", 
+    "UBC9_HUMAN_Weile_2017", 
+    "TPK1_HUMAN_Weile_2017",
+    "YAP1_HUMAN_Araya_2012")
+
+am_subset <- 
+    am_scores |> 
+    filter(DMS_id %in% chosen_assays)
+
+dms_subset <- 
+    dms_data[names(dms_data) %in% chosen_assays]
+
+dms_subset <- 
+    bind_rows(dms_subset) |> 
+    as.data.frame()
+
+metric_subset <- 
+    metrics_scores[["Spearman"]] |> 
+    filter(DMS_ID %in% chosen_assays) |> 
+    select(-c(Number_of_Mutants, Selection_Type, UniProt_ID, 
+        MSA_Neff_L_category, Taxon))
+
+merge_am_dms <-
+    left_join(
+        am_subset, dms_subset, 
+        by = c("DMS_id" = "DMS_id", "variant_id" = "mutant"),
+        relationship = "many-to-many"
+    ) |>
+    na.omit()
+```
+
+The Spearman scores are already provided for the 62 models in the ProteinGym 
+metrics table, but we will need to calculate this for AlphaMissense. 
+
+```{r calc_sp}
+spearman_res <- 
+    merge_am_dms |> 
+    group_by(DMS_id) |> 
+    summarize(
+        AlphaMissense = cor(AlphaMissense, DMS_score, method = "spearman")
+    ) |> 
+    mutate(
+        AlphaMissense = abs(AlphaMissense)
+    )
+
+DMS_IDs <- metric_subset |> pull(DMS_ID)
+
+metric_subset <- 
+    metric_subset |> 
+    select(-DMS_ID) |> 
+    abs() |> 
+    mutate(DMS_id = DMS_IDs)
+
+all_sp <- 
+    left_join(
+        metric_subset, spearman_res, 
+        by = "DMS_id"
+    )
+```
+
+`all_sp` is a table of Spearman correlation values (absolute values to handle 
+difference in directionality of certain DMS assays) across the ProteinGym and 
+AlphaMissense models for the 10 assays.
+
+Prepare the data for plotting. 
+
+```{r pivot_long}
+res_long <- 
+    all_sp |> 
+    select(-DMS_id) |> 
+    tidyr::pivot_longer(
+        cols = everything(), 
+        names_to = "model", 
+        values_to = "score"
+    ) |> 
+    group_by(model) |> 
+    mutate(
+        model_mean = mean(score)
+    ) |> 
+    mutate(
+        model = as.factor(model)
+    ) |> 
+    ungroup() 
+
+unique_ordered_models <- unique(res_long$model[order(res_long$model_mean, 
+                                                        decreasing = TRUE)])
+
+res_long$model <- factor(res_long$model, 
+                   levels = unique_ordered_models)
+
+topmodels <- levels(res_long$model)[1:5]
+
+top_spearmans <- 
+    res_long |> 
+    filter(model %in% topmodels) |> 
+    droplevels()
+```
+
+Visualize with a raincloud plot.
+
+```{r raincloud, fig.width=7, fig.height=4.5}
+top_spearmans |> 
+    ggplot(
+        aes(x = model, y = score, fill = model, group = model)
+    ) + 
+    ggdist::stat_halfeye(
+        adjust = .5, 
+        width = .6, 
+        .width = 0, 
+        justification = -.2, 
+        point_colour = NA
+    ) + 
+    geom_boxplot(
+        width = .15, 
+        outlier.shape = NA
+    ) +
+    gghalves::geom_half_point(
+        side = "l", 
+        range_scale = .4, 
+        alpha = .2
+    ) +
+    coord_cartesian(clip = "off") +
+    scale_fill_discrete(name = "Models") +
+    theme_classic() +
+    ylab("Spearman") +
+    theme(
+        axis.text.x = element_text(size = 11, angle = -12),
+        axis.text.y = element_text(size = 16),
+        axis.title.y = element_text(size = 16),
+        axis.title.x = element_blank(),
+        legend.title = element_text(size = 16),
+        legend.text = element_text(size = 11)
+    )
+```
+
+Based on the Spearman correlation for the 10 assays we chose, AlphaMissense 
+performed the best. For a realistic and comprehensive benchmark, one would 
+want to apply this framework across all 217 DMS assays available in ProteinGym.
+
+# Session information {.unnumbered}
+```{r}
+sessionInfo()
+```
