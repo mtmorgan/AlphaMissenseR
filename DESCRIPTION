@@ -57,7 +57,6 @@ Suggests:
     ExperimentHub,
     ensembldb,
     httr,
-    dplyr,
     tidyr,
     r3dmol, bio3d, shiny, shiny.gosling,
     ggdist, gghalves,
