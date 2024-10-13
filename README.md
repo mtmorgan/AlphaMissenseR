@@ -60,9 +60,12 @@ library(AlphaMissenseR)
   effects can be plotted on AlphaFold (or other) protein structures.
 - Use [ClinVar Integration][clinvar] to compare AlphaMissense and
   ClinVar predictions.
+- See [Benchmarking with ProteinGym][benchmarking] for assessing
+  AlphaMissense predictions.
 - Troubleshoot common problems with [Issues & Solutions][issues].
 
 [intro]: ./articles/introduction.html
 [alphafold]: ./articles/alphafold.html
 [clinvar]: ./articles/clinvar.html
+[benchmarking]: ./articles/benchmarking.html
 [issues]: ./articles/issues.html

@@ -1,7 +1,12 @@
 # AlphaMissenseR 1.2.0
 
+* (v. 1.1.7) Add 'Benchmarking with ProteinGym' vignette to benchmark
+  AlphaMissense predictions.
+  <https://github.com/mtmorgan/AlphaMissenseR/pull/8>. Thank you
+  @tram-nguyen-n
 * (v. 1.1.6) Add `gosling_plot()` for visualizing variants as bar
-  or lollipop plots
+  or lollipop plots. Merges
+  <https://github.com/mtmorgan/AlphaMissenseR/pull/6> Thanks @lee-t.
 * (v. 1.1.4) Add `clinvar_data()` and `clinvar_plot()` for visualizing
   ClinVar data. Merges
   <https://github.com/mtmorgan/AlphaMissenseR/pull/4> Thanks
