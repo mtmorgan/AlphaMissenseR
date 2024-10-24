@@ -1,5 +1,5 @@
 pandoc: '3.3'
-pkgdown: 2.1.0
+pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   alphafold: alphafold.html
@@ -7,7 +7,7 @@ articles:
   clinvar: clinvar.html
   introduction: introduction.html
   issues: issues.html
-last_built: 2024-10-13T16:01Z
+last_built: 2024-10-24T18:06Z
 urls:
   reference: https://mtmorgan.github.io/AlphaMissenseR/reference
   article: https://mtmorgan.github.io/AlphaMissenseR/articles

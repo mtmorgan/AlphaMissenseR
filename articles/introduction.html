@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">AlphaMissenseR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -201,9 +201,9 @@ number of variants assigned to each pathogenicity class.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v1.1.0 [root@Darwin 23.6.0:R 4.5.0//Users/mtmorgan/Library/Caches/org.R-project.R/R/BiocFileCache/121787f1dafbc_121787f1dafbc]</span></span></span>
 <span><span class="co">#&gt;   am_class                 n</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> likely_benign     40<span style="text-decoration: underline;">917</span>351</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> likely_pathogenic 22<span style="text-decoration: underline;">770</span>557</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> ambiguous          8<span style="text-decoration: underline;">009</span>648</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> likely_pathogenic 22<span style="text-decoration: underline;">770</span>557</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> ambiguous          8<span style="text-decoration: underline;">009</span>648</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> likely_benign     40<span style="text-decoration: underline;">917</span>351</span></span></code></pre></div>
 <p>Or the average pathogenicity score in each class…</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">|&gt;</span></span>
@@ -213,9 +213,9 @@ number of variants assigned to each pathogenicity class.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v1.1.0 [root@Darwin 23.6.0:R 4.5.0//Users/mtmorgan/Library/Caches/org.R-project.R/R/BiocFileCache/121787f1dafbc_121787f1dafbc]</span></span></span>
 <span><span class="co">#&gt;   am_class                 n pathogenecity</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> likely_benign     40<span style="text-decoration: underline;">917</span>351         0.147</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> likely_pathogenic 22<span style="text-decoration: underline;">770</span>557         0.863</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> ambiguous          8<span style="text-decoration: underline;">009</span>648         0.444</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> likely_pathogenic 22<span style="text-decoration: underline;">770</span>557         0.863</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> ambiguous          8<span style="text-decoration: underline;">009</span>648         0.444</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> likely_benign     40<span style="text-decoration: underline;">917</span>351         0.147</span></span></code></pre></div>
 <p>Or the number of transitions between <code>REF</code> and
 <code>ALT</code> nucleotides across all variants.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
@@ -334,7 +334,7 @@ Sapiens</em>.</p>
 <code class="sourceCode R"><span><span class="va">hub</span> <span class="op">&lt;-</span> <span class="fu">AnnotationHub</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationHub/man/AnnotationHub-class.html" class="external-link">AnnotationHub</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu">AnnotationHub</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationHub/man/AnnotationHub-class.html" class="external-link">query</a></span><span class="op">(</span><span class="va">hub</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"EnsDb"</span>, <span class="st">"Homo sapiens"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; AnnotationHub with 27 records</span></span>
-<span><span class="co">#&gt; # snapshotDate(): 2024-10-08</span></span>
+<span><span class="co">#&gt; # snapshotDate(): 2024-10-14</span></span>
 <span><span class="co">#&gt; # $dataprovider: Ensembl</span></span>
 <span><span class="co">#&gt; # $species: Homo sapiens</span></span>
 <span><span class="co">#&gt; # $rdataclass: EnsDb</span></span>
@@ -358,7 +358,7 @@ Sapiens</em>.</p>
 <span></span>
 <span><span class="fu">AnnotationHub</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationHub/man/AnnotationHub-class.html" class="external-link">AnnotationHub</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="st">"AH113665"</span><span class="op">]</span></span>
 <span><span class="co">#&gt; AnnotationHub with 1 record</span></span>
-<span><span class="co">#&gt; # snapshotDate(): 2024-10-08</span></span>
+<span><span class="co">#&gt; # snapshotDate(): 2024-10-14</span></span>
 <span><span class="co">#&gt; # names(): AH113665</span></span>
 <span><span class="co">#&gt; # $dataprovider: Ensembl</span></span>
 <span><span class="co">#&gt; # $species: Homo sapiens</span></span>
@@ -512,9 +512,9 @@ pathogenecity class in each exon.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v1.1.0 [root@Darwin 23.6.0:R 4.5.0//Users/mtmorgan/Library/Caches/org.R-project.R/R/BiocFileCache/121787f1dafbc_121787f1dafbc]</span></span></span>
 <span><span class="co">#&gt;   exon_id         likely_benign likely_pathogenic ambiguous</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> ENSE00001924953           172                16        19</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> ENSE00003483971           128                71        33</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> ENSE00001008808           494               257       108</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> ENSE00003483971           128                71        33</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> ENSE00001924953           172                16        19</span></span></code></pre></div>
 <p>It is perhaps instructive to review the range join as a source of
 inspiration for other computations that might be of interest.</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="co">-- range join of 'hg38' with 'bcl2l11'; overwrite any existing table</span></span>
@@ -629,41 +629,41 @@ messages.</p>
 <span><span class="co">#&gt; [8] base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt;  [1] ensembldb_2.29.1        AnnotationFilter_1.29.0 GenomicFeatures_1.57.0 </span></span>
-<span><span class="co">#&gt;  [4] AnnotationDbi_1.67.0    Biobase_2.65.1          GenomicRanges_1.57.1   </span></span>
-<span><span class="co">#&gt;  [7] GenomeInfoDb_1.41.1     IRanges_2.39.2          S4Vectors_0.43.2       </span></span>
-<span><span class="co">#&gt; [10] BiocGenerics_0.51.0     AlphaMissenseR_1.1.7    dplyr_1.1.4            </span></span>
+<span><span class="co">#&gt;  [1] ensembldb_2.29.1        AnnotationFilter_1.29.0 GenomicFeatures_1.57.1 </span></span>
+<span><span class="co">#&gt;  [4] AnnotationDbi_1.67.0    Biobase_2.65.1          GenomicRanges_1.57.2   </span></span>
+<span><span class="co">#&gt;  [7] GenomeInfoDb_1.41.2     IRanges_2.39.2          S4Vectors_0.43.2       </span></span>
+<span><span class="co">#&gt; [10] BiocGenerics_0.51.3     AlphaMissenseR_1.1.7    dplyr_1.1.4            </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;  [1] DBI_1.2.3                   bitops_1.0-8               </span></span>
+<span><span class="co">#&gt;  [1] DBI_1.2.3                   bitops_1.0-9               </span></span>
 <span><span class="co">#&gt;  [3] rlang_1.1.4                 magrittr_2.0.3             </span></span>
-<span><span class="co">#&gt;  [5] matrixStats_1.3.0           compiler_4.5.0             </span></span>
+<span><span class="co">#&gt;  [5] matrixStats_1.4.1           compiler_4.5.0             </span></span>
 <span><span class="co">#&gt;  [7] RSQLite_2.3.7               png_0.1-8                  </span></span>
 <span><span class="co">#&gt;  [9] systemfonts_1.1.0           vctrs_0.6.5                </span></span>
 <span><span class="co">#&gt; [11] ProtGenerics_1.37.1         pkgconfig_2.0.3            </span></span>
 <span><span class="co">#&gt; [13] crayon_1.5.3                fastmap_1.2.0              </span></span>
 <span><span class="co">#&gt; [15] dbplyr_2.5.0                XVector_0.45.0             </span></span>
-<span><span class="co">#&gt; [17] utf8_1.2.4                  Rsamtools_2.21.1           </span></span>
+<span><span class="co">#&gt; [17] utf8_1.2.4                  Rsamtools_2.21.2           </span></span>
 <span><span class="co">#&gt; [19] rmarkdown_2.28              UCSC.utils_1.1.0           </span></span>
-<span><span class="co">#&gt; [21] ragg_1.3.2                  purrr_1.0.2                </span></span>
-<span><span class="co">#&gt; [23] bit_4.5.0                   xfun_0.47                  </span></span>
+<span><span class="co">#&gt; [21] ragg_1.3.3                  purrr_1.0.2                </span></span>
+<span><span class="co">#&gt; [23] bit_4.5.0                   xfun_0.48                  </span></span>
 <span><span class="co">#&gt; [25] zlibbioc_1.51.1             cachem_1.1.0               </span></span>
 <span><span class="co">#&gt; [27] jsonlite_1.8.9              blob_1.2.4                 </span></span>
-<span><span class="co">#&gt; [29] DelayedArray_0.31.11        BiocParallel_1.39.0        </span></span>
+<span><span class="co">#&gt; [29] DelayedArray_0.31.14        BiocParallel_1.39.0        </span></span>
 <span><span class="co">#&gt; [31] parallel_4.5.0              spdl_0.0.5                 </span></span>
 <span><span class="co">#&gt; [33] R6_2.5.1                    bslib_0.8.0                </span></span>
 <span><span class="co">#&gt; [35] rtracklayer_1.65.0          jquerylib_0.1.4            </span></span>
-<span><span class="co">#&gt; [37] Rcpp_1.0.13                 SummarizedExperiment_1.35.1</span></span>
+<span><span class="co">#&gt; [37] Rcpp_1.0.13                 SummarizedExperiment_1.35.4</span></span>
 <span><span class="co">#&gt; [39] knitr_1.48                  BiocBaseUtils_1.7.3        </span></span>
 <span><span class="co">#&gt; [41] Matrix_1.7-0                tidyselect_1.2.1           </span></span>
-<span><span class="co">#&gt; [43] abind_1.4-5                 yaml_2.3.10                </span></span>
+<span><span class="co">#&gt; [43] abind_1.4-8                 yaml_2.3.10                </span></span>
 <span><span class="co">#&gt; [45] codetools_0.2-20            curl_5.2.3                 </span></span>
 <span><span class="co">#&gt; [47] rjsoncons_1.3.1             lattice_0.22-6             </span></span>
 <span><span class="co">#&gt; [49] tibble_3.2.1                withr_3.0.1                </span></span>
-<span><span class="co">#&gt; [51] KEGGREST_1.45.1             evaluate_0.24.0            </span></span>
+<span><span class="co">#&gt; [51] KEGGREST_1.45.1             evaluate_1.0.1             </span></span>
 <span><span class="co">#&gt; [53] desc_1.4.3                  BiocFileCache_2.13.2       </span></span>
-<span><span class="co">#&gt; [55] Biostrings_2.73.1           pillar_1.9.0               </span></span>
-<span><span class="co">#&gt; [57] BiocManager_1.30.23         filelock_1.0.3             </span></span>
+<span><span class="co">#&gt; [55] Biostrings_2.73.2           pillar_1.9.0               </span></span>
+<span><span class="co">#&gt; [57] BiocManager_1.30.25         filelock_1.0.3             </span></span>
 <span><span class="co">#&gt; [59] MatrixGenerics_1.17.0       whisker_0.4.1              </span></span>
 <span><span class="co">#&gt; [61] generics_0.1.3              RCurl_1.98-1.16            </span></span>
 <span><span class="co">#&gt; [63] BiocVersion_3.20.0          ggplot2_3.5.1              </span></span>
@@ -673,16 +673,16 @@ messages.</p>
 <span><span class="co">#&gt; [71] BiocIO_1.15.2               GenomicAlignments_1.41.0   </span></span>
 <span><span class="co">#&gt; [73] fs_1.6.4                    XML_3.99-0.17              </span></span>
 <span><span class="co">#&gt; [75] grid_4.5.0                  tidyr_1.3.1                </span></span>
-<span><span class="co">#&gt; [77] colorspace_2.1-1            GenomeInfoDbData_1.2.12    </span></span>
+<span><span class="co">#&gt; [77] colorspace_2.1-1            GenomeInfoDbData_1.2.13    </span></span>
 <span><span class="co">#&gt; [79] RcppSpdlog_0.0.18           duckdb_1.1.0               </span></span>
 <span><span class="co">#&gt; [81] restfulr_0.0.15             cli_3.6.3                  </span></span>
 <span><span class="co">#&gt; [83] rappdirs_0.3.3              textshaping_0.4.0          </span></span>
-<span><span class="co">#&gt; [85] fansi_1.0.6                 S4Arrays_1.5.7             </span></span>
+<span><span class="co">#&gt; [85] fansi_1.0.6                 S4Arrays_1.5.10            </span></span>
 <span><span class="co">#&gt; [87] gtable_0.3.5                sass_0.4.9                 </span></span>
-<span><span class="co">#&gt; [89] digest_0.6.37               SparseArray_1.5.31         </span></span>
-<span><span class="co">#&gt; [91] rjson_0.2.22                htmlwidgets_1.6.4          </span></span>
+<span><span class="co">#&gt; [89] digest_0.6.37               SparseArray_1.5.44         </span></span>
+<span><span class="co">#&gt; [91] rjson_0.2.23                htmlwidgets_1.6.4          </span></span>
 <span><span class="co">#&gt; [93] memoise_2.0.1               htmltools_0.5.8.1          </span></span>
-<span><span class="co">#&gt; [95] pkgdown_2.1.0               lifecycle_1.0.4            </span></span>
+<span><span class="co">#&gt; [95] pkgdown_2.1.1               lifecycle_1.0.4            </span></span>
 <span><span class="co">#&gt; [97] httr_1.4.7                  mime_0.12                  </span></span>
 <span><span class="co">#&gt; [99] bit64_4.5.2</span></span></code></pre></div>
 </div>
@@ -697,7 +697,7 @@ messages.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer>
