@@ -122,28 +122,6 @@ db_connect <-
     )
 }
 
-db_connect_or_renew <-
-    function(
-        record = ALPHAMISSENSE_RECORD, bfc = BiocFileCache(),
-        read_only = TRUE, managed = read_only)
-{
-    if (!managed) {
-        return(db_connect(record, bfc, read_only, managed))
-    }
-
-    id <- db_connection_id(record, bfc, read_only)
-    if (id %in% names(DB_CONNECTION)) {
-        ## renew
-        spdl::info(paste0(
-            "renewing managed connection to record '{}',\n",
-            "  read_only '{}'; previous connections are invalid"
-        ), record, read_only)
-        db_disconnect(db_connect(record, bfc, read_only, managed))
-    }
-
-    db_connect(record, bfc, read_only, managed)
-}
-
 #' @rdname db
 #'
 #' @description `db_tables()` queries for the names of temporary and
@@ -169,6 +147,37 @@ db_tables <-
     )
 
     dbListTables(db)
+}
+
+db_table_new <-
+    function(record, bfc, db_tbl_name, rname, fpath, template, delim)
+{
+    spdl::info("downloading or finding local file")
+    file_path <- fpath
+    if (!is.null(rname))
+        file_path <- bfcrpath(bfc, rnames  = rname, fpath = fpath)
+
+    spdl::info("creating database table '{}'", db_tbl_name)
+    db_disconnect_all() # no 'read-only' connections allowed
+    db_rw <- db_connect(record, bfc, read_only = FALSE)
+    on.exit(db_disconnect(db_rw))
+
+    sql <- sql_template(
+        template,
+        db_tbl_name = db_tbl_name, file_path = file_path, delim = delim
+    )
+    dbExecute(db_rw, sql)
+
+    if ("#CHROM" %in% dbListFields(db_rw, db_tbl_name)) {
+        spdl::info("renaming '#CHROM' to 'CHROM' in table '{}'", db_tbl_name)
+        sql <- sql_template(
+            "rename_column",
+            db_tbl_name = db_tbl_name, from = "#CHROM", to = "CHROM"
+        )
+        dbExecute(db_rw, sql)
+    }
+
+    db <- db_connect(record, bfc)
 }
 
 #' @title AlphaMissense Database Table Creation or Retrieval
@@ -203,41 +212,13 @@ db_table <-
     ## must be 'read_only = FALSE' so new database can be created. use
     ## 'managed = FALSE' so connection is independent of other
     ## read-write connections
-    db_rw <- db_connect(record, bfc, read_only = FALSE)
-    renew <- FALSE
-    if (!db_tbl_name %in% db_tables(db_rw)) {
-        spdl::info("downloading or finding local file")
-        file_path <- fpath
-        if (!is.null(rname))
-            file_path <- bfcrpath(bfc, rnames  = rname, fpath = fpath)
-        spdl::info("creating database table '{}'", db_tbl_name)
-        sql <- sql_template(
-            template,
-            db_tbl_name = db_tbl_name, file_path = file_path, delim = delim
+    db <- db_connect(record, bfc)
+    if (!db_tbl_name %in% db_tables(db)) {
+        db <- db_table_new(
+            record, bfc, db_tbl_name, rname, fpath, template, delim
         )
-        dbExecute(db_rw, sql)
-
-        renew <- TRUE
     }
-    if ("#CHROM" %in% dbListFields(db_rw, db_tbl_name)) {
-        spdl::info("renaming '#CHROM' to 'CHROM' in table '{}'", db_tbl_name)
-        sql <- sql_template(
-            "rename_column",
-            db_tbl_name = db_tbl_name, from = "#CHROM", to = "CHROM"
-        )
-        dbExecute(db_rw, sql)
 
-        renew <- TRUE
-    }
-    db_disconnect(db_rw)
-
-    if (renew) {
-        ## flush managed read-only connection
-        ## FIXME: but this invalidates existing read-only connections
-        db <- db_connect_or_renew(record, bfc)
-    } else {
-        db <- db_connect(record, bfc)
-    }
     tbl(db, db_tbl_name)
 }
 
@@ -406,5 +387,7 @@ db_disconnect <-
 db_disconnect_all <-
     function()
 {
+    if (length(DB_CONNECTION))
+        spdl::info("disconnecting all registered connections")
     invisible(unlist(eapply(DB_CONNECTION, db_disconnect_duckdb)))
 }

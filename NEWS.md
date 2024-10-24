@@ -1,5 +1,8 @@
 # AlphaMissenseR 1.2.0
 
+* (v. 1.1.9) Manage duckdb connections more completely; all registered
+  connections are disconnected (invalidated) whenever a new table is
+  created.
 * (v. 1.1.7) Add 'Benchmarking with ProteinGym' vignette to benchmark
   AlphaMissense predictions.
   <https://github.com/mtmorgan/AlphaMissenseR/pull/8>. Thank you
