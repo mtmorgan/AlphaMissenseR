@@ -1,6 +1,6 @@
 Package: AlphaMissenseR
 Title: Accessing AlphaMissense Data Resources in R
-Version: 1.5.1
+Version: 1.5.2
 Authors@R:
     c(person(
         "Martin", "Morgan", role = c("aut", "cre"),
@@ -46,7 +46,7 @@ Depends:
     R (>= 4.3.0),
     dplyr
 Imports:
-    rjsoncons (>= 1.0.1), DBI, duckdb (>= 0.9.1), rlang,
+    rjsoncons (>= 1.0.1), DBI, duckdb (>= 1.3.1), rlang,
     curl, BiocFileCache, spdl, memoise, BiocBaseUtils,
     utils, stats, tools, methods, whisker, ggplot2
 Suggests:
