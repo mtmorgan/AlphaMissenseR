@@ -368,7 +368,7 @@ gpos <-
     variants_of_interest |>
     to_GPos()
 ## make gpos 'genome' and 'seqlevels' like bcl2l11
-GenomeInfoDb::genome(gpos) <- "GRCh38"
+Seqinfo::genome(gpos) <- "GRCh38"
 GenomeInfoDb::seqlevelsStyle(gpos) <- "Ensembl"
 gpos
 ```

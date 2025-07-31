@@ -1,9 +1,9 @@
 test_that("to_GPos() works", {
-    genome <- GenomeInfoDb::genome
-    seqinfo <- GenomicRanges::seqinfo
-    seqnames <- GenomicRanges::seqnames
+    genome <- Seqinfo::genome
+    seqinfo <- Seqinfo::seqinfo
+    seqnames <- Seqinfo::seqnames
     pos <- GenomicRanges::pos
-    mcols <- GenomicRanges::mcols
+    mcols <- S4Vectors::mcols
     NROW <- BiocGenerics::NROW
 
     chr <- paste0("chr", rep(1:2, c(3, 5)))

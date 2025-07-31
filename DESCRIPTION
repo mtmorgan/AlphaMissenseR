@@ -1,6 +1,6 @@
 Package: AlphaMissenseR
 Title: Accessing AlphaMissense Data Resources in R
-Version: 1.5.2
+Version: 1.5.3
 Authors@R:
     c(person(
         "Martin", "Morgan", role = c("aut", "cre"),
@@ -52,8 +52,10 @@ Imports:
 Suggests:
     BiocManager,
     BiocGenerics,
-    GenomicRanges,
+    S4Vectors,
+    Seqinfo,
     GenomeInfoDb,
+    GenomicRanges,
     AnnotationHub,
     ExperimentHub,
     ensembldb,

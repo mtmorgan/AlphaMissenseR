@@ -44,7 +44,7 @@ to_GPos <-
     if (length(genome) > 1L)
         stop("'to_GPos()' 'genome' field must have exactly one distinct value")
     seqinfo <- tryCatch({
-        GenomeInfoDb::Seqinfo(genome = genome) |>
+        Seqinfo::Seqinfo(genome = genome) |>
             GenomeInfoDb::keepStandardChromosomes()
     }, error = function(e) {
         spdl::warn(
