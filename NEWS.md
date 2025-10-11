@@ -1,3 +1,10 @@
+# AlphaMissenseR 1.4.0
+
+* (v. 1.4.3) Avoid gghalves in 'benchmarking' vignette for compatilibity
+  with updated ggplot2.
+* (v. 1.4.3) ensure `af_prediction()` returns a single entry exactly
+  matching accession number.
+
 # AlphaMissenseR 1.2.0
 
 * (v. 1.1.9) Manage duckdb connections more completely; all registered
