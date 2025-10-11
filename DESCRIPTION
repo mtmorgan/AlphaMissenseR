@@ -60,7 +60,7 @@ Suggests:
     httr,
     tidyr,
     r3dmol, bio3d, shiny, shiny.gosling,
-    ggdist, gghalves,
+    ggdist,
     colorspace,
     knitr,
     rmarkdown,
