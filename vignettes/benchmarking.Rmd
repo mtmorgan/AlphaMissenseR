@@ -22,7 +22,6 @@ library(ExperimentHub)
 library(dplyr)
 library(tidyr)
 library(ggdist)
-library(gghalves)
 library(ggplot2)
 ```
 
@@ -309,11 +308,6 @@ top_spearmans |>
     geom_boxplot(
         width = .15, 
         outlier.shape = NA
-    ) +
-    gghalves::geom_half_point(
-        side = "l", 
-        range_scale = .4, 
-        alpha = .2
     ) +
     coord_cartesian(clip = "off") +
     scale_fill_discrete(name = "Models") +
