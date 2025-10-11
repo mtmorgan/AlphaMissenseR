@@ -14,7 +14,9 @@ af_prediction <-
     if (httr::status_code(response) < 400L) {
         record <- httr::content(response)
         tibble(record) |>
-            tidyr::unnest_wider("record")
+            tidyr::unnest_wider("record") |>
+            ## avoid matches to '{{accession}}-1', etc
+            filter(.data$uniprotAccession == accession)
     } else {
         spdl::debug(
             "af_prediction() accession '{}' status_code '{}'",
