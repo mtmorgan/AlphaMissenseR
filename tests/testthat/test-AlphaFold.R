@@ -9,7 +9,7 @@ test_that("AlphaFold endpoints exist", {
     expect_identical(httr::status_code(httr::GET(url)), 200L)
 
     ## af_prediction_view() -- PDB file
-    url <- "https://alphafold.ebi.ac.uk/files/AF-P35557-F1-model_v4.pdb"
+    url <- "https://alphafold.ebi.ac.uk/files/AF-P35557-F1-model_v6.pdb"
     expect_identical(httr::status_code(httr::HEAD(url)), 200L)
 })
 
