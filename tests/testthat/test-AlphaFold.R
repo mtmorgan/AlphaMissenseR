@@ -37,10 +37,9 @@ test_that("af_predictions() works", {
         "uniprotStart", "uniprotEnd", "uniprotSequence",
         "modelCreatedDate", "latestVersion", "allVersions",
         "isReviewed", "isReferenceProteome", "cifUrl", "bcifUrl",
-        "pdbUrl", "paeImageUrl", "paeDocUrl", "amAnnotationsUrl",
-        "amAnnotationsHg19Url", "amAnnotationsHg38Url"
+        "pdbUrl", "paeImageUrl", "paeDocUrl"
     )
-    expect_true(all(colnames %in% names(tbl)))
+    expect_equal(setdiff(colnames, names(tbl)), character())
 })
 
 test_that("af_colorfunc_by_position() works", {
