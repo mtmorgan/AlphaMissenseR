@@ -8,8 +8,8 @@
 <title>D. Benchmarking with ProteinGym • AlphaMissenseR</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="D. Benchmarking with ProteinGym">
 </head>
 <body>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">AlphaMissenseR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,11 +72,10 @@
 <p>Original version: 8 October, 2024</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mtmorgan.github.io/AlphaMissenseR/">AlphaMissenseR</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">ExperimentHub</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Bioconductor/ExperimentHub" class="external-link">ExperimentHub</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mjskay.github.io/ggdist/" class="external-link">ggdist</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/erocoar/gghalves" class="external-link">gghalves</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
@@ -114,8 +113,7 @@ mutation effects.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">eh</span> <span class="op">&lt;-</span> <span class="fu">ExperimentHub</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ExperimentHub/man/ExperimentHub-class.html" class="external-link">ExperimentHub</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">dms_data</span> <span class="op">&lt;-</span> <span class="va">eh</span><span class="op">[[</span><span class="st">'EH9555'</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="co">#&gt; ProteinGymR not installed.</span></span>
-<span><span class="co">#&gt;   Full functionality, documentation, and loading of data might not be possible without installing</span></span>
+<span><span class="co">#&gt; see ?ProteinGymR and browseVignettes('ProteinGymR') for documentation</span></span>
 <span><span class="co">#&gt; loading from cache</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">dms_data</span><span class="op">)</span><span class="op">)</span></span>
@@ -135,8 +133,7 @@ Cheng et al. <a href="https://www.science.org/doi/10.1126/science.adg7492" clas
 can also be accessed through <code>ExperimentHub</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">am_scores</span> <span class="op">&lt;-</span> <span class="va">eh</span><span class="op">[[</span><span class="st">'EH9554'</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="co">#&gt; ProteinGymR not installed.</span></span>
-<span><span class="co">#&gt;   Full functionality, documentation, and loading of data might not be possible without installing</span></span>
+<span><span class="co">#&gt; see ?ProteinGymR and browseVignettes('ProteinGymR') for documentation</span></span>
 <span><span class="co">#&gt; loading from cache</span></span>
 <span><span class="va">am_scores</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                                   DMS_id      Uniprot_ID variant_id</span></span>
@@ -209,7 +206,7 @@ UniProt and mutant identifers.</p>
 <span>    <span class="op">)</span></span>
 <span></span>
 <span><span class="va">correlation_plot</span></span></code></pre></div>
-<p><img src="benchmarking_files/figure-html/dms_am_plot-1.png" width="480"></p>
+<p><img src="benchmarking_files/figure-html/dms_am_plot-1.png" class="r-plt" width="480"></p>
 <p>If mutating a residue resulted in reduced fitness in the DMS assay
 (low DMS score), we would expect it to be predicted as pathogenic
 (higher AlphaMissense score). Therefore, a stronger negative correlation
@@ -245,8 +242,7 @@ models calculated across the 217 DMS assays from the ProteinGym database
 available through <code>ExperimentHub</code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">metrics_scores</span> <span class="op">&lt;-</span> <span class="va">eh</span><span class="op">[[</span><span class="st">'EH9593'</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="co">#&gt; ProteinGymR not installed.</span></span>
-<span><span class="co">#&gt;   Full functionality, documentation, and loading of data might not be possible without installing</span></span>
+<span><span class="co">#&gt; see ?ProteinGymR and browseVignettes('ProteinGymR') for documentation</span></span>
 <span><span class="co">#&gt; loading from cache</span></span></code></pre></div>
 <p><code>metrics_scores</code> is a <code>list</code> object where each
 element is a <code>data.frame</code> corresponding to one of five model
@@ -362,7 +358,7 @@ assays.</p>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span></span>
 <span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">model</span>, y <span class="op">=</span> <span class="va">score</span>, fill <span class="op">=</span> <span class="va">model</span>, group <span class="op">=</span> <span class="va">model</span><span class="op">)</span></span>
 <span>    <span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu">ggdist</span><span class="fu">::</span><span class="fu"><a href="http://mjskay.github.io/ggdist/reference/stat_halfeye.html" class="external-link">stat_halfeye</a></span><span class="op">(</span></span>
+<span>    <span class="fu">ggdist</span><span class="fu">::</span><span class="fu"><a href="https://mjskay.github.io/ggdist/reference/stat_halfeye.html" class="external-link">stat_halfeye</a></span><span class="op">(</span></span>
 <span>        adjust <span class="op">=</span> <span class="fl">.5</span>, </span>
 <span>        width <span class="op">=</span> <span class="fl">.6</span>, </span>
 <span>        .width <span class="op">=</span> <span class="fl">0</span>, </span>
@@ -372,11 +368,6 @@ assays.</p>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">geom_boxplot</a></span><span class="op">(</span></span>
 <span>        width <span class="op">=</span> <span class="fl">.15</span>, </span>
 <span>        outlier.shape <span class="op">=</span> <span class="cn">NA</span></span>
-<span>    <span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">gghalves</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gghalves/man/geom_half_point.html" class="external-link">geom_half_point</a></span><span class="op">(</span></span>
-<span>        side <span class="op">=</span> <span class="st">"l"</span>, </span>
-<span>        range_scale <span class="op">=</span> <span class="fl">.4</span>, </span>
-<span>        alpha <span class="op">=</span> <span class="fl">.2</span></span>
 <span>    <span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_fill_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Models"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -390,7 +381,7 @@ assays.</p>
 <span>        legend.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">16</span><span class="op">)</span>,</span>
 <span>        legend.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">11</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span></code></pre></div>
-<p><img src="benchmarking_files/figure-html/raincloud-1.png" width="672"></p>
+<p><img src="benchmarking_files/figure-html/raincloud-1.png" class="r-plt" width="672"></p>
 <p>Based on the Spearman correlation for the 10 assays we chose,
 AlphaMissense performed the best. For a realistic and comprehensive
 benchmark, one would want to apply this framework across all 217 DMS
@@ -401,58 +392,57 @@ assays available in ProteinGym.</p>
 </h2>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; R Under development (unstable) (2024-07-31 r86945)</span></span>
-<span><span class="co">#&gt; Platform: aarch64-apple-darwin23.4.0</span></span>
-<span><span class="co">#&gt; Running under: macOS Sonoma 14.6.1</span></span>
+<span><span class="co">#&gt; R Under development (unstable) (2025-08-09 r88545)</span></span>
+<span><span class="co">#&gt; Platform: aarch64-apple-darwin24.6.0</span></span>
+<span><span class="co">#&gt; Running under: macOS Tahoe 26.1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Matrix products: default</span></span>
 <span><span class="co">#&gt; BLAS:   /Users/mtmorgan/bin/R-devel/lib/libRblas.dylib </span></span>
-<span><span class="co">#&gt; LAPACK: /Users/mtmorgan/bin/R-devel/lib/libRlapack.dylib;  LAPACK version 3.12.0</span></span>
+<span><span class="co">#&gt; LAPACK: /Users/mtmorgan/bin/R-devel/lib/libRlapack.dylib;  LAPACK version 3.12.1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; locale:</span></span>
-<span><span class="co">#&gt; [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span></span>
+<span><span class="co">#&gt; [1] en_CA.UTF-8/en_CA.UTF-8/en_CA.UTF-8/C/en_CA.UTF-8/en_CA.UTF-8</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; time zone: America/New_York</span></span>
+<span><span class="co">#&gt; time zone: America/Toronto</span></span>
 <span><span class="co">#&gt; tzcode source: internal</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; attached base packages:</span></span>
 <span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt;  [1] gghalves_0.1.4        ggplot2_3.5.1         ggdist_3.3.2         </span></span>
-<span><span class="co">#&gt;  [4] tidyr_1.3.1           ExperimentHub_2.13.1  AnnotationHub_3.13.3 </span></span>
-<span><span class="co">#&gt;  [7] BiocFileCache_2.13.2  dbplyr_2.5.0          BiocGenerics_0.51.3  </span></span>
-<span><span class="co">#&gt; [10] AlphaMissenseR_1.1.10 dplyr_1.1.4          </span></span>
+<span><span class="co">#&gt;  [1] ProteinGymR_1.4.0    ggplot2_4.0.1        ggdist_3.3.3        </span></span>
+<span><span class="co">#&gt;  [4] tidyr_1.3.1          ExperimentHub_3.0.0  AnnotationHub_4.0.0 </span></span>
+<span><span class="co">#&gt;  [7] BiocFileCache_3.0.0  dbplyr_2.5.1         BiocGenerics_0.56.0 </span></span>
+<span><span class="co">#&gt; [10] generics_0.1.4       AlphaMissenseR_1.7.1 dplyr_1.1.4         </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;  [1] tidyselect_1.2.1        viridisLite_0.4.2       farver_2.1.2           </span></span>
-<span><span class="co">#&gt;  [4] blob_1.2.4              filelock_1.0.3          Biostrings_2.73.2      </span></span>
-<span><span class="co">#&gt;  [7] fastmap_1.2.0           duckdb_1.1.1            digest_0.6.37          </span></span>
-<span><span class="co">#&gt; [10] mime_0.12               lifecycle_1.0.4         KEGGREST_1.45.1        </span></span>
-<span><span class="co">#&gt; [13] RSQLite_2.3.7           magrittr_2.0.3          compiler_4.5.0         </span></span>
-<span><span class="co">#&gt; [16] rlang_1.1.4             sass_0.4.9              tools_4.5.0            </span></span>
-<span><span class="co">#&gt; [19] utf8_1.2.4              yaml_2.3.10             knitr_1.48             </span></span>
-<span><span class="co">#&gt; [22] labeling_0.4.3          htmlwidgets_1.6.4       bit_4.5.0              </span></span>
-<span><span class="co">#&gt; [25] spdl_0.0.5              curl_5.2.3              withr_3.0.1            </span></span>
-<span><span class="co">#&gt; [28] purrr_1.0.2             desc_1.4.3              grid_4.5.0             </span></span>
-<span><span class="co">#&gt; [31] stats4_4.5.0            fansi_1.0.6             colorspace_2.1-1       </span></span>
-<span><span class="co">#&gt; [34] scales_1.3.0            cli_3.6.3               rmarkdown_2.28         </span></span>
-<span><span class="co">#&gt; [37] crayon_1.5.3            ragg_1.3.3              generics_0.1.3         </span></span>
-<span><span class="co">#&gt; [40] httr_1.4.7              BiocBaseUtils_1.7.3     DBI_1.2.3              </span></span>
-<span><span class="co">#&gt; [43] cachem_1.1.0            zlibbioc_1.51.1         AnnotationDbi_1.67.0   </span></span>
-<span><span class="co">#&gt; [46] BiocManager_1.30.25     XVector_0.45.0          vctrs_0.6.5            </span></span>
-<span><span class="co">#&gt; [49] jsonlite_1.8.9          IRanges_2.39.2          S4Vectors_0.43.2       </span></span>
-<span><span class="co">#&gt; [52] bit64_4.5.2             systemfonts_1.1.0       jquerylib_0.1.4        </span></span>
-<span><span class="co">#&gt; [55] glue_1.8.0              pkgdown_2.1.1           distributional_0.5.0   </span></span>
-<span><span class="co">#&gt; [58] gtable_0.3.6            BiocVersion_3.20.0      GenomeInfoDb_1.41.2    </span></span>
-<span><span class="co">#&gt; [61] UCSC.utils_1.1.0        munsell_0.5.1           tibble_3.2.1           </span></span>
-<span><span class="co">#&gt; [64] pillar_1.9.0            rappdirs_0.3.3          htmltools_0.5.8.1      </span></span>
-<span><span class="co">#&gt; [67] GenomeInfoDbData_1.2.13 R6_2.5.1                textshaping_0.4.0      </span></span>
-<span><span class="co">#&gt; [70] evaluate_1.0.1          Biobase_2.65.1          highr_0.11             </span></span>
-<span><span class="co">#&gt; [73] png_0.1-8               memoise_2.0.1           bslib_0.8.0            </span></span>
-<span><span class="co">#&gt; [76] RcppSpdlog_0.0.18       rjsoncons_1.3.1         Rcpp_1.0.13            </span></span>
-<span><span class="co">#&gt; [79] whisker_0.4.1           xfun_0.48               fs_1.6.4               </span></span>
-<span><span class="co">#&gt; [82] pkgconfig_2.0.3</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] KEGGREST_1.50.0      gtable_0.3.6         xfun_0.54           </span></span>
+<span><span class="co">#&gt;  [4] bslib_0.9.0          httr2_1.2.1          htmlwidgets_1.6.4   </span></span>
+<span><span class="co">#&gt;  [7] Biobase_2.70.0       vctrs_0.6.5          rjsoncons_1.3.2     </span></span>
+<span><span class="co">#&gt; [10] tools_4.6.0          stats4_4.6.0         curl_7.0.0          </span></span>
+<span><span class="co">#&gt; [13] tibble_3.3.0         AnnotationDbi_1.72.0 RSQLite_2.4.4       </span></span>
+<span><span class="co">#&gt; [16] blob_1.2.4           pkgconfig_2.0.3      BiocBaseUtils_1.12.0</span></span>
+<span><span class="co">#&gt; [19] RColorBrewer_1.1-3   S7_0.2.1             desc_1.4.3          </span></span>
+<span><span class="co">#&gt; [22] S4Vectors_0.48.0     RcppSpdlog_0.0.23    distributional_0.5.0</span></span>
+<span><span class="co">#&gt; [25] lifecycle_1.0.4      stringr_1.6.0        compiler_4.6.0      </span></span>
+<span><span class="co">#&gt; [28] farver_2.1.2         Biostrings_2.78.0    textshaping_1.0.4   </span></span>
+<span><span class="co">#&gt; [31] Seqinfo_1.0.0        htmltools_0.5.8.1    sass_0.4.10         </span></span>
+<span><span class="co">#&gt; [34] queryup_1.0.5        yaml_2.3.10          crayon_1.5.3        </span></span>
+<span><span class="co">#&gt; [37] pillar_1.11.1        pkgdown_2.2.0        jquerylib_0.1.4     </span></span>
+<span><span class="co">#&gt; [40] whisker_0.4.1        cachem_1.1.0         tidyselect_1.2.1    </span></span>
+<span><span class="co">#&gt; [43] digest_0.6.39        stringi_1.8.7        purrr_1.2.0         </span></span>
+<span><span class="co">#&gt; [46] duckdb_1.4.2         BiocVersion_3.22.0   labeling_0.4.3      </span></span>
+<span><span class="co">#&gt; [49] fastmap_1.2.0        grid_4.6.0           cli_3.6.5           </span></span>
+<span><span class="co">#&gt; [52] magrittr_2.0.4       dichromat_2.0-0.1    spdl_0.0.5          </span></span>
+<span><span class="co">#&gt; [55] withr_3.0.2          filelock_1.0.3       scales_1.4.0        </span></span>
+<span><span class="co">#&gt; [58] rappdirs_0.3.3       bit64_4.6.0-1        XVector_0.50.0      </span></span>
+<span><span class="co">#&gt; [61] httr_1.4.7           rmarkdown_2.30       bit_4.6.0           </span></span>
+<span><span class="co">#&gt; [64] png_0.1-8            ragg_1.5.0           memoise_2.0.1       </span></span>
+<span><span class="co">#&gt; [67] evaluate_1.0.5       knitr_1.50           IRanges_2.44.0      </span></span>
+<span><span class="co">#&gt; [70] viridisLite_0.4.2    rlang_1.1.6          Rcpp_1.1.0          </span></span>
+<span><span class="co">#&gt; [73] glue_1.8.0           DBI_1.2.3            BiocManager_1.30.27 </span></span>
+<span><span class="co">#&gt; [76] jsonlite_2.0.0       R6_2.6.1             systemfonts_1.3.1   </span></span>
+<span><span class="co">#&gt; [79] fs_1.6.6</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -465,7 +455,7 @@ assays available in ProteinGym.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
