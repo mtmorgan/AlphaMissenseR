@@ -306,8 +306,13 @@ top_spearmans |>
         point_colour = NA
     ) + 
     geom_boxplot(
-        width = .15, 
-        outlier.shape = NA
+            width = 0.15,
+            outlier.shape = NA
+    ) +
+    geom_jitter(
+            width = 0.1,
+            alpha = 0.4,
+            size = 1.5
     ) +
     coord_cartesian(clip = "off") +
     scale_fill_discrete(name = "Models") +
