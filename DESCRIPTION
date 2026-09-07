@@ -66,6 +66,7 @@ Suggests:
     colorspace,
     knitr,
     rmarkdown,
+    withr,
     testthat (>= 3.0.0)
 biocViews: SNP, Annotation, FunctionalGenomics, StructuralPrediction,
     Transcriptomics, VariantAnnotation, GenePrediction, ImmunoOncology
