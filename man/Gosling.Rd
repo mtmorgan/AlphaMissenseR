@@ -13,8 +13,8 @@ gosling_plot(
 )
 }
 \arguments{
-\item{granges}{A \code{\link[GenomicRanges:GRanges-class]{GenomicRanges::GRanges}} (e.g.,
-\code{\link[GenomicRanges:GPos-class]{GenomicRanges::GPos}}) object containing the genomic ranges
+\item{granges}{A \code{\link[GenomicRanges:GRanges]{GenomicRanges::GRanges}} (e.g.,
+\code{\link[GenomicRanges:GPos]{GenomicRanges::GPos}}) object containing the genomic ranges
 to be plotted.}
 
 \item{title}{character(1) Title of the plot. Default is
@@ -47,7 +47,7 @@ The function supports 2 types of plots as selected through the
 pathogenicity score at each position, similar to a sequencing
 coverage plot, and (2) \code{"lollipop"}: a lollipop plot focusing on
 the pathogenicity classification (ambiguous, benign, pathogenic) at
-each position. It requires that the \code{\link[GenomicRanges:GRanges-class]{GenomicRanges::GRanges}}
+each position. It requires that the \code{\link[GenomicRanges:GRanges]{GenomicRanges::GRanges}}
 object has the following metadata columns: 'am_class' (effect
 classification),'am_pathogenicity' (pathogenicity score), 'ALT'
 (alternative allele) and 'REF' (reference allele).
